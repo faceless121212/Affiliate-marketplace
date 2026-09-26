@@ -9,15 +9,21 @@ export function EscrowMeter({ offer, showLabel = true }: { offer: Offer; showLab
 
   return (
     <div>
-      <div className="flex items-baseline justify-between gap-2">
-        {showLabel && <span className="text-[11.5px] text-muted">Escrow remaining</span>}
-        <span className="text-[13px]">
-          <Money value={offer.escrowRemainingUsd} tone={empty ? 'depleted' : 'escrow'} />
-          <span className="font-mono tnum text-muted"> / </span>
-          <Money value={offer.escrowTotalUsd} tone="muted" />
+      {showLabel && <span className="text-[11.5px] text-muted">Escrow remaining</span>}
+      {/* The remainder is the trust signal: largest, boldest figure on the card.
+          The total is context for it, not a peer — small and muted. flex-wrap keeps
+          this from overflowing a narrow sidebar (the offer-detail aside is ~320px). */}
+      <div className={`flex flex-wrap items-baseline gap-x-1.5 ${showLabel ? 'mt-0.5' : ''}`}>
+        <Money
+          value={offer.escrowRemainingUsd}
+          tone={empty ? 'depleted' : 'escrow'}
+          className="text-[21px] font-bold"
+        />
+        <span className="font-mono tnum text-[12px] text-muted">
+          / <Money value={offer.escrowTotalUsd} tone="muted" className="text-[12px]" />
         </span>
       </div>
-      <div className="mt-1.5 h-1 overflow-hidden rounded-sm bg-line">
+      <div className="mt-2 h-2 overflow-hidden rounded-sm bg-line">
         <div
           className={`h-full ${empty ? 'bg-depleted' : 'bg-escrow'}`}
           style={{ width: `${pct}%` }}

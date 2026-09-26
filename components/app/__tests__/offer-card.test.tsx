@@ -38,4 +38,20 @@ describe('OfferCard', () => {
     render(<OfferCard offer={drayton} />)
     expect(screen.getByRole('link')).toHaveAttribute('href', `/app/offers/${drayton.id}`)
   })
+
+  // Regression for the "escrow must be the dominant figure, not CPA" review
+  // finding. Asserts the hierarchy itself rather than pinning exact pixel
+  // values, so a later design pass can resize both without re-breaking this.
+  it('gives the escrow remainder more visual weight than the CPA commission', () => {
+    render(<OfferCard offer={drayton} />)
+    const escrow = screen.getByText('$340.00')
+    const cpa = screen.getByText('$24.00')
+
+    expect(escrow.className).toMatch(/font-bold/)
+    expect(cpa.className).not.toMatch(/font-bold/)
+
+    const escrowSize = Number(escrow.className.match(/text-\[(\d+)px\]/)?.[1])
+    const cpaSize = Number(cpa.className.match(/text-\[(\d+)px\]/)?.[1])
+    expect(escrowSize).toBeGreaterThan(cpaSize)
+  })
 })
