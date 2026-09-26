@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Badge } from '@/components/ui/Badge'
+import { CategoryIcon } from '@/components/ui/CategoryIcon'
 import { Money } from '@/components/ui/Money'
 import { EscrowMeter } from './EscrowMeter'
 import { CATEGORIES, type Offer } from '@/lib/types'
@@ -17,7 +18,10 @@ export function OfferCard({ offer }: { offer: Offer }) {
         <h3 className="min-w-0 truncate text-[15px] font-semibold leading-tight">{offer.name}</h3>
         {offer.verified && <Badge tone="paid">Verified</Badge>}
       </div>
-      <p className="mb-4 text-[12px] text-muted">{category}</p>
+      <p className="mb-4 flex items-center gap-1.5 text-[12px] text-muted">
+        <CategoryIcon category={offer.category} />
+        {category}
+      </p>
 
       {/* Escrow leads the card — it's the guaranteed balance, not a promise,
           so it carries the most visual weight of anything here. */}
