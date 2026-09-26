@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# sdd scratch (task briefs, reports, review diffs — not build inputs;
+# Tailwind v4's content detection respects .gitignore but not
+# .git/info/exclude, so this must be a real .gitignore entry)
+.superpowers/

@@ -1,6 +1,24 @@
 @import "tailwindcss";
 
-@theme {
+/*
+ * Tailwind v4's automatic content detection scans every tracked file in the
+ * project, including docs/, for utility-class-shaped strings — it isn't
+ * limited to app/lib source. docs/superpowers/plans/2026-09-26-nativness-phase1.md
+ * contains code-sample strings like 'text-paid' and 'text-depleted' inside
+ * markdown, which would otherwise cause those utilities to compile in before
+ * any real component uses them. Exclude the tracked docs/ tree from content
+ * scanning so the compiled CSS reflects what app source actually uses.
+ */
+@source not "../docs";
+
+/*
+ * `static` forces Tailwind to always emit these custom properties in :root,
+ * even for the two tones (paid, depleted) no component references yet.
+ * Without it, Tailwind v4 tree-shakes unused @theme variables out of the
+ * compiled CSS entirely — the token contract (all eight colours resolve)
+ * would otherwise depend on which components happen to exist yet.
+ */
+@theme static {
   --color-canvas: #0B0D10;
   --color-surface: #141922;
   --color-line: #242C38;
