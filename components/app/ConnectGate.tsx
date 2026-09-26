@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/Button'
 import { useLoginModal } from '@/lib/wallet/useAccount'
+import { enableDemoWallet, isDevMode } from '@/lib/wallet/demoWallet'
 
 /**
  * Renders in place rather than redirecting to '/'. A redirect would lose the
@@ -19,6 +20,27 @@ export function ConnectGate() {
       <Button className="mt-6" onClick={openLogin}>
         Connect wallet
       </Button>
+      <p className="mt-3 text-[12px] text-muted">
+        Needs a Solana wallet extension — Phantom, Solflare or Backpack — set to devnet.
+      </p>
+
+      {isDevMode && (
+        <div className="mt-8 border-t border-line pt-6">
+          <Button
+            variant="secondary"
+            onClick={() => {
+              enableDemoWallet()
+              window.location.reload()
+            }}
+          >
+            Explore without a wallet
+          </Button>
+          <p className="mt-2 text-[12px] text-muted">
+            Local development only. Signs you in as a fixed demo address so you can walk the app
+            without installing an extension. This control does not exist in a production build.
+          </p>
+        </div>
+      )}
     </div>
   )
 }
