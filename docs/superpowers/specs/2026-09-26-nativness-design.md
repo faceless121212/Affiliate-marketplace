@@ -89,6 +89,8 @@ Purple-pink gradients. Uniform rounded cards with identical soft shadows. Tracke
 
 `/r/*` is deliberately a **real working route**, not a decorative string. It records the click and redirects. This also means the tracking-link seam already exists when Phase 2 adds attribution.
 
+Built as `app/r/[offerId]/[wallet]/page.tsx` — a client page, not a route handler — because click counts live in `localStorage` in Phase 1, which a server route handler cannot read.
+
 ---
 
 ## 4. Navigation
@@ -166,7 +168,7 @@ type Conversion = {
 
 ## 6. Repository seam
 
-Every read and write goes through `lib/store/`. No component touches `localStorage`. The signatures are deliberately shaped like the REST API that replaces them in Phase 2.
+Every read and write goes through `lib/store/`. No component touches `localStorage`. The signatures are deliberately shaped like the REST API that replaces them in Phase 2. Implemented across `index.ts` (the seam), `offers.ts`, `links.ts`, `conversions.ts`, `users.ts`, `storage.ts` and `seed.ts`.
 
 ```ts
 ensureUser(wallet): User
@@ -289,7 +291,8 @@ Files stay focused; nothing becomes a grab-bag.
 app/
   layout.tsx                  root, fonts, providers
   page.tsx                    landing
-  r/[offerId]/[wallet]/route.ts
+  r/[offerId]/[wallet]/page.tsx  client page — click counts live in localStorage in
+                               Phase 1, which a server route handler cannot read
   app/
     layout.tsx                wallet gate + nav + prototype banner
     page.tsx                  browse
@@ -303,7 +306,7 @@ components/
                               ConversionRow, CreateOfferForm, TopUpDialog, WalletBadge
   ui/                         Button, Input, Select, Badge, Money, Address
 lib/
-  store/                      index.ts (the seam), storage.ts, seed.ts
+  store/                      index.ts (the seam), storage.ts, seed.ts, users.ts
   wallet/                     provider.tsx, useAccount.ts
   format.ts                   money, address shortening, dates
 ```
