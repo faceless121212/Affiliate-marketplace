@@ -1,13 +1,21 @@
+import { Hero } from '@/components/landing/Hero'
+import { Problem } from '@/components/landing/Problem'
+import { HowItWorks } from '@/components/landing/HowItWorks'
+import { WhyEscrow } from '@/components/landing/WhyEscrow'
+import { WhatYouGet } from '@/components/landing/WhatYouGet'
+import { Market } from '@/components/landing/Market'
+import { Footer } from '@/components/landing/Footer'
+
 export default function LandingPage() {
   return (
-    <main className="min-h-dvh grid place-items-center px-4">
-      <div className="border border-line bg-surface rounded-md p-6 max-w-sm w-full">
-        <p className="text-muted text-sm">Escrow remaining</p>
-        <p className="font-mono tnum text-2xl">
-          <span className="text-escrow">$340.00</span>
-          <span className="text-muted"> / $500.00</span>
-        </p>
-      </div>
+    <main>
+      <Hero />
+      <Problem />
+      <HowItWorks />
+      <WhyEscrow />
+      <WhatYouGet />
+      <Market />
+      <Footer />
     </main>
   )
 }
