@@ -4,20 +4,20 @@ const STEPS = [
   {
     n: '01',
     label: 'Escrow',
-    heading: 'Lock the commission budget',
-    body: 'The advertiser funds escrow before the offer is visible to anyone. No budget, no listing.',
+    heading: 'Lock the budget',
+    body: 'No budget, no listing. The advertiser funds escrow first.',
   },
   {
     n: '02',
     label: 'Promotion',
-    heading: 'Promote with the balance visible',
-    body: 'Affiliates see exactly what is left to pay out and generate a link carrying their own wallet address.',
+    heading: 'See the balance, promote',
+    body: 'They see the balance and grab their own link.',
   },
   {
     n: '03',
     label: 'Payout',
-    heading: 'A confirmed conversion pays out',
-    body: 'Confirmation releases the commission from escrow to the affiliate’s wallet. No terms, no hold, no investigation.',
+    heading: 'Get paid on confirmation',
+    body: 'Confirmed means paid — no terms, no hold, no investigation.',
   },
 ]
 
@@ -26,7 +26,7 @@ export function HowItWorks() {
     <section id="how-it-works" data-testid="how-it-works" className="border-t border-line">
       <div className="mx-auto max-w-6xl px-4 py-16">
         <Reveal>
-          <h2 className="text-2xl font-semibold tracking-tight">How a payout actually happens</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">How payouts happen</h2>
         </Reveal>
 
         <ol className="mt-10 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-3">

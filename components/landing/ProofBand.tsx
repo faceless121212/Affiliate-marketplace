@@ -1,8 +1,8 @@
 import { Reveal } from './Reveal'
 
 const FACTS = [
-  { value: 'Oct 2025', label: 'ShareASale shut down, folded into Awin', tone: 'text-depleted' },
-  { value: 'NET-60', label: 'Rakuten Advertising’s standard settlement term', tone: 'text-ink' },
+  { value: 'Oct 2025', label: 'ShareASale shut down, became Awin', tone: 'text-depleted' },
+  { value: 'NET-60', label: 'Rakuten’s standard settlement term', tone: 'text-ink' },
   { value: '2.2/5', label: 'Rakuten Advertising’s Trustpilot rating', tone: 'text-depleted' },
 ] as const
 
@@ -18,11 +18,10 @@ export function ProofBand() {
       <div className="mx-auto max-w-6xl px-4 py-16">
         <Reveal>
           <h2 className="text-2xl font-semibold tracking-tight">
-            Proof that doesn’t need us to say it
+            Proof, not a claim.
           </h2>
           <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-muted">
-            These facts are sourced, not asserted — and they’re the strongest argument on this
-            page.
+            Sourced facts, not assertions — the strongest argument here.
           </p>
         </Reveal>
 
@@ -44,8 +43,7 @@ export function ProofBand() {
           className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-escrow/30 bg-escrow/5 p-5"
         >
           <p className="max-w-md text-[14px] leading-relaxed text-text">
-            Every line of this prototype is public. An open-source claim is proof a new product
-            can actually make — read the code rather than take our word for it.
+            Every line of this prototype is public. Read the code — don’t take our word for it.
           </p>
           <a
             href="https://github.com/faceless121212/Affiliate-marketplace"

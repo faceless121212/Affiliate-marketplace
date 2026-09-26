@@ -30,14 +30,14 @@ export function CreateOfferForm({ wallet }: { wallet: string }) {
     const commission = Number(form.commission)
     const budget = Number(form.budget)
 
-    if (!form.name.trim()) return setError('Give the offer a name.')
-    if (!form.description.trim()) return setError('Describe what the advertiser sells.')
-    if (!(commission > 0)) return setError('Commission must be greater than zero.')
-    if (!form.conversionTerms.trim()) return setError('State what counts as a conversion.')
+    if (!form.name.trim()) return setError('Give it a name.')
+    if (!form.description.trim()) return setError('Describe what you’re selling.')
+    if (!(commission > 0)) return setError('Enter a commission above zero.')
+    if (!form.conversionTerms.trim()) return setError('Say what counts as a conversion.')
     if (!/^https?:\/\//i.test(form.targetUrl.trim()))
-      return setError('The target URL must start with http:// or https://')
+      return setError('The URL must start with http:// or https://')
     if (!(budget >= commission))
-      return setError('The escrow budget must cover at least one conversion.')
+      return setError('Budget must cover at least one payout.')
 
     mutate(() =>
       createOffer(
@@ -100,7 +100,7 @@ export function CreateOfferForm({ wallet }: { wallet: string }) {
         </Field>
       </div>
 
-      <Field label="Conversion terms" hint="Be specific. Affiliates price their effort on this.">
+      <Field label="Conversion terms" hint="Be specific — this is what affiliates get paid for.">
         <textarea
           aria-label="Conversion terms"
           rows={2}
@@ -122,7 +122,7 @@ export function CreateOfferForm({ wallet }: { wallet: string }) {
 
       <Field
         label="Escrow budget (USD)"
-        hint="Locked before the offer goes live. Affiliates see this balance, not a promise."
+        hint="Locked before launch — affiliates see the real balance."
         error={error ?? undefined}
       >
         <input

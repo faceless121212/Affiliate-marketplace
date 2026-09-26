@@ -21,14 +21,14 @@ export function EscrowCounter() {
     // just muddies the number underneath, so it's dropped rather than
     // re-tuned — the figure's size and weight carry the emphasis instead.
     <div className="relative">
-      <p className="text-[11px] uppercase tracking-wide text-muted">Locked in escrow right now</p>
+      <p className="text-[11px] uppercase tracking-wide text-muted">In escrow now</p>
       <Money
         value={value}
         tone="escrow"
         className="text-[38px] font-bold leading-none sm:text-[46px]"
       />
       <p className="mt-1 max-w-[220px] text-[11px] leading-snug text-muted">
-        The demo marketplace’s six seeded offers — simulated in this browser, not on-chain.
+        Six seeded demo offers — simulated, not on-chain.
       </p>
     </div>
   )

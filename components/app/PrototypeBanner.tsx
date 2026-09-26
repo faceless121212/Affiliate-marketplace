@@ -11,8 +11,7 @@ export function PrototypeBanner() {
       // in favour of the fill+ink pattern used everywhere else.
       className="border-b border-line bg-escrow/20 px-4 py-2 text-[12px] text-text"
     >
-      <span className="font-semibold">Prototype</span> — escrow balances are simulated and
-      stored in this browser. Not yet on-chain.
+      <span className="font-semibold">Prototype:</span> escrow is simulated here, not on-chain.
     </div>
   )
 }

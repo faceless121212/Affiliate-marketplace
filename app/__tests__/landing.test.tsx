@@ -49,13 +49,18 @@ describe('Landing page', () => {
   it('renders the announcement bar and header', () => {
     render(<LandingPage />)
     expect(screen.getByTestId('site-header')).toBeInTheDocument()
-    expect(screen.getByText(/escrow balances are simulated/i)).toBeInTheDocument()
+    // Guards the honesty framing (constraint 8), not the exact wording:
+    // escrow is disclosed as simulated and not on-chain, in one sentence.
+    // (Matched as one regex, not two separate getByText calls, since the
+    // escrow counter lower on the page also says "not on-chain" on its own.)
+    expect(screen.getByText(/escrow is simulated.*not on-chain/i)).toBeInTheDocument()
   })
 
   it('states one login for both sides in the hero', () => {
     render(<LandingPage />)
     const hero = screen.getByTestId('hero')
-    expect(hero).toHaveTextContent(/one wallet is one login/i)
+    expect(hero).toHaveTextContent(/one wallet/i)
+    expect(hero).toHaveTextContent(/one login/i)
     expect(hero).toHaveTextContent(/both sides/i)
   })
 
@@ -134,10 +139,10 @@ describe('Landing page', () => {
     render(<LandingPage />)
     expect(screen.getByTestId('repeat-cta')).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: 'Start listing an offer' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Start an offer' }))
     expect(push).toHaveBeenCalledWith('/app/my-offers')
 
-    fireEvent.click(screen.getByRole('button', { name: 'Start browsing offers' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Browse now' }))
     expect(push).toHaveBeenCalledWith('/app')
   })
 
@@ -150,8 +155,15 @@ describe('Landing page', () => {
   it('states the three steps in order', () => {
     render(<LandingPage />)
     const steps = screen.getByTestId('how-it-works')
-    expect(steps).toHaveTextContent(/lock the commission budget/i)
-    expect(steps).toHaveTextContent(/promote with the balance visible/i)
-    expect(steps).toHaveTextContent(/confirmed conversion pays out/i)
+    const text = steps.textContent ?? ''
+    // Guards the property (escrow, then promotion, then payout appear in
+    // that order), not the exact step-heading wording, which copy passes
+    // are free to keep tightening.
+    const lockIdx = text.toLowerCase().indexOf('lock the budget')
+    const promoteIdx = text.toLowerCase().indexOf('see the balance, promote')
+    const payoutIdx = text.toLowerCase().indexOf('get paid on confirmation')
+    expect(lockIdx).toBeGreaterThanOrEqual(0)
+    expect(promoteIdx).toBeGreaterThan(lockIdx)
+    expect(payoutIdx).toBeGreaterThan(promoteIdx)
   })
 })

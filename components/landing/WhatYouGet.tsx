@@ -1,15 +1,15 @@
 import { Reveal } from './Reveal'
 
 const AFFILIATE = [
-  'Browse every listed offer with its escrow balance in view',
-  'Generate a tracking link tied to your wallet address',
-  'Track clicks, confirmed conversions and payouts in one place',
+  'See every offer’s balance',
+  'Get your wallet-tied link',
+  'Track clicks, conversions and payouts',
 ]
 
 const ADVERTISER = [
-  'List an offer in any niche, with your budget locked on creation',
-  'Watch remaining escrow, conversions and spend per offer',
-  'Top up escrow whenever you want more conversions funded',
+  'List any niche, budget locked instantly',
+  'Watch escrow, conversions and spend',
+  'Top up escrow anytime',
 ]
 
 export function WhatYouGet() {
@@ -17,11 +17,10 @@ export function WhatYouGet() {
     <section data-testid="what-you-get" className="border-t border-line bg-paid/5">
       <div className="mx-auto max-w-6xl px-4 py-16">
         <Reveal>
-          <h2 className="text-2xl font-semibold tracking-tight">One login opens both sides</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">One login, both sides</h2>
           <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-muted">
-            There is no affiliate account and no advertiser account. Connecting your wallet creates
-            one identity that can promote other people’s offers and list its own, in the same
-            session, from the same navigation. Nobody signs up twice.
+            No affiliate account. No advertiser account. One wallet, one identity — promote
+            offers or list your own. Nobody signs up twice.
           </p>
         </Reveal>
 

@@ -2,23 +2,23 @@ import { Reveal } from './Reveal'
 
 const CLAIMS = [
   {
-    heading: 'The good tooling is priced for enterprises only',
-    body: 'Workforce-data providers LinkUp and Revelio Labs list at $75,000–$300,000 a year, enterprise-only, with no self-serve tier. Adjacent infrastructure prices out exactly the people who need it most.',
+    heading: 'Good tools cost enterprise money.',
+    body: 'LinkUp and Revelio Labs — workforce-data providers — charge $75,000–$300,000 a year, pricing out everyone but enterprises.',
     source: 'LinkUp, Revelio Labs',
   },
   {
-    heading: 'Getting paid takes months — when it happens',
-    body: 'Rakuten Advertising settles on NET-60 terms and holds a 2.2/5 rating on Trustpilot. CJ Affiliate has drawn reported complaints of commissions withheld behind an “investigation” that never resolves.',
+    heading: 'Paid in months — maybe.',
+    body: 'Rakuten Advertising: NET-60 terms, 2.2/5 on Trustpilot. CJ Affiliate: reported complaints of commissions stuck in ‘investigation.’',
     source: 'Rakuten Advertising, Trustpilot; CJ Affiliate complaints',
   },
   {
-    heading: 'Outside the big networks there is no recourse at all',
-    body: 'iGaming and dating CPA networks such as Ace Partners, N1 Partners and Affilitex are fragmented and offshore. Trust rests on reputation alone: no escrow, no arbitration, nowhere to go when a payment does not arrive.',
+    heading: 'Smaller networks offer no recourse.',
+    body: 'iGaming and dating CPA networks — Ace Partners, N1 Partners, Affilitex — are offshore and fragmented. No escrow, no arbitration, nowhere to go.',
     source: 'Ace Partners, N1 Partners, Affilitex',
   },
   {
-    heading: 'And networks do disappear',
-    body: 'ShareASale shut down and merged into Awin in October 2025. Affiliates who had built their business on it had no claim on anything except goodwill.',
+    heading: 'Networks disappear.',
+    body: 'ShareASale folded into Awin, October 2025. Its affiliates were left with nothing but goodwill.',
     source: 'ShareASale / Awin, October 2025',
   },
 ]
@@ -29,11 +29,10 @@ export function Problem() {
       <div className="mx-auto max-w-6xl px-4 py-16">
         <Reveal>
           <h2 className="text-2xl font-semibold tracking-tight">
-            Affiliate payment is a trust problem nobody has fixed
+            Nobody has fixed affiliate trust.
           </h2>
           <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-muted">
-            Every layer of the current market asks the affiliate to do the work first and trust
-            somebody else to pay later.
+            Affiliates do the work first and trust someone else to pay later.
           </p>
         </Reveal>
 

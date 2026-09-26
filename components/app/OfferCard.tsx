@@ -35,7 +35,9 @@ export function OfferCard({ offer }: { offer: Offer }) {
       {/* CPA is supporting detail beneath the escrow figure, not the headline —
           the border now separates the meter from this footer instead of framing CPA. */}
       <div className="mt-3 flex items-baseline justify-between border-t border-line pt-2">
-        <span className="text-[11.5px] text-muted">CPA per conversion</span>
+        <span className="text-[11.5px] text-muted" title="CPA: a fixed amount paid per conversion.">
+          CPA per conversion
+        </span>
         <Money value={offer.commissionAmountUsd} className="text-[13px]" />
       </div>
     </Link>

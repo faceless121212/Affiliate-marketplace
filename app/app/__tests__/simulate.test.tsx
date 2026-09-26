@@ -20,7 +20,7 @@ describe('Simulate', () => {
         <SimulatePage />
       </StoreProvider>,
     )
-    expect(screen.getByText(/stands in for a real postback/i)).toBeInTheDocument()
+    expect(screen.getByText(/in for a real postback/i)).toBeInTheDocument()
   })
 
   it('says there is nothing to simulate when the user has no links', () => {
@@ -29,7 +29,7 @@ describe('Simulate', () => {
         <SimulatePage />
       </StoreProvider>,
     )
-    expect(screen.getByText(/you have no tracking links yet/i)).toBeInTheDocument()
+    expect(screen.getByText(/no links yet/i)).toBeInTheDocument()
   })
 
   it('decrements escrow and records a payout on confirmation', async () => {
@@ -45,7 +45,8 @@ describe('Simulate', () => {
 
     const status = screen.getByRole('status')
     expect(status.textContent).toMatch(/paid \$24\.00/i)
-    expect(status.textContent).toMatch(/\$316\.00 in escrow/i)
+    expect(status.textContent).toMatch(/\$316\.00/)
+    expect(status.textContent).toMatch(/in escrow/i)
   })
 
   it('renders the confirmation figures in mono with tabular numerals, like every other balance', async () => {
@@ -80,7 +81,11 @@ describe('Simulate', () => {
       </StoreProvider>,
     )
     await userEvent.click(screen.getByRole('button', { name: 'Confirm conversion' }))
-    expect(screen.getByText(/not enough escrow/i)).toBeInTheDocument()
+    // Guards the property that insufficient escrow renders an actionable
+    // message pointing at the advertiser's top-up, not a bare error.
+    const status = screen.getByRole('status')
+    expect(status).toHaveTextContent(/escrow.*empty/i)
+    expect(status).toHaveTextContent(/top-up/i)
   })
 })
 

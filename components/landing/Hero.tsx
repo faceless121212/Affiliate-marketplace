@@ -22,12 +22,11 @@ export function Hero() {
             For affiliate platforms
           </p>
           <h1 className="mt-3 text-[30px] font-bold leading-[1.08] tracking-tight sm:text-[36px]">
-            No proof of funds, no affiliate will risk sending you traffic.
+            Fund it. Affiliates will trust you.
           </h1>
           <p className="mt-3 text-[14px] leading-relaxed text-muted">
-            List in any niche — ecommerce, iGaming, dating, SaaS. Lock your commission budget in
-            escrow the moment you create the offer, so affiliates see a guaranteed balance instead
-            of a promise from a stranger.
+            List in any niche — ecommerce, iGaming, dating, SaaS. Your budget locks in escrow
+            before affiliates ever see the offer.
           </p>
 
           <div className="mt-4 flex flex-wrap gap-1.5">
@@ -43,7 +42,7 @@ export function Hero() {
               List an offer
             </LoginCta>
             <p className="mt-2 text-[12px] text-muted">
-              Connecting a wallet is the whole signup — seconds, not a form.
+              Connect a wallet — that’s the signup.
             </p>
           </div>
 
@@ -62,12 +61,11 @@ export function Hero() {
             For affiliates
           </p>
           <h1 className="mt-3 text-[30px] font-bold leading-[1.08] tracking-tight sm:text-[36px]">
-            Promote on a promise, and you might not get paid at all.
+            See the money before you click.
           </h1>
           <p className="mt-3 text-[14px] leading-relaxed text-muted">
-            Browse offers with the escrow balance visible before you send a single click,
-            generate a tracking link tied to your own wallet, and get paid the instant a
-            conversion is confirmed — no NET-60, no “under investigation.”
+            Browse offers with the balance visible. Generate your link, and get paid the instant a
+            conversion confirms — no NET-60, no investigation.
           </p>
 
           <div className="mt-4 flex flex-wrap gap-1.5">
@@ -79,19 +77,18 @@ export function Hero() {
           </div>
 
           <div className="mt-6">
-            <LoginCta destination="/app" variant="paid" className={CTA_CLASS}>
+            <LoginCta destination="/app" variant="primary" className={CTA_CLASS}>
               Browse offers
             </LoginCta>
             <p className="mt-2 text-[12px] text-muted">
-              Devnet means nothing real is at risk while you look around.
+              Devnet — nothing real is at risk.
             </p>
           </div>
         </div>
       </div>
 
       <p className="mt-10 text-center text-[12px] text-muted">
-        One wallet is one login for both sides — there’s no separate advertiser account and no
-        second signup.
+        One wallet. One login for both sides — no second signup.
       </p>
     </section>
   )

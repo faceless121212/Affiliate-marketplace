@@ -23,7 +23,7 @@ export function TopUpDialog({ offerId }: { offerId: string }) {
   function submit(e: React.FormEvent) {
     e.preventDefault()
     const value = Number(amount)
-    if (!(value > 0)) return setError('Enter an amount greater than zero.')
+    if (!(value > 0)) return setError('Enter an amount above zero.')
     mutate(() => topUpEscrow(offerId, value))
     setAmount('')
     setError(null)

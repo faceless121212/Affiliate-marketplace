@@ -15,7 +15,7 @@ export function Footer() {
           Source
         </a>
         <p className="ml-auto text-[12px] text-muted">
-          Solana devnet prototype. Escrow is simulated.
+          Devnet prototype. Escrow simulated.
         </p>
       </div>
     </footer>

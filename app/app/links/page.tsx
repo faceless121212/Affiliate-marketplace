@@ -21,7 +21,7 @@ export default function LinksPage() {
       <header>
         <h1 className="text-lg font-semibold">My links</h1>
         <p className="text-[13px] text-muted">
-          Links you have generated, and every conversion confirmed against them.
+          Your links, and what they’ve earned.
         </p>
       </header>
 

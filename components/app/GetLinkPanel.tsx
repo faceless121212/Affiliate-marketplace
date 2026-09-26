@@ -33,7 +33,7 @@ export function GetLinkPanel({ offer, wallet }: { offer: Offer; wallet: string }
       <div className="rounded-lg border border-line bg-surface p-4">
         <Button onClick={generate}>Get my link</Button>
         <p className="mt-2 text-[11.5px] text-muted">
-          Your link carries your wallet address, so confirmed conversions pay out to you.
+          Your wallet’s in the link — payouts land there.
         </p>
       </div>
     )

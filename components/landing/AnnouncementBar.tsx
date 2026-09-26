@@ -11,7 +11,7 @@ export function AnnouncementBar() {
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-2 px-4 py-2 text-[12px]">
         <Badge tone="escrow">Devnet</Badge>
         <p className="text-muted">
-          Phase 1 prototype — escrow balances are simulated in this browser, not on-chain yet.
+          Phase 1: escrow is simulated, not on-chain.
         </p>
         <a
           href="https://github.com/faceless121212/Affiliate-marketplace"

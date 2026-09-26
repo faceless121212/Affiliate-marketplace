@@ -71,7 +71,7 @@ describe('Create offer', () => {
     await user.type(screen.getByLabelText('Target URL'), 'https://example.com/underfunded')
     await user.type(screen.getByLabelText('Escrow budget (USD)'), '20')
     await user.click(screen.getByRole('button', { name: 'Lock budget and list offer' }))
-    expect(screen.getByText(/must cover at least one conversion/i)).toBeInTheDocument()
+    expect(screen.getByText(/must cover at least one payout/i)).toBeInTheDocument()
     expect(screen.queryByText('Underfunded Ltd')).toBeNull()
   })
 

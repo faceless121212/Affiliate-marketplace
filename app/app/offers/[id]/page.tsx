@@ -19,7 +19,7 @@ export default function OfferDetailPage({ params }: { params: Promise<{ id: stri
   if (!offer) {
     return (
       <p className="rounded-lg border border-line bg-surface p-6 text-[13px] text-muted">
-        That offer no longer exists. <Link href="/app" className="text-info hover:underline">Back to browse</Link>.
+        This offer no longer exists. <Link href="/app" className="text-info hover:underline">Back to browse</Link>.
       </p>
     )
   }
@@ -65,12 +65,14 @@ export default function OfferDetailPage({ params }: { params: Promise<{ id: stri
               it, in a plain unbolded footer row — not its own headline. */}
           <EscrowMeter offer={offer} />
           <div className="mt-3 flex items-baseline justify-between border-t border-line pt-2">
-            <span className="text-[11.5px] text-muted">CPA per conversion</span>
+            <span className="text-[11.5px] text-muted" title="CPA: a fixed amount paid per conversion.">
+              CPA per conversion
+            </span>
             <Money value={offer.commissionAmountUsd} className="text-[13px]" />
           </div>
           {offer.status === 'depleted' && (
             <p className="mt-3 text-[11.5px] text-depleted">
-              This offer cannot pay out until the advertiser tops up its escrow.
+              Paused until the advertiser tops up escrow.
             </p>
           )}
         </div>

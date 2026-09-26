@@ -45,18 +45,17 @@ export default function SimulatePage() {
       <header>
         <h1 className="text-lg font-semibold">Simulate a conversion</h1>
         <p className="text-[13px] text-muted">
-          A testing tool. It stands in for a real postback from an advertiser’s backend, which
-          Phase 2 adds as an API endpoint.
+          A testing tool, standing in for a real postback (coming in Phase 2).
         </p>
       </header>
 
       {links.length === 0 ? (
         <p className="rounded-lg border border-line bg-surface p-5 text-[13px] text-muted">
-          You have no tracking links yet.{' '}
+          No links yet —{' '}
           <Link href="/app" className="text-info hover:underline">
-            Browse offers
+            browse offers
           </Link>{' '}
-          and generate one first.
+          to make one.
         </p>
       ) : (
         <div className="space-y-3 rounded-lg border border-line bg-surface p-4">
@@ -97,14 +96,13 @@ export default function SimulatePage() {
         >
           {message.kind === 'paid' && (
             <>
-              Conversion confirmed. Paid <Money value={message.amountUsd} tone="paid" /> to your
-              wallet. {message.offerName} now holds{' '}
-              <Money value={message.remainingUsd} tone="paid" /> in escrow.
+              Confirmed. Paid <Money value={message.amountUsd} tone="paid" /> to your wallet —{' '}
+              <Money value={message.remainingUsd} tone="paid" /> left in escrow.
             </>
           )}
           {message.kind === 'insufficient_escrow' &&
-            'Not enough escrow. This offer cannot fund another conversion until the advertiser tops up.'}
-          {message.kind === 'not_found' && 'That tracking link could not be found.'}
+            'Escrow’s empty. This waits on the advertiser’s top-up.'}
+          {message.kind === 'not_found' && 'Link not found.'}
         </p>
       )}
     </section>

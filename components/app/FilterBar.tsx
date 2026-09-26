@@ -18,7 +18,7 @@ export function FilterBar({
         <input
           aria-label="Search"
           className={inputClass}
-          placeholder="Search offers by name or description"
+          placeholder="Search by name or description"
           value={query}
           onChange={(e) => onQuery(e.target.value)}
         />

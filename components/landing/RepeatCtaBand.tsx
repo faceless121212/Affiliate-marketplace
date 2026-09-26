@@ -15,19 +15,18 @@ export function RepeatCtaBand() {
     <section data-testid="repeat-cta" className="border-t border-line bg-escrow/5">
       <Reveal className="mx-auto max-w-6xl px-4 py-16 text-center">
         <h2 className="text-2xl font-semibold tracking-tight">
-          Still scrolling? The budget’s either funded or it isn’t.
+          Funded or not — see for yourself.
         </h2>
         <p className="mx-auto mt-3 max-w-xl text-[14px] leading-relaxed text-muted">
-          One wallet, one login, both sides. Connecting is the whole signup — it takes seconds,
-          and devnet means there’s nothing real on the line.
+          One wallet, one login. Devnet means nothing real is on the line.
         </p>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <LoginCta destination="/app/my-offers" variant="primary" className={CTA_CLASS}>
-            Start listing an offer
+            Start an offer
           </LoginCta>
-          <LoginCta destination="/app" variant="paid" className={CTA_CLASS}>
-            Start browsing offers
+          <LoginCta destination="/app" variant="primary" className={CTA_CLASS}>
+            Browse now
           </LoginCta>
         </div>
       </Reveal>

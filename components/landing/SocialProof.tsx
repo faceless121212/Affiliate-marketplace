@@ -11,25 +11,22 @@ import { Reveal } from './Reveal'
 
 const QUOTES = [
   {
-    quote:
-      'The balance was visible before I sent a single click — that’s the difference between spending my time and gambling with it.',
+    quote: 'I saw the balance before I clicked — spending my time, not gambling it.',
     name: 'Priya Osei',
     role: 'Independent affiliate marketer',
   },
   {
-    quote:
-      'Locking the budget before anyone can see the offer means I’m the one taking the risk, not the affiliate chasing my commission.',
+    quote: 'I lock the budget first. I take the risk, not the affiliate.',
     name: 'Femi Adeyemi',
     role: 'Marketing lead, Nettlecombe Trading',
   },
   {
-    quote: 'No form, no waiting on approval — I connected a wallet and the offer was already funded.',
+    quote: 'No form. No waiting. Wallet connected, offer already funded.',
     name: 'Dana Iversen',
     role: 'Growth partner',
   },
   {
-    quote:
-      'Escrow being visible from day one is exactly the kind of proof affiliates want before they’ll touch an unfamiliar brand.',
+    quote: 'Visible escrow before I’d touch an unfamiliar brand — that’s the proof I need.',
     name: 'Marcus Whitlow',
     role: 'Founder, Solborne Goods',
   },
@@ -40,14 +37,13 @@ export function SocialProof() {
     <section data-testid="social-proof" className="border-t border-line bg-paid/5">
       <div className="mx-auto max-w-6xl px-4 py-16">
         <Reveal className="flex flex-wrap items-baseline gap-2">
-          <h2 className="text-2xl font-semibold tracking-tight">What using it might feel like</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">What it might feel like</h2>
           <Badge>Illustrative examples</Badge>
         </Reveal>
         <Reveal delayMs={60}>
           <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-muted">
-            Nativness has no customers yet, so these are not real quotes. They’re invented — in
-            the same spirit as the fictional seed offers above — to show how the mechanism might
-            feel to use, not to claim results anyone has actually had.
+            Nativness has no customers yet. These quotes are invented, like the seed offers — to
+            show the feel, not claim real results.
           </p>
         </Reveal>
 

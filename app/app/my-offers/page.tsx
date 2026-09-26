@@ -20,7 +20,7 @@ export default function MyOffersPage() {
       <div>
         <h1 className="mb-1 text-lg font-semibold">List an offer</h1>
         <p className="mb-3 text-[13px] text-muted">
-          The budget is locked when the offer is created. Nobody has to take your word for it.
+          The budget locks the moment it’s created — no trust required.
         </p>
         {wallet && <CreateOfferForm wallet={wallet} />}
       </div>
@@ -29,7 +29,7 @@ export default function MyOffersPage() {
         <h2 className="mb-3 text-lg font-semibold">My offers</h2>
         {offers.length === 0 ? (
           <p className="rounded-lg border border-line bg-surface p-5 text-[13px] text-muted">
-            You have not listed an offer yet. The form on the left lists one immediately.
+            No offers yet. Use the form on the left.
           </p>
         ) : (
           <ul className="space-y-3">

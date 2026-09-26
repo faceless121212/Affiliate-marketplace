@@ -16,8 +16,7 @@ export default function BrowsePage() {
       <header className="mb-5">
         <h1 className="text-lg font-semibold">Browse offers</h1>
         <p className="text-[13px] text-muted">
-          Every listed offer, with the commission budget already locked. The balance is what the
-          advertiser can still pay out.
+          The budget’s locked. The balance is what’s left to pay.
         </p>
       </header>
 

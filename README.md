@@ -4,7 +4,7 @@ A Solana-native affiliate marketplace where the commission budget is locked in e
 the offer goes live. Affiliates see a guaranteed balance instead of a promise; a confirmed
 conversion releases payment to the affiliate's wallet.
 
-One login opens both sides. Connecting a wallet creates a single identity that can promote
+One login, both sides. Connecting a wallet creates a single identity that can promote
 other people's offers and list its own — there is no separate affiliate or advertiser account.
 
 ## Running it
