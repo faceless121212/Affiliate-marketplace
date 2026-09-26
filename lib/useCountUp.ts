@@ -1,18 +1,23 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { usePrefersReducedMotion } from './usePrefersReducedMotion'
 
 /**
  * Animates a number counting up from 0 to `target` on mount, eased out, using
- * `requestAnimationFrame` — no animation library. Jumps straight to `target`
+ * `requestAnimationFrame` — no animation library.
+ *
+ * Deliberately has NO run-once guard. React Strict Mode mounts effects twice in
+ * development: a `startedRef` flag set on the first mount survives into the
+ * second, where it short-circuits before starting the loop, leaving the value
+ * pinned at 0. The cleanup already cancels any pending frame, so simply letting
+ * the effect restart is both correct and idempotent. Jumps straight to `target`
  * (no animation at all) when the user has asked for reduced motion, or when
  * `requestAnimationFrame` is unavailable (SSR, the test runner).
  */
 export function useCountUp(target: number, durationMs = 1400): number {
   const reducedMotion = usePrefersReducedMotion()
   const [value, setValue] = useState(0)
-  const startedRef = useRef(false)
 
   useEffect(() => {
     if (reducedMotion || typeof window === 'undefined' || typeof window.requestAnimationFrame !== 'function') {
@@ -20,9 +25,6 @@ export function useCountUp(target: number, durationMs = 1400): number {
       setValue(target)
       return
     }
-    if (startedRef.current) return
-    startedRef.current = true
-
     let frame = 0
     const start = performance.now()
     const tick = (now: number) => {
