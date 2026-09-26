@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
+import { WalletProviders } from '@/lib/wallet/provider'
+import { StoreProvider } from '@/lib/store/provider'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
@@ -14,7 +16,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrains.variable}`}>
-      <body className="font-sans antialiased bg-canvas text-text">{children}</body>
+      <body className="font-sans antialiased bg-canvas text-text">
+        <WalletProviders>
+          <StoreProvider>{children}</StoreProvider>
+        </WalletProviders>
+      </body>
     </html>
   )
 }
