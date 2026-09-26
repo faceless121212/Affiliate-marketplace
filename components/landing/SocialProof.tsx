@@ -51,7 +51,7 @@ export function SocialProof() {
           </p>
         </Reveal>
 
-        <div className="mt-10 grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-2">
+        <div className="mt-10 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">
           {QUOTES.map((q, i) => (
             <Reveal
               key={q.name}
@@ -60,7 +60,7 @@ export function SocialProof() {
             >
               <p className="text-[14px] leading-relaxed text-text">“{q.quote}”</p>
               <p className="mt-3 text-[12.5px] text-muted">
-                {q.name} <span className="text-muted/70">· {q.role}</span>
+                {q.name} <span className="text-muted">· {q.role}</span>
               </p>
             </Reveal>
           ))}

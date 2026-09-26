@@ -13,20 +13,40 @@
 
 /*
  * `static` forces Tailwind to always emit these custom properties in :root,
- * even for the two tones (paid, depleted) no component references yet.
- * Without it, Tailwind v4 tree-shakes unused @theme variables out of the
- * compiled CSS entirely — the token contract (all eight colours resolve)
- * would otherwise depend on which components happen to exist yet.
+ * even for tones no component references yet. Without it, Tailwind v4
+ * tree-shakes unused @theme variables out of the compiled CSS entirely — the
+ * token contract (every colour resolves) would otherwise depend on which
+ * components happen to exist yet.
+ *
+ * Light theme, sampled from limitless.exchange and darkened wherever the
+ * sampled value failed the 4.5:1 body-text / 3:1 large-text contrast bar
+ * (measured ratios are in the conversion report).
+ *
+ * - `escrow` is a FILL colour only (chips, the meter's progress bar) — never
+ *   text. Lime text on white is ~1.2:1, illegible. Every spot that used to
+ *   render escrow as text now uses `ink` instead.
+ * - `ink` is the dominant-figure colour (the escrow balance, big stat
+ *   numbers): pure black, kept as its own token distinct from `text` so a
+ *   later pass can tune "numbers that must dominate" independently of body
+ *   copy, even though both resolve to #000000 today.
+ * - `inset` is a stronger fill than `line`, for surfaces where `line`
+ *   (#F0F0F0, close to white) doesn't read as a boundary: the escrow-meter
+ *   track and form-input borders.
+ * - `info` is new — a legible blue for the handful of spots (in-card links,
+ *   the target-URL link) that used to be escrow-coloured text.
  */
 @theme static {
-  --color-canvas: #0B0D10;
-  --color-surface: #141922;
-  --color-line: #242C38;
-  --color-text: #E6EAF0;
-  --color-muted: #8695A8;
-  --color-escrow: #F2B231;
-  --color-paid: #3FCF8E;
-  --color-depleted: #E5484D;
+  --color-canvas: #FFFFFF;
+  --color-surface: #FAFAFA;
+  --color-line: #F0F0F0;
+  --color-inset: #E5E5E5;
+  --color-text: #000000;
+  --color-ink: #000000;
+  --color-muted: #666666;
+  --color-escrow: #C3FF00;
+  --color-paid: #297644;
+  --color-depleted: #BC3B15;
+  --color-info: #0066D6;
 
   --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
@@ -35,6 +55,7 @@
 html, body {
   background: var(--color-canvas);
   color: var(--color-text);
+  color-scheme: light;
 }
 
 /* Numbers are a first-class visual element: they always align in columns. */

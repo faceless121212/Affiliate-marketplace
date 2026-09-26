@@ -18,8 +18,8 @@ export default function OfferDetailPage({ params }: { params: Promise<{ id: stri
 
   if (!offer) {
     return (
-      <p className="rounded-md border border-line bg-surface p-6 text-[13px] text-muted">
-        That offer no longer exists. <Link href="/app" className="text-escrow">Back to browse</Link>.
+      <p className="rounded-lg border border-line bg-surface p-6 text-[13px] text-muted">
+        That offer no longer exists. <Link href="/app" className="text-info hover:underline">Back to browse</Link>.
       </p>
     )
   }
@@ -48,7 +48,7 @@ export default function OfferDetailPage({ params }: { params: Promise<{ id: stri
           href={offer.targetUrl}
           target="_blank"
           rel="noopener noreferrer nofollow"
-          className="mt-1 block break-all font-mono text-[12px] text-escrow"
+          className="mt-1 block break-all font-mono text-[12px] text-info hover:underline"
         >
           {offer.targetUrl}
         </a>
@@ -58,7 +58,7 @@ export default function OfferDetailPage({ params }: { params: Promise<{ id: stri
       </div>
 
       <aside className="space-y-4">
-        <div className="rounded-md border border-line bg-surface p-4">
+        <div className="rounded-lg border border-line bg-surface p-4">
           {/* Escrow leads, unframed, matching the browse card: it's the
               guaranteed balance the affiliate's decision turns on, so it
               carries the most visual weight. CPA is supporting detail below

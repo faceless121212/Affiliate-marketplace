@@ -30,7 +30,7 @@ export function GetLinkPanel({ offer, wallet }: { offer: Offer; wallet: string }
 
   if (!url) {
     return (
-      <div className="rounded-md border border-line bg-surface p-4">
+      <div className="rounded-lg border border-line bg-surface p-4">
         <Button onClick={generate}>Get my link</Button>
         <p className="mt-2 text-[11.5px] text-muted">
           Your link carries your wallet address, so confirmed conversions pay out to you.
@@ -40,10 +40,10 @@ export function GetLinkPanel({ offer, wallet }: { offer: Offer; wallet: string }
   }
 
   return (
-    <div className="rounded-md border border-line bg-surface p-4">
+    <div className="rounded-lg border border-line bg-surface p-4">
       <p className="mb-2 text-[11.5px] text-muted">Your tracking link</p>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-        <code className="min-w-0 flex-1 break-all rounded-[5px] border border-line bg-canvas px-2 py-1.5 font-mono text-[12px]">
+        <code className="min-w-0 flex-1 break-all rounded-[8px] border border-inset bg-canvas px-2 py-1.5 font-mono text-[12px]">
           {url}
         </code>
         <Button variant="secondary" onClick={copy} className="shrink-0">

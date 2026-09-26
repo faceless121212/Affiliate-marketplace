@@ -19,5 +19,8 @@ export function Field({
   )
 }
 
+// `border-inset` (#E5E5E5), not `border-line` (#F0F0F0): on white, `line` is
+// too close to the page/card background to read as an input boundary — this
+// is the one spot the brief calls out by name.
 export const inputClass =
-  'w-full rounded-[5px] border border-line bg-canvas px-2.5 py-2 text-[13px] text-text outline-none focus:border-muted'
+  'w-full rounded-[8px] border border-inset bg-canvas px-2.5 py-2 text-[13px] text-text outline-none focus:border-text'

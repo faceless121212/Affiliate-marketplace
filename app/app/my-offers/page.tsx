@@ -28,7 +28,7 @@ export default function MyOffersPage() {
       <div>
         <h2 className="mb-3 text-lg font-semibold">My offers</h2>
         {offers.length === 0 ? (
-          <p className="rounded-md border border-line bg-surface p-5 text-[13px] text-muted">
+          <p className="rounded-lg border border-line bg-surface p-5 text-[13px] text-muted">
             You have not listed an offer yet. The form on the left lists one immediately.
           </p>
         ) : (
@@ -36,7 +36,7 @@ export default function MyOffersPage() {
             {offers.map((offer) => {
               const conversions = listConversionsByOffer(offer.id).length
               return (
-                <li key={offer.id} className="rounded-md border border-line bg-surface p-4">
+                <li key={offer.id} className="rounded-lg border border-line bg-surface p-4">
                   <div className="mb-3 flex items-start justify-between gap-2">
                     <h3 className="text-[15px] font-semibold">{offer.name}</h3>
                     {offer.status === 'depleted' ? (

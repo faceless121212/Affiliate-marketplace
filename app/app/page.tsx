@@ -29,7 +29,7 @@ export default function BrowsePage() {
       />
 
       {offers.length === 0 ? (
-        <p className="rounded-md border border-line bg-surface p-6 text-center text-[13px] text-muted">
+        <p className="rounded-lg border border-line bg-surface p-6 text-center text-[13px] text-muted">
           No offers match that filter.
         </p>
       ) : (

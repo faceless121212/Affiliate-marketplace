@@ -29,7 +29,7 @@ export function HowItWorks() {
           <h2 className="text-2xl font-semibold tracking-tight">How a payout actually happens</h2>
         </Reveal>
 
-        <ol className="mt-10 grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-3">
+        <ol className="mt-10 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-3">
           {STEPS.map((s, i) => (
             <li
               key={s.n}
@@ -37,7 +37,11 @@ export function HowItWorks() {
             >
               <Reveal delayMs={i * 80}>
                 <div className="flex items-baseline gap-2">
-                  <span className="font-mono tnum text-[12px] text-escrow">{s.n}</span>
+                  {/* A lime-filled pill, not lime text — same fill+ink
+                      pattern as the badges and the escrow figure. */}
+                  <span className="rounded-full bg-escrow px-1.5 py-0.5 font-mono tnum text-[11px] font-semibold text-ink">
+                    {s.n}
+                  </span>
                   <span className="text-[12px] text-muted">{s.label}</span>
                 </div>
                 <h3 className="mt-2 text-[15px] font-semibold">{s.heading}</h3>

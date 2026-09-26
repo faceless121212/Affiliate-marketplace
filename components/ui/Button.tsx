@@ -4,17 +4,21 @@ type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 
 export function Button({ variant = 'primary', className = '', ...rest }: Props) {
   const variantClass = {
-    // Dark text on the bright accent, as on all three reference apps.
-    primary: 'bg-escrow text-canvas hover:brightness-110 disabled:opacity-40',
-    // Same treatment, paid-green — for the affiliate side of the split hero.
-    paid: 'bg-paid text-canvas hover:brightness-110 disabled:opacity-40',
-    secondary: 'border border-line bg-surface text-text hover:border-muted disabled:opacity-40',
+    // Black text on the lime fill — lime is a fill colour only; text drawn
+    // in it is illegible on white (~1.2:1). Darkening slightly on hover
+    // (brightness-95) reads as pressed feedback on a light, saturated fill.
+    primary: 'bg-escrow text-ink hover:brightness-95 disabled:opacity-40',
+    // White on the paid green — for the affiliate side of the split hero.
+    // `paid` is darkened for 4.5:1 body-text legibility elsewhere, so black
+    // text here no longer has enough contrast; white does (5.6:1).
+    paid: 'bg-paid text-white hover:brightness-110 disabled:opacity-40',
+    secondary: 'border border-line bg-surface text-text hover:border-muted hover:bg-line disabled:opacity-40',
     ghost: 'text-muted hover:text-text',
   }[variant]
   return (
     <button
       {...rest}
-      className={`rounded-[5px] px-3 py-2 text-[13px] font-semibold transition disabled:cursor-not-allowed ${variantClass} ${className}`}
+      className={`rounded-[8px] px-3 py-2 text-[13px] font-semibold transition disabled:cursor-not-allowed ${variantClass} ${className}`}
     />
   )
 }

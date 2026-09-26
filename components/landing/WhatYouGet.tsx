@@ -25,7 +25,7 @@ export function WhatYouGet() {
           </p>
         </Reveal>
 
-        <div className="mt-10 grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-2">
+        <div className="mt-10 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">
           <Reveal
             delayMs={0}
             className="border border-transparent bg-surface p-5 transition-colors duration-300 hover:border-paid/40 hover:bg-paid/5"

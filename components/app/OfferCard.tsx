@@ -12,7 +12,7 @@ export function OfferCard({ offer }: { offer: Offer }) {
   return (
     <Link
       href={`/app/offers/${offer.id}`}
-      className="block rounded-md border border-line bg-surface p-4 transition hover:border-muted"
+      className="block rounded-lg border border-line bg-surface p-4 transition hover:border-muted hover:bg-line"
     >
       <div className="mb-0.5 flex items-start justify-between gap-2">
         <h3 className="min-w-0 truncate text-[15px] font-semibold leading-tight">{offer.name}</h3>

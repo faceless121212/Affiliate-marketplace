@@ -35,7 +35,7 @@ export default function LinksPage() {
         <h2 className="mb-2 text-[13px] font-semibold">Tracking links</h2>
         {links.length === 0 ? (
           <Empty>
-            No links yet. <Link href="/app" className="text-escrow">Browse offers</Link> and generate one.
+            No links yet. <Link href="/app" className="text-info hover:underline">Browse offers</Link> and generate one.
           </Empty>
         ) : (
           <Table head={['Offer', 'Clicks', 'Link']}>
@@ -87,7 +87,7 @@ function Stat({
   testId?: string
 }) {
   return (
-    <div className="rounded-md border border-line bg-surface p-3">
+    <div className="rounded-lg border border-line bg-surface p-3">
       <p className="text-[11.5px] text-muted">{label}</p>
       <p className="mt-1 text-[17px] font-bold" data-testid={testId}>
         {value}
@@ -98,7 +98,7 @@ function Stat({
 
 function Empty({ children }: { children: React.ReactNode }) {
   return (
-    <p className="rounded-md border border-line bg-surface p-5 text-[13px] text-muted">
+    <p className="rounded-lg border border-line bg-surface p-5 text-[13px] text-muted">
       {children}
     </p>
   )
@@ -106,7 +106,7 @@ function Empty({ children }: { children: React.ReactNode }) {
 
 function Table({ head, children }: { head: string[]; children: React.ReactNode }) {
   return (
-    <div className="overflow-x-auto rounded-md border border-line bg-surface">
+    <div className="overflow-x-auto rounded-lg border border-line bg-surface">
       <table className="w-full text-[13px]">
         <thead>
           <tr>

@@ -2,7 +2,7 @@ import { Reveal } from './Reveal'
 
 const FACTS = [
   { value: 'Oct 2025', label: 'ShareASale shut down, folded into Awin', tone: 'text-depleted' },
-  { value: 'NET-60', label: 'Rakuten Advertising’s standard settlement term', tone: 'text-escrow' },
+  { value: 'NET-60', label: 'Rakuten Advertising’s standard settlement term', tone: 'text-ink' },
   { value: '2.2/5', label: 'Rakuten Advertising’s Trustpilot rating', tone: 'text-depleted' },
 ] as const
 
@@ -26,7 +26,7 @@ export function ProofBand() {
           </p>
         </Reveal>
 
-        <div className="mt-10 grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-3">
+        <div className="mt-10 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-3">
           {FACTS.map((f, i) => (
             <Reveal
               key={f.value}
@@ -41,7 +41,7 @@ export function ProofBand() {
 
         <Reveal
           delayMs={240}
-          className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-md border border-escrow/30 bg-escrow/5 p-5"
+          className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-escrow/30 bg-escrow/5 p-5"
         >
           <p className="max-w-md text-[14px] leading-relaxed text-text">
             Every line of this prototype is public. An open-source claim is proof a new product
@@ -49,7 +49,7 @@ export function ProofBand() {
           </p>
           <a
             href="https://github.com/faceless121212/Affiliate-marketplace"
-            className="shrink-0 rounded-[5px] border border-line bg-surface px-4 py-2.5 text-[13px] font-semibold text-text transition-colors duration-300 hover:border-escrow/50 hover:bg-escrow/10"
+            className="shrink-0 rounded-[8px] border border-line bg-surface px-4 py-2.5 text-[13px] font-semibold text-text transition-colors duration-300 hover:border-escrow/50 hover:bg-escrow/10"
           >
             Audit the source on GitHub
           </a>

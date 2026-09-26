@@ -15,7 +15,11 @@ export function Money({
 }) {
   const toneClass = {
     default: 'text-text',
-    escrow: 'text-escrow',
+    // The dominant figure (escrow remainder, the hero counter). Lime as text
+    // is ~1.2:1 on white — illegible — so escrow renders in `ink` (black)
+    // instead, and gets its dominance from size and weight, not colour. Lime
+    // stays reserved for fills: the meter's progress bar, chips.
+    escrow: 'text-ink',
     paid: 'text-paid',
     muted: 'text-muted',
     // Used by EscrowMeter in Task 11 when a balance can no longer fund a conversion.

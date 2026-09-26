@@ -51,15 +51,15 @@ export default function SimulatePage() {
       </header>
 
       {links.length === 0 ? (
-        <p className="rounded-md border border-line bg-surface p-5 text-[13px] text-muted">
+        <p className="rounded-lg border border-line bg-surface p-5 text-[13px] text-muted">
           You have no tracking links yet.{' '}
-          <Link href="/app" className="text-escrow">
+          <Link href="/app" className="text-info hover:underline">
             Browse offers
           </Link>{' '}
           and generate one first.
         </p>
       ) : (
-        <div className="space-y-3 rounded-md border border-line bg-surface p-4">
+        <div className="space-y-3 rounded-lg border border-line bg-surface p-4">
           <label className="block">
             <span className="mb-1 block text-[12px] text-muted">Tracking link</span>
             <select
@@ -89,7 +89,7 @@ export default function SimulatePage() {
       {message && (
         <p
           role="status"
-          className={`rounded-md border p-3 text-[13px] ${
+          className={`rounded-lg border p-3 text-[13px] ${
             message.kind === 'paid'
               ? 'border-paid/35 bg-paid/10 text-paid'
               : 'border-depleted/35 bg-depleted/10 text-depleted'

@@ -22,8 +22,8 @@ export function Nav({ pathname }: { pathname: string }) {
             key={href}
             href={href}
             aria-current={active ? 'page' : undefined}
-            className={`whitespace-nowrap rounded-[5px] px-2.5 py-1.5 text-[13px] transition ${
-              active ? 'bg-surface text-text' : 'text-muted hover:text-text'
+            className={`whitespace-nowrap rounded-full px-2.5 py-1.5 text-[13px] transition ${
+              active ? 'bg-line text-text' : 'text-muted hover:text-text hover:bg-surface'
             }`}
           >
             {label}

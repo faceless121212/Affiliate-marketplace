@@ -36,7 +36,7 @@ export function HeroOfferCard() {
   const fundable = Math.floor(SAMPLE_OFFER.escrowRemainingUsd / SAMPLE_OFFER.commissionAmountUsd)
 
   return (
-    <div className="mt-8 rounded-md border border-line bg-surface p-4 transition-colors duration-300 hover:border-escrow/40 hover:bg-escrow/5">
+    <div className="mt-8 rounded-lg border border-line bg-surface p-4 transition-colors duration-300 hover:border-escrow/40 hover:bg-escrow/5">
       <div className="mb-0.5 flex items-start justify-between gap-2">
         <h2 className="min-w-0 truncate text-[15px] font-semibold leading-tight">
           {SAMPLE_OFFER.name}

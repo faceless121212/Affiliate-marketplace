@@ -17,11 +17,10 @@ export function EscrowCounter() {
   const value = useCountUp(TOTAL_LOCKED_USD)
 
   return (
+    // The lime radial glow this had on dark read as a soft halo; on white it
+    // just muddies the number underneath, so it's dropped rather than
+    // re-tuned — the figure's size and weight carry the emphasis instead.
     <div className="relative">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -inset-10 -z-10 rounded-full bg-[radial-gradient(circle,var(--color-escrow)_0%,transparent_70%)] opacity-20 blur-2xl"
-      />
       <p className="text-[11px] uppercase tracking-wide text-muted">Locked in escrow right now</p>
       <Money
         value={value}

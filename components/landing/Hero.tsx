@@ -14,7 +14,11 @@ export function Hero() {
       <div className="grid gap-10 lg:grid-cols-[1fr_0.7fr_1fr] lg:gap-6">
         {/* Left — advertisers ("affiliate platforms" in the owner's words). Amber, escrow-toned. */}
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-escrow">
+          {/* Lime as text is illegible on white (~1.2:1) — the audience tag
+              now carries the colour as a small fill swatch instead, with the
+              label itself in legible black. */}
+          <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-text">
+            <span className="h-1.5 w-4 rounded-full bg-escrow" aria-hidden />
             For affiliate platforms
           </p>
           <h1 className="mt-3 text-[30px] font-bold leading-[1.08] tracking-tight sm:text-[36px]">
@@ -53,7 +57,8 @@ export function Hero() {
             places this third on mobile (after the centre column is pushed
             last) and third in the desktop grid — no order override needed. */}
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-paid">
+          <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-paid">
+            <span className="h-1.5 w-4 rounded-full bg-paid" aria-hidden />
             For affiliates
           </p>
           <h1 className="mt-3 text-[30px] font-bold leading-[1.08] tracking-tight sm:text-[36px]">

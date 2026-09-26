@@ -42,11 +42,11 @@ export function Problem() {
             <Reveal
               key={c.heading}
               delayMs={i * 70}
-              className="rounded-md border border-transparent p-4 transition-colors duration-300 hover:border-line hover:bg-surface"
+              className="rounded-lg border border-transparent p-4 transition-colors duration-300 hover:border-line hover:bg-surface"
             >
               <h3 className="text-[15px] font-semibold">{c.heading}</h3>
               <p className="mt-2 text-[14px] leading-relaxed text-muted">{c.body}</p>
-              <p className="mt-2 text-[11px] text-muted/70">Source: {c.source}</p>
+              <p className="mt-2 text-[11px] text-muted">Source: {c.source}</p>
             </Reveal>
           ))}
         </div>

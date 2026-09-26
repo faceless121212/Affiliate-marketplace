@@ -47,9 +47,12 @@ export function EscrowMeter({
           / <Money value={offer.escrowTotalUsd} tone="muted" className="text-[12px]" />
         </span>
       </div>
-      <div className="mt-2 h-2 overflow-hidden rounded-sm bg-line">
+      {/* `bg-inset` (#E5E5E5), not `bg-line` (#F0F0F0): the track needs to
+          read as a groove against the card's own #FAFAFA surface, which
+          `line` is too close to. */}
+      <div className="mt-2 h-2 overflow-hidden rounded-full bg-inset">
         <div
-          className={`h-full transition-[width] duration-700 ease-out motion-reduce:transition-none ${empty ? 'bg-depleted' : 'bg-escrow'}`}
+          className={`h-full rounded-full transition-[width] duration-700 ease-out motion-reduce:transition-none ${empty ? 'bg-depleted' : 'bg-escrow'}`}
           style={{ width: `${barPct}%` }}
         />
       </div>
