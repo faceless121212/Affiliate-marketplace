@@ -1,22 +1,62 @@
-import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { render, screen, fireEvent } from '@testing-library/react'
 import LandingPage from '@/app/page'
 
+// Mutable so individual tests can simulate a connected wallet without a
+// second vi.mock factory per test.
+let connected = false
+const push = vi.fn()
+
 vi.mock('@/lib/wallet/useAccount', () => ({
-  useAccount: () => ({ wallet: null, connected: false, connecting: false }),
+  useAccount: () => ({ wallet: connected ? 'DemoWallet111' : null, connected, connecting: false }),
   useLoginModal: () => () => {},
 }))
 
+// Overrides the global setup mock for this file only, so CTA destinations
+// can be asserted against a real spy instead of a throwaway vi.fn().
+vi.mock('next/navigation', () => ({
+  usePathname: () => '/',
+  useRouter: () => ({ push, replace: vi.fn(), back: vi.fn(), prefetch: vi.fn() }),
+  useSearchParams: () => new URLSearchParams(),
+}))
+
+beforeEach(() => {
+  connected = false
+  push.mockClear()
+})
+
 describe('Landing page', () => {
-  it('offers exactly one primary call to action', () => {
+  it('offers two CTAs, one per audience', () => {
     render(<LandingPage />)
-    expect(screen.getAllByRole('button', { name: 'Enter Nativness' })).toHaveLength(1)
+    expect(screen.getAllByRole('button', { name: 'List an offer' })).toHaveLength(1)
+    expect(screen.getAllByRole('button', { name: 'Browse offers' })).toHaveLength(1)
   })
 
-  it('has no separate browse or list CTA — login is the single front door', () => {
+  it('routes the advertiser CTA to /app/my-offers once the wallet is connected', () => {
+    connected = true
     render(<LandingPage />)
-    expect(screen.queryByRole('button', { name: /^browse/i })).toBeNull()
-    expect(screen.queryByRole('button', { name: /^list an offer/i })).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'List an offer' }))
+    expect(push).toHaveBeenCalledWith('/app/my-offers')
+  })
+
+  it('routes the affiliate CTA to /app once the wallet is connected', () => {
+    connected = true
+    render(<LandingPage />)
+    fireEvent.click(screen.getByRole('button', { name: 'Browse offers' }))
+    expect(push).toHaveBeenCalledWith('/app')
+  })
+
+  it('renders the announcement bar and header', () => {
+    render(<LandingPage />)
+    expect(screen.getByTestId('site-header')).toBeInTheDocument()
+    expect(screen.getByText(/escrow balances are simulated/i)).toBeInTheDocument()
+  })
+
+  it('states one login for both sides in the hero', () => {
+    render(<LandingPage />)
+    const hero = screen.getByTestId('hero')
+    expect(hero).toHaveTextContent(/one wallet is one login/i)
+    expect(hero).toHaveTextContent(/both sides/i)
   })
 
   it('shows a real offer card with a locked escrow balance', () => {

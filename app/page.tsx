@@ -1,3 +1,5 @@
+import { AnnouncementBar } from '@/components/landing/AnnouncementBar'
+import { Header } from '@/components/landing/Header'
 import { Hero } from '@/components/landing/Hero'
 import { Problem } from '@/components/landing/Problem'
 import { HowItWorks } from '@/components/landing/HowItWorks'
@@ -8,14 +10,18 @@ import { Footer } from '@/components/landing/Footer'
 
 export default function LandingPage() {
   return (
-    <main>
-      <Hero />
-      <Problem />
-      <HowItWorks />
-      <WhyEscrow />
-      <WhatYouGet />
-      <Market />
-      <Footer />
-    </main>
+    <>
+      <AnnouncementBar />
+      <Header />
+      <main>
+        <Hero />
+        <Problem />
+        <HowItWorks />
+        <WhyEscrow />
+        <WhatYouGet />
+        <Market />
+        <Footer />
+      </main>
+    </>
   )
 }
