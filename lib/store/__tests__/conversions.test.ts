@@ -8,7 +8,8 @@ import {
 } from '@/lib/store/conversions'
 import { issueLink } from '@/lib/store/links'
 import { createOffer, getOffer, listOffers, topUpEscrow } from '@/lib/store/offers'
-import type { OfferDraft } from '@/lib/types'
+import { KEYS, read, write } from '@/lib/store/storage'
+import type { Offer, OfferDraft } from '@/lib/types'
 
 const AFFILIATE = '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU'
 const ADVERTISER = '3nMwKpQ8rTyVbCfXzJ5hLdSaG2eU9NvRqBtHxY4kciWo'
@@ -44,10 +45,21 @@ describe('recordConversion', () => {
   })
 
   it('snapshots the amount so history survives a commission change', () => {
-    const offer = createOffer(draft, ADVERTISER)
-    const link = issueLink(offer.id, AFFILIATE)
+    listOffers()
+    const link = issueLink('of_seed_drayton', AFFILIATE)
     recordConversion(link.id)
-    expect(listConversionsByAffiliate(AFFILIATE)[0].amountUsd).toBe(15)
+    expect(listConversionsByAffiliate(AFFILIATE)[0].amountUsd).toBe(24)
+
+    // No public commission-editing API exists by design; reach through the
+    // storage layer to simulate the advertiser changing the offer's terms.
+    const offers = read<Offer[]>(KEYS.offers, [])
+    write(
+      KEYS.offers,
+      offers.map((o) => (o.id === 'of_seed_drayton' ? { ...o, commissionAmountUsd: 48 } : o)),
+    )
+
+    expect(listConversionsByAffiliate(AFFILIATE)[0].amountUsd).toBe(24)
+    expect(totalEarnedUsd(AFFILIATE)).toBe(24)
   })
 
   it('flips the offer to depleted when the remainder can no longer fund one', () => {
