@@ -102,11 +102,49 @@ describe('Landing page', () => {
     const { container } = render(<LandingPage />)
     const text = container.textContent ?? ''
     // Allows the hero's sanctioned illustrative offer-card figures ($340, $500,
-    // $24, the conversions count) and the cited market figures — only a figure
-    // describing Nativness's own adoption is disallowed.
+    // $24, the conversions count), the animated escrow counter (labelled as
+    // the demo marketplace's total, not Nativness's own), and the cited
+    // market figures — only a figure describing Nativness's own adoption,
+    // revenue or traffic is disallowed.
     expect(text).not.toMatch(
-      /\d[\d,]*(\.\d+)?%?\s*(companies|advertisers|affiliates|users|onboarded|paid out|conversions paid|volume)\b/i,
+      /\d[\d,]*(\.\d+)?%?\s*(companies|advertisers|affiliates|users|onboarded|paid out|conversions paid|volume|signups|revenue|traffic|GMV)\b/i,
     )
+  })
+
+  it('renders the social-proof section labelled as illustrative, not real customers', () => {
+    render(<LandingPage />)
+    const proof = screen.getByTestId('social-proof')
+    expect(proof).toHaveTextContent(/illustrative/i)
+    expect(proof).toHaveTextContent(/no customers yet|not real quotes/i)
+  })
+
+  it('renders the honest proof band with the sourced facts and an audit link', () => {
+    render(<LandingPage />)
+    const band = screen.getByTestId('proof-band')
+    expect(band).toHaveTextContent('Awin')
+    expect(band).toHaveTextContent('NET-60')
+    expect(band).toHaveTextContent('2.2/5')
+    expect(
+      screen.getByRole('link', { name: /audit the source on github/i }),
+    ).toHaveAttribute('href', expect.stringContaining('github.com'))
+  })
+
+  it('offers a repeat CTA band low on the page that routes to the same two destinations', () => {
+    connected = true
+    render(<LandingPage />)
+    expect(screen.getByTestId('repeat-cta')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Start listing an offer' }))
+    expect(push).toHaveBeenCalledWith('/app/my-offers')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Start browsing offers' }))
+    expect(push).toHaveBeenCalledWith('/app')
+  })
+
+  it('never duplicates the hero CTA labels in the repeat band', () => {
+    render(<LandingPage />)
+    expect(screen.getAllByRole('button', { name: 'List an offer' })).toHaveLength(1)
+    expect(screen.getAllByRole('button', { name: 'Browse offers' })).toHaveLength(1)
   })
 
   it('states the three steps in order', () => {

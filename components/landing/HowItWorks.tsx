@@ -1,3 +1,5 @@
+import { Reveal } from './Reveal'
+
 const STEPS = [
   {
     n: '01',
@@ -23,17 +25,24 @@ export function HowItWorks() {
   return (
     <section id="how-it-works" data-testid="how-it-works" className="border-t border-line">
       <div className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="text-2xl font-semibold tracking-tight">How a payout actually happens</h2>
+        <Reveal>
+          <h2 className="text-2xl font-semibold tracking-tight">How a payout actually happens</h2>
+        </Reveal>
 
         <ol className="mt-10 grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-3">
-          {STEPS.map((s) => (
-            <li key={s.n} className="bg-surface p-5">
-              <div className="flex items-baseline gap-2">
-                <span className="font-mono tnum text-[12px] text-escrow">{s.n}</span>
-                <span className="text-[12px] text-muted">{s.label}</span>
-              </div>
-              <h3 className="mt-2 text-[15px] font-semibold">{s.heading}</h3>
-              <p className="mt-2 text-[14px] leading-relaxed text-muted">{s.body}</p>
+          {STEPS.map((s, i) => (
+            <li
+              key={s.n}
+              className="border border-transparent bg-surface p-5 transition-colors duration-300 hover:border-escrow/40 hover:bg-escrow/5"
+            >
+              <Reveal delayMs={i * 80}>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-mono tnum text-[12px] text-escrow">{s.n}</span>
+                  <span className="text-[12px] text-muted">{s.label}</span>
+                </div>
+                <h3 className="mt-2 text-[15px] font-semibold">{s.heading}</h3>
+                <p className="mt-2 text-[14px] leading-relaxed text-muted">{s.body}</p>
+              </Reveal>
             </li>
           ))}
         </ol>

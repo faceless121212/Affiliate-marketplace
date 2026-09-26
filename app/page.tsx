@@ -6,6 +6,9 @@ import { HowItWorks } from '@/components/landing/HowItWorks'
 import { WhyEscrow } from '@/components/landing/WhyEscrow'
 import { WhatYouGet } from '@/components/landing/WhatYouGet'
 import { Market } from '@/components/landing/Market'
+import { ProofBand } from '@/components/landing/ProofBand'
+import { SocialProof } from '@/components/landing/SocialProof'
+import { RepeatCtaBand } from '@/components/landing/RepeatCtaBand'
 import { Footer } from '@/components/landing/Footer'
 
 export default function LandingPage() {
@@ -20,6 +23,9 @@ export default function LandingPage() {
         <WhyEscrow />
         <WhatYouGet />
         <Market />
+        <ProofBand />
+        <SocialProof />
+        <RepeatCtaBand />
         <Footer />
       </main>
     </>

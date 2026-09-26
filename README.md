@@ -19,7 +19,7 @@ Backpack) set to **devnet**. Nothing of value moves: the wallet is an identity h
 payment rail.
 
 ```bash
-npm test          # 106 unit and component tests (Vitest 5)
+npm test          # 116 unit and component tests (Vitest 5)
 npm run lint       # ESLint
 npx tsc --noEmit   # type-check
 npm run build      # production build
@@ -67,7 +67,16 @@ The app carries a permanent banner saying the same thing. It is not dismissible.
 Six fictional offers seed on first load, across ecommerce, iGaming, dating and SaaS. No real
 brand names are used. Two are Verified; one (Fenwick Grounds) is nearly exhausted and one
 (Halcyon Tools) has zero escrow, so both degraded states are visible without simulating your
-way there.
+way there. The landing page's live escrow counter is the sum of these six offers'
+`escrowTotalUsd` — real seed data, labelled honestly as the demo marketplace's total, not a
+claim about Nativness's own traction.
+
+**The landing page's social-proof quotes (`components/landing/SocialProof.tsx`) are
+placeholders.** Nativness has no customers yet, so every name, company and quote there is
+invented — in the same spirit as the fictional seed offers, never a real person or company —
+and the section carries a visible "Illustrative examples" label saying so. Swap each quote for
+a real one the moment there is a real user to quote; the file's header comment repeats this
+note next to the data.
 
 ## Icons and assets
 

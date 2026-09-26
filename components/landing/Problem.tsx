@@ -1,3 +1,5 @@
+import { Reveal } from './Reveal'
+
 const CLAIMS = [
   {
     heading: 'The good tooling is priced for enterprises only',
@@ -23,23 +25,29 @@ const CLAIMS = [
 
 export function Problem() {
   return (
-    <section data-testid="problem" className="border-t border-line">
+    <section data-testid="problem" className="border-t border-line bg-depleted/5">
       <div className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="text-2xl font-semibold tracking-tight">
-          Affiliate payment is a trust problem nobody has fixed
-        </h2>
-        <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-muted">
-          Every layer of the current market asks the affiliate to do the work first and trust
-          somebody else to pay later.
-        </p>
+        <Reveal>
+          <h2 className="text-2xl font-semibold tracking-tight">
+            Affiliate payment is a trust problem nobody has fixed
+          </h2>
+          <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-muted">
+            Every layer of the current market asks the affiliate to do the work first and trust
+            somebody else to pay later.
+          </p>
+        </Reveal>
 
-        <div className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2">
-          {CLAIMS.map((c) => (
-            <div key={c.heading}>
+        <div className="mt-10 grid gap-x-6 gap-y-4 sm:grid-cols-2">
+          {CLAIMS.map((c, i) => (
+            <Reveal
+              key={c.heading}
+              delayMs={i * 70}
+              className="rounded-md border border-transparent p-4 transition-colors duration-300 hover:border-line hover:bg-surface"
+            >
               <h3 className="text-[15px] font-semibold">{c.heading}</h3>
               <p className="mt-2 text-[14px] leading-relaxed text-muted">{c.body}</p>
               <p className="mt-2 text-[11px] text-muted/70">Source: {c.source}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>
