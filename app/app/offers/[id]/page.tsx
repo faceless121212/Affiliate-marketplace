@@ -59,12 +59,14 @@ export default function OfferDetailPage({ params }: { params: Promise<{ id: stri
 
       <aside className="space-y-4">
         <div className="rounded-md border border-line bg-surface p-4">
-          <div className="flex items-baseline justify-between border-b border-line pb-2">
+          {/* Escrow leads, unframed, matching the browse card: it's the
+              guaranteed balance the affiliate's decision turns on, so it
+              carries the most visual weight. CPA is supporting detail below
+              it, in a plain unbolded footer row — not its own headline. */}
+          <EscrowMeter offer={offer} />
+          <div className="mt-3 flex items-baseline justify-between border-t border-line pt-2">
             <span className="text-[11.5px] text-muted">CPA per conversion</span>
-            <Money value={offer.commissionAmountUsd} className="text-[17px] font-bold" />
-          </div>
-          <div className="pt-3">
-            <EscrowMeter offer={offer} />
+            <Money value={offer.commissionAmountUsd} className="text-[13px]" />
           </div>
           {offer.status === 'depleted' && (
             <p className="mt-3 text-[11.5px] text-depleted">
