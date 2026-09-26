@@ -3,18 +3,24 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
+import { Money } from '@/components/ui/Money'
 import { inputClass } from '@/components/ui/Field'
 import { useMyLinks, useMutate } from '@/lib/store/provider'
 import { getOffer, recordConversion } from '@/lib/store'
 import { useAccount } from '@/lib/wallet/useAccount'
 import { money } from '@/lib/format'
 
+type SimMessage =
+  | { kind: 'paid'; amountUsd: number; offerName: string; remainingUsd: number }
+  | { kind: 'insufficient_escrow' }
+  | { kind: 'not_found' }
+
 export default function SimulatePage() {
   const { wallet } = useAccount()
   const links = useMyLinks(wallet)
   const mutate = useMutate()
   const [linkId, setLinkId] = useState('')
-  const [message, setMessage] = useState<{ tone: 'paid' | 'depleted'; text: string } | null>(null)
+  const [message, setMessage] = useState<SimMessage | null>(null)
 
   const selected = linkId || links[0]?.id || ''
 
@@ -22,16 +28,15 @@ export default function SimulatePage() {
     const result = mutate(() => recordConversion(selected))
     if (result.ok) {
       setMessage({
-        tone: 'paid',
-        text: `Conversion confirmed. Paid ${money(result.conversion.amountUsd)} to your wallet. ${result.offer.name} now holds ${money(result.offer.escrowRemainingUsd)} in escrow.`,
+        kind: 'paid',
+        amountUsd: result.conversion.amountUsd,
+        offerName: result.offer.name,
+        remainingUsd: result.offer.escrowRemainingUsd,
       })
     } else if (result.reason === 'insufficient_escrow') {
-      setMessage({
-        tone: 'depleted',
-        text: 'Not enough escrow. This offer cannot fund another conversion until the advertiser tops up.',
-      })
+      setMessage({ kind: 'insufficient_escrow' })
     } else {
-      setMessage({ tone: 'depleted', text: 'That tracking link could not be found.' })
+      setMessage({ kind: 'not_found' })
     }
   }
 
@@ -85,12 +90,21 @@ export default function SimulatePage() {
         <p
           role="status"
           className={`rounded-md border p-3 text-[13px] ${
-            message.tone === 'paid'
+            message.kind === 'paid'
               ? 'border-paid/35 bg-paid/10 text-paid'
               : 'border-depleted/35 bg-depleted/10 text-depleted'
           }`}
         >
-          {message.text}
+          {message.kind === 'paid' && (
+            <>
+              Conversion confirmed. Paid <Money value={message.amountUsd} tone="paid" /> to your
+              wallet. {message.offerName} now holds{' '}
+              <Money value={message.remainingUsd} tone="paid" /> in escrow.
+            </>
+          )}
+          {message.kind === 'insufficient_escrow' &&
+            'Not enough escrow. This offer cannot fund another conversion until the advertiser tops up.'}
+          {message.kind === 'not_found' && 'That tracking link could not be found.'}
         </p>
       )}
     </section>

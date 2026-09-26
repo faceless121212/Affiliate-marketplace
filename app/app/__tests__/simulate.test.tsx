@@ -42,7 +42,33 @@ describe('Simulate', () => {
     )
     await userEvent.click(screen.getByRole('button', { name: 'Confirm conversion' }))
     expect(getOffer('of_seed_drayton')!.escrowRemainingUsd).toBe(316)
-    expect(screen.getByText(/paid \$24\.00/i)).toBeInTheDocument()
+
+    const status = screen.getByRole('status')
+    expect(status.textContent).toMatch(/paid \$24\.00/i)
+    expect(status.textContent).toMatch(/\$316\.00 in escrow/i)
+  })
+
+  it('renders the confirmation figures in mono with tabular numerals, like every other balance', async () => {
+    listOffers()
+    issueLink('of_seed_drayton', WALLET)
+    render(
+      <StoreProvider>
+        <SimulatePage />
+      </StoreProvider>,
+    )
+    await userEvent.click(screen.getByRole('button', { name: 'Confirm conversion' }))
+
+    // These are the product's two most consequential numbers on this screen
+    // (the payout and the resulting escrow balance) — they must carry the
+    // same mono/tabular treatment as every other currency figure, not render
+    // in the prose typeface as part of a flat interpolated string.
+    const paidFigure = screen.getByText('$24.00')
+    expect(paidFigure.className).toMatch(/\bfont-mono\b/)
+    expect(paidFigure.className).toMatch(/\btnum\b/)
+
+    const escrowFigure = screen.getByText('$316.00')
+    expect(escrowFigure.className).toMatch(/\bfont-mono\b/)
+    expect(escrowFigure.className).toMatch(/\btnum\b/)
   })
 
   it('refuses when the offer’s escrow cannot fund another conversion', async () => {
