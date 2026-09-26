@@ -986,7 +986,7 @@ export function topUpEscrow(offerId: string, amountUsd: number): Offer | null {
 npx vitest run lib/store/__tests__/offers.test.ts
 ```
 
-Expected: PASS, 18 tests.
+Expected: PASS, 19 tests.
 
 - [ ] **Step 5: Commit**
 
@@ -1427,7 +1427,8 @@ Expected: PASS, 13 tests.
 npm test
 ```
 
-Expected: PASS, 53 tests across five files.
+Expected: PASS — roughly 56 tests across six files. Treat the count as
+approximate: the gate is that nothing fails, not that the number matches.
 
 - [ ] **Step 6: Commit**
 
@@ -1910,7 +1911,7 @@ export function Money({
   className = '',
 }: {
   value: number
-  tone?: 'default' | 'escrow' | 'paid' | 'muted'
+  tone?: 'default' | 'escrow' | 'paid' | 'muted' | 'depleted'
   className?: string
 }) {
   const toneClass = {
@@ -1918,6 +1919,8 @@ export function Money({
     escrow: 'text-escrow',
     paid: 'text-paid',
     muted: 'text-muted',
+    // Used by EscrowMeter in Task 11 when a balance can no longer fund a conversion.
+    depleted: 'text-depleted',
   }[tone]
   return <span className={`font-mono tnum ${toneClass} ${className}`}>{money(value)}</span>
 }

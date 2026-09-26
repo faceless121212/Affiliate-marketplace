@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@theme {
+  --color-canvas: #0B0D10;
+  --color-surface: #141922;
+  --color-line: #242C38;
+  --color-text: #E6EAF0;
+  --color-muted: #8695A8;
+  --color-escrow: #F2B231;
+  --color-paid: #3FCF8E;
+  --color-depleted: #E5484D;
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+html, body {
+  background: var(--color-canvas);
+  color: var(--color-text);
+}
+
+/* Numbers are a first-class visual element: they always align in columns. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
