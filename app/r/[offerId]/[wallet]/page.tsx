@@ -27,7 +27,7 @@ export default function TrackingRedirect({
       setFailed(true)
       return
     }
-    recordClick(offerId, decodeURIComponent(wallet))
+    recordClick(offerId, wallet)
     window.location.replace(offer.targetUrl)
   }, [offerId, wallet])
 

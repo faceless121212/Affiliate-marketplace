@@ -42,7 +42,6 @@ describe('Landing page', () => {
     const problem = screen.getByTestId('problem')
     expect(problem).toHaveTextContent('$75,000')
     expect(problem).toHaveTextContent('$300,000')
-    expect(problem).toHaveTextContent('15/100')
     expect(problem).toHaveTextContent('NET-60')
     expect(problem).toHaveTextContent('2.2/5')
     expect(problem).toHaveTextContent('Awin')
@@ -52,13 +51,22 @@ describe('Landing page', () => {
   it('never claims LinkUp or Revelio Labs is an affiliate network', () => {
     render(<LandingPage />)
     const text = screen.getByTestId('problem').textContent ?? ''
-    expect(text).toMatch(/workforce-data/i)
+    const sentences = text.split(/(?<=[.!?])\s+/)
+    const linkUpSentence = sentences.find((s) => s.includes('LinkUp'))
+    expect(linkUpSentence).toBeDefined()
+    expect(linkUpSentence).toMatch(/workforce-data/i)
+    expect(linkUpSentence).not.toMatch(/affiliate network/i)
   })
 
   it('makes no numeric claim about Nativness itself', () => {
-    render(<LandingPage />)
-    const whatYouGet = screen.getByTestId('what-you-get').textContent ?? ''
-    expect(whatYouGet).not.toMatch(/\d+\s*(companies|advertisers|affiliates|users|paid out)/i)
+    const { container } = render(<LandingPage />)
+    const text = container.textContent ?? ''
+    // Allows the hero's sanctioned illustrative offer-card figures ($340, $500,
+    // $24, the conversions count) and the cited market figures — only a figure
+    // describing Nativness's own adoption is disallowed.
+    expect(text).not.toMatch(
+      /\d[\d,]*(\.\d+)?%?\s*(companies|advertisers|affiliates|users|onboarded|paid out|conversions paid|volume)\b/i,
+    )
   })
 
   it('states the three steps in order', () => {

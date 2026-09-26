@@ -50,18 +50,17 @@ The app carries a permanent banner saying the same thing. It is not dismissible.
 - **No attribution integrity.** With no postback endpoint there are no duplicate-conversion
   checks. Deferred deliberately to Phase 2.
 - **Devnet only.** No mainnet, no real funds.
-- **The dependency tree has known-vulnerable packages.** `npm audit` reports 97 advisories, 13
-  of them critical or high, all transitive via `@solana/web3.js` and the wallet-adapter tree:
-  `protobufjs` (12 criticals — arbitrary code execution, prototype pollution, several DoS),
-  `lodash` (code injection via `_.template`, prototype pollution), `toml` (uncontrolled
-  recursion, prototype pollution), and `ws` (uninitialised memory disclosure, DoS). The app
-  imports the adapter packages directly, so this tree ships in the bundle regardless of use;
-  `WalletProvider wallets={[]}` (see `lib/wallet/provider.tsx`) means the WalletConnect and
-  mobile adapters responsible for much of it are never instantiated, which limits but does not
-  remove the exposure. **This must be resolved before mainnet or any handling of real funds.**
-  The realistic options are `npm audit fix --force` (likely breaks the adapter — these are deep
-  transitive pins, not direct ones) or migrating to [`@solana/kit`](https://github.com/anza-xyz/kit),
-  the v2 rewrite with a far smaller dependency tree.
+- **The dependency tree has known-vulnerable packages.** `npm audit` reports 12 advisories, all
+  moderate severity, transitive via `@solana/web3.js` and the wallet-adapter tree. This was 97
+  advisories (13 critical or high) until `@solana/wallet-adapter-wallets` — unused, since
+  `WalletProvider wallets={[]}` (see `lib/wallet/provider.tsx`) means wallet-standard wallets
+  self-register and nothing in this repo imports it — was removed; that one package pulled in
+  the WalletConnect and mobile-adapter subtrees responsible for most of the critical and high
+  findings. The remaining moderate advisories (`stream-json`, `uuid`, both transitive via
+  `jayson`) trace back to `@solana/web3.js` itself; `npm audit` reports no fix available for any
+  of them. **This must be resolved before mainnet or any handling of real funds.** The realistic
+  path is migrating to [`@solana/kit`](https://github.com/anza-xyz/kit), the v2 rewrite with a
+  far smaller dependency tree.
 
 ### Demo data
 
@@ -93,9 +92,16 @@ lib/wallet/             Solana wallet adapter wiring
 **The repository seam is the important part.** Components import from `@/lib/store` and never
 reach deeper. Those function signatures — `listOffers`, `createOffer`, `issueLink`,
 `recordConversion` — are deliberately shaped like the REST API that replaces them, so Phase 2
-swaps implementations without touching a single component. `lib/store/users.ts` holds the
-one function on that seam that manages identity (`ensureUser`), alongside `offers.ts`,
-`links.ts`, `conversions.ts`, `storage.ts` and `seed.ts`.
+swaps *implementations* without touching a single component's imports. `lib/store/users.ts`
+holds the one function on that seam that manages identity (`ensureUser`), alongside
+`offers.ts`, `links.ts`, `conversions.ts`, `storage.ts` and `seed.ts`.
+
+That said, every seam function today is synchronous — `listOffers(): Offer[]`, not
+`Promise<Offer[]>` — because `localStorage` is synchronous. Components call these directly
+from render and from bare `useMemo`. Phase 2's real API is necessarily async, so converting the
+seam to return promises *is* a change that reaches every call site: each one needs a loading
+state and an error state it does not have today. That conversion should be the first thing
+Phase 2 does, before anything else changes.
 
 **The tracking redirect is a client page, not a route handler:**
 `app/r/[offerId]/[wallet]/page.tsx`. In Phase 1, click counts live in `localStorage`, and a

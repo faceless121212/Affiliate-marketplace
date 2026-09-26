@@ -1,8 +1,8 @@
 const CLAIMS = [
   {
     heading: 'The good tooling is priced for enterprises only',
-    body: 'Workforce-data providers LinkUp and Revelio Labs list at $75,000–$300,000 a year, enterprise-only, with no self-serve tier. One independent review scored Revelio Labs 15/100 on fit for a solo marketer or founder. Adjacent infrastructure prices out exactly the people who need it most.',
-    source: 'LinkUp, Revelio Labs; independent review',
+    body: 'Workforce-data providers LinkUp and Revelio Labs list at $75,000–$300,000 a year, enterprise-only, with no self-serve tier. Adjacent infrastructure prices out exactly the people who need it most.',
+    source: 'LinkUp, Revelio Labs',
   },
   {
     heading: 'Getting paid takes months — when it happens',

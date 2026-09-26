@@ -1,7 +1,7 @@
 // Generates the Nativness icon set via fal.ai (Recraft v3 -> SVG).
 // Reads FAL_KEY from the environment; never hardcode a key here.
 // Run: FAL_KEY=... node scripts/generate-icons.mjs
-import { writeFile } from 'node:fs/promises'
+import { mkdir, writeFile } from 'node:fs/promises'
 
 const KEY = process.env.FAL_KEY
 if (!KEY) {
@@ -44,6 +44,8 @@ async function one({ name, prompt }) {
   await writeFile(path, svg)
   console.log(`  ${path}  ${(svg.length / 1024).toFixed(1)} KB`)
 }
+
+await mkdir('public/icons', { recursive: true })
 
 for (const job of JOBS) {
   try { await one(job) } catch (e) { console.error(`  FAILED ${job.name}: ${e.message}`) }

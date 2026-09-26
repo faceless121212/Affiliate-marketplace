@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen, within } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import MyOffersPage from '@/app/app/my-offers/page'
 import BrowsePage from '@/app/app/page'
@@ -18,11 +18,7 @@ async function fillAndSubmit(user: ReturnType<typeof userEvent.setup>) {
     screen.getByLabelText('Description'),
     'Discount rail booking for commuters in the north of England.',
   )
-  // Scoped to the create-offer form: the browse grid's FilterBar (rendered
-  // alongside it in the "no reload" test below) also exposes a "Category"
-  // control, so an unscoped query would be ambiguous.
-  const createForm = within(screen.getByTestId('create-offer-form'))
-  await user.selectOptions(createForm.getByLabelText('Category'), 'ecommerce')
+  await user.selectOptions(screen.getByLabelText('Category'), 'ecommerce')
   await user.type(screen.getByLabelText('Commission per conversion (USD)'), '15')
   await user.type(
     screen.getByLabelText('Conversion terms'),

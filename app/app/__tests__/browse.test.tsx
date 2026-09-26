@@ -20,7 +20,7 @@ describe('Browse', () => {
 
   it('filters by category', async () => {
     renderBrowse()
-    await userEvent.selectOptions(screen.getByLabelText('Category'), 'saas')
+    await userEvent.selectOptions(screen.getByLabelText('Filter by category'), 'saas')
     expect(screen.getByText('Meridian Ledger')).toBeInTheDocument()
     expect(screen.queryByText('Drayton Supply Co.')).toBeNull()
   })

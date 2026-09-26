@@ -58,11 +58,7 @@ export function CreateOfferForm({ wallet }: { wallet: string }) {
   }
 
   return (
-    <form
-      onSubmit={submit}
-      data-testid="create-offer-form"
-      className="space-y-3 rounded-md border border-line bg-surface p-4"
-    >
+    <form onSubmit={submit} className="space-y-3 rounded-md border border-line bg-surface p-4">
       <Field label="Offer name">
         <input aria-label="Offer name" className={inputClass} value={form.name} onChange={set('name')} />
       </Field>

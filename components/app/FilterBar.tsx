@@ -15,7 +15,6 @@ export function FilterBar({
   return (
     <div className="mb-5 flex flex-col gap-2 sm:flex-row">
       <label className="flex-1">
-        <span className="sr-only">Search</span>
         <input
           aria-label="Search"
           className={inputClass}
@@ -25,9 +24,8 @@ export function FilterBar({
         />
       </label>
       <label className="sm:w-48">
-        <span className="sr-only">Category</span>
         <select
-          aria-label="Category"
+          aria-label="Filter by category"
           className={inputClass}
           value={category}
           onChange={(e) => onCategory(e.target.value as Category | '')}
