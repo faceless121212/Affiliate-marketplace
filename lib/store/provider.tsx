@@ -52,25 +52,30 @@ export function useMutate() {
 export function useOffers(opts: { category?: Category; query?: string } = {}): Offer[] {
   const version = useStoreVersion()
   const { category, query } = opts
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- `version` is an intentional invalidation trigger (see StoreProvider docblock), not an unused dependency: bumping it forces this memo to re-read the store.
   return useMemo(() => listOffers({ category, query }), [version, category, query])
 }
 
 export function useOffer(id: string): Offer | null {
   const version = useStoreVersion()
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- `version` is an intentional invalidation trigger (see StoreProvider docblock), not an unused dependency: bumping it forces this memo to re-read the store.
   return useMemo(() => getOffer(id), [version, id])
 }
 
 export function useMyOffers(wallet: string | null): Offer[] {
   const version = useStoreVersion()
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- `version` is an intentional invalidation trigger (see StoreProvider docblock), not an unused dependency: bumping it forces this memo to re-read the store.
   return useMemo(() => (wallet ? listOffersByAdvertiser(wallet) : []), [version, wallet])
 }
 
 export function useMyLinks(wallet: string | null): TrackingLink[] {
   const version = useStoreVersion()
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- `version` is an intentional invalidation trigger (see StoreProvider docblock), not an unused dependency: bumping it forces this memo to re-read the store.
   return useMemo(() => (wallet ? listLinksByAffiliate(wallet) : []), [version, wallet])
 }
 
 export function useMyConversions(wallet: string | null): Conversion[] {
   const version = useStoreVersion()
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- `version` is an intentional invalidation trigger (see StoreProvider docblock), not an unused dependency: bumping it forces this memo to re-read the store.
   return useMemo(() => (wallet ? listConversionsByAffiliate(wallet) : []), [version, wallet])
 }
