@@ -10,7 +10,7 @@ export function WhyEscrow() {
         </Reveal>
         <Reveal delayMs={80} className="space-y-4 text-[15px] leading-relaxed text-muted">
           <p className="flex items-start gap-2">
-            <LandingIcon glyph="lock" className="mt-0.5 h-4 w-4 shrink-0" />
+            <LandingIcon glyph="lock" className="mt-0.5 h-5 w-5 shrink-0 text-ink" />
             Escrow locks the money first.
           </p>
           <p className="text-text">

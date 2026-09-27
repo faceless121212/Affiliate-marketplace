@@ -39,7 +39,7 @@ function Column({ title, items }: { title: string; items: string[] }) {
       <ul className="mt-3 space-y-2">
         {items.map((item) => (
           <li key={item} className="flex gap-2 text-[14px] leading-relaxed text-muted">
-            <LandingIcon glyph="check" className="mt-[3px] h-3.5 w-3.5 shrink-0 text-escrow" />
+            <LandingIcon glyph="check" className="mt-0.5 h-5 w-5 shrink-0 text-paid" />
             {item}
           </li>
         ))}

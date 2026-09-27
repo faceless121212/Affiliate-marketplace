@@ -45,7 +45,7 @@ const PATHS: Record<LandingGlyph, React.ReactNode> = {
 
 export function LandingIcon({
   glyph,
-  className = 'h-4 w-4',
+  className = 'h-5 w-5',
 }: {
   glyph: LandingGlyph
   className?: string

@@ -1,7 +1,6 @@
 import { Badge } from '@/components/ui/Badge'
 import { LandingIcon } from '@/components/ui/LandingIcon'
 import { HeroCenter } from './HeroCenter'
-import { HeroOfferCard } from './HeroOfferCard'
 import { LoginCta } from './LoginCta'
 
 const ADVERTISER_CHIPS = ['Any niche']
@@ -41,7 +40,12 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="mt-14 grid gap-10 lg:grid-cols-[1fr_0.7fr_1fr] lg:gap-6">
+      {/* A symmetric three-up row: the two audience statements carry equal
+          weight on either side of the escrow counter, which stays the
+          band's focal number. Deliberately as short as its content needs,
+          no card to build a tall column around, vertically centred so all
+          three columns sit on one shared middle line. */}
+      <div className="mt-10 grid items-center gap-8 lg:grid-cols-3 lg:gap-6">
         {/* Left: advertisers ("affiliate platforms" in the owner's words). Amber, escrow-toned. */}
         <div>
           {/* Lime as text is illegible on white (~1.2:1). The audience tag
@@ -51,8 +55,8 @@ export function Hero() {
             <span className="h-1.5 w-4 rounded-full bg-escrow" aria-hidden />
             For affiliate platforms
           </p>
-          <p className="mt-3 flex items-start gap-1.5 text-[14px] leading-relaxed text-muted">
-            <LandingIcon glyph="lock" className="mt-0.5 h-4 w-4 shrink-0 text-escrow" />
+          <p className="mt-3 flex items-start gap-2 text-[14px] leading-relaxed text-muted">
+            <LandingIcon glyph="lock" className="mt-0.5 h-5 w-5 shrink-0 text-ink" />
             Your budget locks in escrow first.
           </p>
 
@@ -63,8 +67,6 @@ export function Hero() {
               </Badge>
             ))}
           </div>
-
-          <HeroOfferCard />
         </div>
 
         {/* Centre: narrow, restrained. Reads last on mobile. */}
@@ -78,8 +80,8 @@ export function Hero() {
             <span className="h-1.5 w-4 rounded-full bg-paid" aria-hidden />
             For affiliates
           </p>
-          <p className="mt-3 flex items-start gap-1.5 text-[14px] leading-relaxed text-muted">
-            <LandingIcon glyph="lightning" className="mt-0.5 h-4 w-4 shrink-0 text-paid" />
+          <p className="mt-3 flex items-start gap-2 text-[14px] leading-relaxed text-muted">
+            <LandingIcon glyph="lightning" className="mt-0.5 h-5 w-5 shrink-0 text-paid" />
             Get paid the instant it confirms.
           </p>
 

@@ -48,8 +48,8 @@ export function Problem() {
               delayMs={i * 70}
               className="rounded-lg border border-transparent p-4 transition-colors duration-300 hover:border-line hover:bg-surface"
             >
-              <h3 className="flex items-start gap-1.5 text-[15px] font-semibold">
-                <LandingIcon glyph={c.glyph} className="mt-0.5 h-4 w-4 shrink-0 text-depleted" />
+              <h3 className="flex items-start gap-2 text-[15px] font-semibold">
+                <LandingIcon glyph={c.glyph} className="mt-0.5 h-6 w-6 shrink-0 text-depleted" />
                 {c.heading}
               </h3>
               <p className="mt-2 text-[14px] leading-relaxed text-muted">{c.body}</p>

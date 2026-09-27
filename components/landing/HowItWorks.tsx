@@ -47,7 +47,7 @@ export function HowItWorks() {
                     {s.n}
                   </span>
                   <span className="text-[12px] text-muted">{s.label}</span>
-                  <LandingIcon glyph={s.glyph} className="ml-auto h-4 w-4 shrink-0 text-muted" />
+                  <LandingIcon glyph={s.glyph} className="ml-auto h-5 w-5 shrink-0 text-ink" />
                 </div>
                 <h3 className="mt-2 text-[15px] font-semibold">{s.heading}</h3>
                 <p className="mt-2 text-[14px] leading-relaxed text-muted">{s.body}</p>

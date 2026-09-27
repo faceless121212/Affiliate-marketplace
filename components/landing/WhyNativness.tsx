@@ -35,8 +35,8 @@ export function WhyNativness() {
         <div className="mt-10 grid gap-x-6 gap-y-6 sm:grid-cols-2">
           {POINTS.map((p, i) => (
             <Reveal key={p.heading} delayMs={i * 70}>
-              <h3 className="flex items-start gap-1.5 text-[15px] font-semibold">
-                <LandingIcon glyph={p.glyph} className="mt-0.5 h-4 w-4 shrink-0 text-escrow" />
+              <h3 className="flex items-start gap-2 text-[15px] font-semibold">
+                <LandingIcon glyph={p.glyph} className="mt-0.5 h-6 w-6 shrink-0 text-paid" />
                 {p.heading}
               </h3>
               <p className="mt-2 text-[14px] leading-relaxed text-muted">{p.body}</p>

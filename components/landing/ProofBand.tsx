@@ -33,8 +33,8 @@ export function ProofBand() {
               delayMs={i * 80}
               className="border border-transparent bg-surface p-5 transition-colors duration-300 hover:border-muted hover:bg-depleted/10"
             >
-              <p className={`flex items-center gap-1.5 font-mono tnum text-3xl font-bold ${f.tone}`}>
-                <LandingIcon glyph={f.glyph} className="h-5 w-5 shrink-0" />
+              <p className={`flex items-center gap-2 font-mono tnum text-3xl font-bold ${f.tone}`}>
+                <LandingIcon glyph={f.glyph} className="h-6 w-6 shrink-0" />
                 {f.value}
               </p>
               <p className="mt-2 text-[13px] leading-relaxed text-muted">{f.label}</p>

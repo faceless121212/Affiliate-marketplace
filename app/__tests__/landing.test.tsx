@@ -110,11 +110,17 @@ describe('Landing page', () => {
     expect(hero).toHaveTextContent(/both sides/i)
   })
 
-  it('shows a real offer card with a locked escrow balance', () => {
-    render(<LandingPage />)
-    expect(screen.getByText('$340.00')).toBeInTheDocument()
-    expect(screen.getByText(/\$500\.00/)).toBeInTheDocument()
-  })
+  // The old "shows a real offer card with a locked escrow balance" test
+  // asserted against the hero's showcase offer card, deleted along with the
+  // rest of the unbalanced hero band (owner feedback: a tall card on one
+  // side, nothing on the other). The element genuinely no longer exists on
+  // the landing page, so there is nothing left here to assert. The property
+  // it was
+  // really guarding, that the escrow remainder outweighs the CPA commission
+  // visually, is still covered for the real app card by
+  // `components/app/__tests__/offer-card.test.tsx`'s
+  // "gives the escrow remainder more visual weight than the CPA commission",
+  // against the same Drayton Supply Co. $340.00 / $500.00 / $24.00 figures.
 
   it('cites every market figure with its source', () => {
     render(<LandingPage />)
@@ -152,11 +158,10 @@ describe('Landing page', () => {
   it('makes no numeric claim about Nativness itself', () => {
     const { container } = render(<LandingPage />)
     const text = container.textContent ?? ''
-    // Allows the hero's sanctioned illustrative offer-card figures ($340, $500,
-    // $24, the conversions count), the animated escrow counter (labelled as
-    // the demo marketplace's total, not Nativness's own), and the cited
-    // market figures. Only a figure describing Nativness's own adoption,
-    // revenue or traffic is disallowed.
+    // Allows the animated escrow counter (labelled as the demo marketplace's
+    // total, not Nativness's own) and the cited market figures. Only a
+    // figure describing Nativness's own adoption, revenue or traffic is
+    // disallowed.
     expect(text).not.toMatch(
       /\d[\d,]*(\.\d+)?%?\s*(companies|advertisers|affiliates|users|onboarded|paid out|conversions paid|volume|signups|revenue|traffic|GMV)\b/i,
     )
@@ -181,21 +186,23 @@ describe('Landing page', () => {
     }
   })
 
-  it('renders "Proof, not quotes" with a live GitHub link and clearly unfilled placeholders', () => {
-    render(<LandingPage />)
-    const proof = screen.getByTestId('proof-not-quotes')
-    expect(proof).toHaveTextContent(/every escrow rule is public/i)
+  // Re-anchored from the old "renders 'Proof, not quotes' with a live GitHub
+  // link and clearly unfilled placeholders" assertion. That section (three
+  // of its four cards permanently unfilled) is deleted outright per owner
+  // feedback: a mostly-empty section reads as broken, not honest. The one
+  // real thing it held, the GitHub source link, moved back to the footer
+  // (its pre-existing home before the section moved it out). What is still
+  // worth guarding: the link survives the move, and no placeholder marking
+  // ever renders anywhere on the page, now or if a future section adds one
+  // by accident.
+  it('keeps the GitHub source link live in the footer and renders no unfilled placeholder anywhere', () => {
+    const { container } = render(<LandingPage />)
+    expect(screen.queryByTestId('proof-not-quotes')).not.toBeInTheDocument()
 
-    const githubLink = within(proof).getByRole('link', { name: /github/i })
+    const githubLink = screen.getByRole('link', { name: 'Source' })
     expect(githubLink).toHaveAttribute('href', expect.stringContaining('github.com'))
 
-    // The two owner-supplied slots and the founder-note block must render as
-    // visibly marked, unfilled placeholders, not as asserted fact.
-    const notYetFilled = within(proof).getAllByText(/not yet filled in/i)
-    expect(notYetFilled.length).toBeGreaterThanOrEqual(3)
-    expect(proof).toHaveTextContent(/\[Add: hackathon name\/track/i)
-    expect(proof).toHaveTextContent(/\[Add: real devnet payout count/i)
-    expect(proof).toHaveTextContent(/founder note/i)
+    expect(container.textContent ?? '').not.toMatch(/not yet filled in/i)
   })
 
   it('renders the honest proof band with the sourced facts and an audit link', () => {

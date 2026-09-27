@@ -4,7 +4,7 @@ import { EscrowCounter } from './EscrowCounter'
 /** The hero's narrow centre column: badges, wordmark, the live escrow counter. */
 export function HeroCenter() {
   return (
-    <div className="order-last flex flex-col items-center gap-5 text-center lg:order-none lg:justify-self-center lg:self-start lg:pt-2">
+    <div className="order-last flex flex-col items-center gap-5 text-center lg:order-none lg:justify-self-center">
       <div className="flex flex-wrap items-center justify-center gap-1.5">
         <Badge>Solana</Badge>
         <Badge>Devnet</Badge>
