@@ -30,17 +30,48 @@ export function Reveal({ children, className = '', delayMs = 0 }: Props) {
       setRevealed(true)
       return
     }
+    let done = false
+    const reveal = () => {
+      if (done) return
+      done = true
+      setRevealed(true)
+      observer.disconnect()
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+
+    // Safety net. IntersectionObserver only fires when the intersection state
+    // CHANGES, so an element that goes from below the viewport to above it in
+    // a single jump — a trackpad fling, the End key, an anchor link — can
+    // report ratio 0 both times and never reveal, leaving content permanently
+    // invisible. A cheap rect check on scroll covers exactly that case.
+    const onScroll = () => {
+      const rect = el.getBoundingClientRect()
+      if (rect.height === 0) return // not laid out yet (or a zero-height test stub)
+      if (rect.top < window.innerHeight && rect.bottom > 0) reveal()
+      else if (rect.bottom <= 0) reveal() // already scrolled past
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          setRevealed(true)
-          observer.disconnect()
-        }
+        if (entries.some((entry) => entry.isIntersecting)) reveal()
       },
       { threshold: 0.15, rootMargin: '0px 0px -40px 0px' },
     )
     observer.observe(el)
-    return () => observer.disconnect()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+    // Also check once on mount, for a page that opens already scrolled past
+    // this element: a restored scroll position, or a link to an anchor
+    // further down. Without this such content waits for a scroll that may
+    // never come.
+    onScroll()
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
   }, [])
 
   return (
