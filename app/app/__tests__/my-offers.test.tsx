@@ -93,6 +93,70 @@ describe('Create offer', () => {
   })
 })
 
+describe('Create offer form usability', () => {
+  const TEXT_FIELDS = [
+    'Offer name',
+    'Description',
+    'Target URL',
+    'Conversion terms',
+    'Commission per conversion (USD)',
+    'Escrow budget (USD)',
+  ]
+
+  it('shows an example placeholder in every text field', () => {
+    render(
+      <StoreProvider>
+        <MyOffersPage />
+      </StoreProvider>,
+    )
+    for (const label of TEXT_FIELDS) {
+      const field = screen.getByLabelText(label) as HTMLInputElement | HTMLTextAreaElement
+      expect(field.placeholder.trim().length).toBeGreaterThan(0)
+      // A placeholder is an example, not a restatement of the label.
+      expect(field.placeholder.toLowerCase()).not.toBe(label.toLowerCase())
+    }
+  })
+
+  it('fills every field from one example that passes validation on submit', async () => {
+    const user = userEvent.setup()
+    render(
+      <StoreProvider>
+        <MyOffersPage />
+      </StoreProvider>,
+    )
+    await user.click(screen.getByRole('button', { name: 'Fill with an example' }))
+
+    expect(screen.getByLabelText('Offer name')).toHaveValue('Hollowell Trading Co.')
+    expect(screen.getByLabelText('Description')).not.toHaveValue('')
+    expect(screen.getByLabelText('Target URL')).toHaveValue('https://example.com/hollowell')
+    expect(screen.getByLabelText('Conversion terms')).not.toHaveValue('')
+    expect(screen.getByLabelText('Commission per conversion (USD)')).toHaveValue('35')
+    expect(screen.getByLabelText('Escrow budget (USD)')).toHaveValue('1200')
+
+    // The fill only sets state — every field must still be editable
+    // afterwards, not locked.
+    await user.clear(screen.getByLabelText('Offer name'))
+    await user.type(screen.getByLabelText('Offer name'), 'Hollowell Outdoor Co.')
+    expect(screen.getByLabelText('Offer name')).toHaveValue('Hollowell Outdoor Co.')
+
+    await user.click(screen.getByRole('button', { name: 'Lock budget and list offer' }))
+    expect(screen.getByText('Hollowell Outdoor Co.')).toBeInTheDocument()
+    expect(screen.queryByText(/must cover at least one payout/i)).not.toBeInTheDocument()
+  })
+
+  it('does not create an offer just from filling the example', async () => {
+    const user = userEvent.setup()
+    render(
+      <StoreProvider>
+        <MyOffersPage />
+      </StoreProvider>,
+    )
+    await user.click(screen.getByRole('button', { name: 'Fill with an example' }))
+    expect(screen.queryByText('Hollowell Trading Co.')).not.toBeInTheDocument()
+    expect(screen.getByText('No offers yet. Use the form on the left.')).toBeInTheDocument()
+  })
+})
+
 describe('Top up escrow', () => {
   it('raises both the remainder and the total', async () => {
     const user = userEvent.setup()

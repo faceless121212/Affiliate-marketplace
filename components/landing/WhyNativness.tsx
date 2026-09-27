@@ -14,7 +14,7 @@ const POINTS: { heading: string; body: string; glyph: LandingGlyph }[] = [
   },
   {
     heading: 'Anyone can list, not just enterprise accounts',
-    body: 'No $75K/year minimum, no sales call, no weeks-long approval.',
+    body: 'No enterprise minimum, no sales call, no weeks-long approval.',
     glyph: 'check',
   },
   {

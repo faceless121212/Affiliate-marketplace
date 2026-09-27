@@ -134,25 +134,34 @@ describe('Landing page', () => {
     expect(market).toHaveTextContent('eMarketer')
   })
 
+  // The former "Good tools cost enterprise money" card (LinkUp / Revelio
+  // Labs, $75,000-$300,000/year) is deleted per owner feedback, so this
+  // ledger now covers only the three claims that remain: Rakuten's NET-60
+  // and Trustpilot score, the offshore-network claim (no figure), and
+  // ShareASale folding into Awin.
   it('attributes each problem claim to a named source', () => {
     render(<LandingPage />)
     const problem = screen.getByTestId('problem')
-    expect(problem).toHaveTextContent('$75,000')
-    expect(problem).toHaveTextContent('$300,000')
     expect(problem).toHaveTextContent('NET-60')
     expect(problem).toHaveTextContent('2.2/5')
+    expect(problem).toHaveTextContent('Rakuten')
+    expect(problem).toHaveTextContent('Trustpilot')
+    expect(problem).toHaveTextContent('ShareASale')
     expect(problem).toHaveTextContent('Awin')
     expect(problem).toHaveTextContent('October 2025')
   })
 
-  it('never claims LinkUp or Revelio Labs is an affiliate network', () => {
-    render(<LandingPage />)
-    const text = screen.getByTestId('problem').textContent ?? ''
-    const sentences = text.split(/(?<=[.!?])\s+/)
-    const linkUpSentence = sentences.find((s) => s.includes('LinkUp'))
-    expect(linkUpSentence).toBeDefined()
-    expect(linkUpSentence).toMatch(/workforce-data/i)
-    expect(linkUpSentence).not.toMatch(/affiliate network/i)
+  // Re-anchored from "never claims LinkUp or Revelio Labs is an affiliate
+  // network": the card that cited them (and thus justified naming them at
+  // all) is now deleted, so the property worth guarding has inverted. It is
+  // no longer about how they're framed if mentioned, it's that they must
+  // never be mentioned, permanently, since nothing on the page cites them
+  // any more.
+  it('never mentions LinkUp or Revelio Labs anywhere on the page', () => {
+    const { container } = render(<LandingPage />)
+    const text = container.textContent ?? ''
+    expect(text).not.toMatch(/linkup/i)
+    expect(text).not.toMatch(/revelio/i)
   })
 
   it('makes no numeric claim about Nativness itself', () => {

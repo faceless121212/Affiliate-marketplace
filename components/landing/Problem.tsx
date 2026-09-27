@@ -3,12 +3,6 @@ import { Reveal } from './Reveal'
 
 const CLAIMS: { heading: string; body: string; source: string; glyph: LandingGlyph }[] = [
   {
-    heading: 'Good tools cost enterprise money.',
-    body: 'LinkUp and Revelio Labs, workforce-data providers: $75,000–$300,000 yearly.',
-    source: 'LinkUp, Revelio Labs',
-    glyph: 'chart',
-  },
-  {
     heading: 'Paid in months, maybe.',
     body: 'Rakuten’s NET-60 rates 2.2/5 on Trustpilot; CJ Affiliate reports stuck commissions.',
     source: 'Rakuten Advertising, Trustpilot; CJ Affiliate complaints',

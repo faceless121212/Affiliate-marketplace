@@ -2,10 +2,11 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
-import { Field, inputClass } from '@/components/ui/Field'
 import { createOffer } from '@/lib/store'
 import { useMutate } from '@/lib/store/provider'
-import { CATEGORIES, type Category } from '@/lib/types'
+import type { Category } from '@/lib/types'
+import { EXAMPLE_OFFER } from './createOfferExample'
+import { OfferDetailsFields, PayoutFields } from './CreateOfferFormFields'
 
 const BLANK = {
   name: '',
@@ -17,13 +18,24 @@ const BLANK = {
   budget: '',
 }
 
+export type OfferFormState = typeof BLANK
+
 export function CreateOfferForm({ wallet }: { wallet: string }) {
   const mutate = useMutate()
-  const [form, setForm] = useState(BLANK)
+  const [form, setForm] = useState<OfferFormState>(BLANK)
   const [error, setError] = useState<string | null>(null)
 
-  const set = (k: keyof typeof BLANK) => (e: { target: { value: string } }) =>
+  const set = (k: keyof OfferFormState) => (e: { target: { value: string } }) =>
     setForm((f) => ({ ...f, [k]: e.target.value }))
+
+  // Fills every field with one coherent, fictional sample offer so a
+  // first-time advertiser can see what a valid, complete offer looks like
+  // before writing their own. Pure convenience: it only sets form state,
+  // never calls createOffer, and every field stays editable afterwards.
+  function fillExample() {
+    setForm({ ...EXAMPLE_OFFER })
+    setError(null)
+  }
 
   function submit(e: React.FormEvent) {
     e.preventDefault()
@@ -58,81 +70,18 @@ export function CreateOfferForm({ wallet }: { wallet: string }) {
   }
 
   return (
-    <form onSubmit={submit} className="space-y-3 rounded-lg border border-line bg-surface p-4">
-      <Field label="Offer name">
-        <input aria-label="Offer name" className={inputClass} value={form.name} onChange={set('name')} />
-      </Field>
-
-      <Field label="Description">
-        <textarea
-          aria-label="Description"
-          rows={3}
-          className={inputClass}
-          value={form.description}
-          onChange={set('description')}
-        />
-      </Field>
-
-      <div className="grid gap-3 sm:grid-cols-2">
-        <Field label="Category">
-          <select
-            aria-label="Category"
-            className={inputClass}
-            value={form.category}
-            onChange={set('category')}
-          >
-            {CATEGORIES.map((c) => (
-              <option key={c.value} value={c.value}>
-                {c.label}
-              </option>
-            ))}
-          </select>
-        </Field>
-
-        <Field label="Commission per conversion (USD)" hint="CPA: a fixed amount per conversion.">
-          <input
-            aria-label="Commission per conversion (USD)"
-            inputMode="decimal"
-            className={`${inputClass} font-mono tnum`}
-            value={form.commission}
-            onChange={set('commission')}
-          />
-        </Field>
+    <form onSubmit={submit} className="space-y-4 rounded-lg border border-line bg-surface p-4">
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-[12px] text-muted">
+          New to this? Every field has an example, or fill the whole form at once.
+        </p>
+        <Button type="button" variant="secondary" className="shrink-0" onClick={fillExample}>
+          Fill with an example
+        </Button>
       </div>
 
-      <Field label="Conversion terms" hint="Be specific. This is what affiliates get paid for.">
-        <textarea
-          aria-label="Conversion terms"
-          rows={2}
-          className={inputClass}
-          value={form.conversionTerms}
-          onChange={set('conversionTerms')}
-        />
-      </Field>
-
-      <Field label="Target URL">
-        <input
-          aria-label="Target URL"
-          className={`${inputClass} font-mono text-[12px]`}
-          placeholder="https://"
-          value={form.targetUrl}
-          onChange={set('targetUrl')}
-        />
-      </Field>
-
-      <Field
-        label="Escrow budget (USD)"
-        hint="Locked before launch. Affiliates see the real balance."
-        error={error ?? undefined}
-      >
-        <input
-          aria-label="Escrow budget (USD)"
-          inputMode="decimal"
-          className={`${inputClass} font-mono tnum`}
-          value={form.budget}
-          onChange={set('budget')}
-        />
-      </Field>
+      <OfferDetailsFields form={form} set={set} />
+      <PayoutFields form={form} set={set} error={error} />
 
       <Button type="submit">Lock budget and list offer</Button>
     </form>
