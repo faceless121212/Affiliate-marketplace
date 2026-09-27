@@ -2,6 +2,7 @@
 
 import { Badge } from '@/components/ui/Badge'
 import { Money } from '@/components/ui/Money'
+import { OfferAvatar } from '@/components/ui/OfferAvatar'
 import { EscrowMeter } from '@/components/app/EscrowMeter'
 import { CreateOfferForm } from '@/components/app/CreateOfferForm'
 import { TopUpDialog } from '@/components/app/TopUpDialog'
@@ -38,7 +39,10 @@ export default function MyOffersPage() {
               return (
                 <li key={offer.id} className="rounded-lg border border-line bg-surface p-4">
                   <div className="mb-3 flex items-start justify-between gap-2">
-                    <h3 className="text-[15px] font-semibold">{offer.name}</h3>
+                    <div className="flex min-w-0 items-center gap-2">
+                      <OfferAvatar offer={offer} />
+                      <h3 className="min-w-0 truncate text-[15px] font-semibold">{offer.name}</h3>
+                    </div>
                     {offer.status === 'depleted' ? (
                       <Badge tone="depleted">Escrow empty</Badge>
                     ) : (

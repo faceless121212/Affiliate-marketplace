@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Badge } from '@/components/ui/Badge'
 import { Money } from '@/components/ui/Money'
 import { Address } from '@/components/ui/Address'
+import { OfferAvatar } from '@/components/ui/OfferAvatar'
 import { EscrowMeter } from '@/components/app/EscrowMeter'
 import { GetLinkPanel } from '@/components/app/GetLinkPanel'
 import { useOffer } from '@/lib/store/provider'
@@ -32,9 +33,12 @@ export default function OfferDetailPage({ params }: { params: Promise<{ id: stri
         <Link href="/app" className="text-[12px] text-muted hover:text-text">
           Back to browse
         </Link>
-        <div className="mt-2 flex items-start gap-2">
-          <h1 className="text-xl font-semibold leading-tight">{offer.name}</h1>
-          {offer.verified ? <Badge tone="paid">Verified</Badge> : <Badge>Community</Badge>}
+        <div className="mt-2 flex items-start gap-3">
+          <OfferAvatar offer={offer} size="large" />
+          <div className="flex min-w-0 flex-wrap items-start gap-2">
+            <h1 className="text-xl font-semibold leading-tight">{offer.name}</h1>
+            {offer.verified ? <Badge tone="paid">Verified</Badge> : <Badge>Community</Badge>}
+          </div>
         </div>
         <p className="mt-1 text-[13px] text-muted">{category}</p>
 

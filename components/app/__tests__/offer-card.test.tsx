@@ -39,6 +39,14 @@ describe('OfferCard', () => {
     expect(screen.getByRole('link')).toHaveAttribute('href', `/app/offers/${drayton.id}`)
   })
 
+  // The avatar sits beside the offer name but must not become (part of) the
+  // card link's accessible name; `aria-hidden` keeps it out of that
+  // computation, so the offer name alone still identifies the link.
+  it('keeps the offer name as the accessible name of the card link, avatar included', () => {
+    render(<OfferCard offer={drayton} />)
+    expect(screen.getByRole('link', { name: /Drayton Supply Co\./ })).toBeInTheDocument()
+  })
+
   // Regression for the "escrow must be the dominant figure, not CPA" review
   // finding. Asserts the hierarchy itself rather than pinning exact pixel
   // values, so a later design pass can resize both without re-breaking this.

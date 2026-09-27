@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Badge } from '@/components/ui/Badge'
 import { CategoryIcon } from '@/components/ui/CategoryIcon'
 import { Money } from '@/components/ui/Money'
+import { OfferAvatar } from '@/components/ui/OfferAvatar'
 import { EscrowMeter } from './EscrowMeter'
 import { CATEGORIES, type Offer } from '@/lib/types'
 
@@ -15,7 +16,10 @@ export function OfferCard({ offer }: { offer: Offer }) {
       className="block rounded-lg border border-line bg-surface p-4 transition hover:border-muted hover:bg-line"
     >
       <div className="mb-0.5 flex items-start justify-between gap-2">
-        <h3 className="min-w-0 truncate text-[15px] font-semibold leading-tight">{offer.name}</h3>
+        <div className="flex min-w-0 items-center gap-2">
+          <OfferAvatar offer={offer} />
+          <h3 className="min-w-0 truncate text-[15px] font-semibold leading-tight">{offer.name}</h3>
+        </div>
         {offer.verified && <Badge tone="paid">Verified</Badge>}
       </div>
       <p className="mb-4 flex items-center gap-1.5 text-[12px] text-muted">
