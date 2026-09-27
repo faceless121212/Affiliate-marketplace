@@ -1,15 +1,16 @@
+import { LandingIcon, type LandingGlyph } from '@/components/ui/LandingIcon'
 import { Reveal } from './Reveal'
 
-const FACTS = [
-  { value: 'Oct 2025', label: 'ShareASale shut down, became Awin', tone: 'text-depleted' },
-  { value: 'NET-60', label: 'Rakuten’s standard settlement term', tone: 'text-ink' },
-  { value: '2.2/5', label: 'Rakuten Advertising’s Trustpilot rating', tone: 'text-depleted' },
-] as const
+const FACTS: { value: string; label: string; tone: string; glyph: LandingGlyph }[] = [
+  { value: 'Oct 2025', label: 'Shut down, became Awin', tone: 'text-depleted', glyph: 'warning' },
+  { value: 'NET-60', label: 'Rakuten’s settlement term', tone: 'text-ink', glyph: 'clock' },
+  { value: '2.2/5', label: 'Rakuten’s Trustpilot rating', tone: 'text-depleted', glyph: 'warning' },
+]
 
 /**
  * The honest proof band: the sourced facts already cited in `Problem`,
  * resurfaced here with more visual weight, plus the one kind of proof a
- * product with zero customers can actually offer — an open-source repo
+ * product with zero customers can actually offer: an open-source repo
  * anyone can read for themselves.
  */
 export function ProofBand() {
@@ -21,7 +22,7 @@ export function ProofBand() {
             Proof, not a claim.
           </h2>
           <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-muted">
-            Sourced facts, not assertions — the strongest argument here.
+            Sourced facts, not assertions.
           </p>
         </Reveal>
 
@@ -32,7 +33,10 @@ export function ProofBand() {
               delayMs={i * 80}
               className="border border-transparent bg-surface p-5 transition-colors duration-300 hover:border-muted hover:bg-depleted/10"
             >
-              <p className={`font-mono tnum text-3xl font-bold ${f.tone}`}>{f.value}</p>
+              <p className={`flex items-center gap-1.5 font-mono tnum text-3xl font-bold ${f.tone}`}>
+                <LandingIcon glyph={f.glyph} className="h-5 w-5 shrink-0" />
+                {f.value}
+              </p>
               <p className="mt-2 text-[13px] leading-relaxed text-muted">{f.label}</p>
             </Reveal>
           ))}
@@ -43,7 +47,7 @@ export function ProofBand() {
           className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-escrow/30 bg-escrow/5 p-5"
         >
           <p className="max-w-md text-[14px] leading-relaxed text-text">
-            Every line of this prototype is public. Read the code — don’t take our word for it.
+            Every line is public. Read it yourself.
           </p>
           <a
             href="https://github.com/faceless121212/Affiliate-marketplace"

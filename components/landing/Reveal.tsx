@@ -10,7 +10,7 @@ type Props = {
 }
 
 /**
- * Fades and lifts its children in as they cross into the viewport — pure CSS
+ * Fades and lifts its children in as they cross into the viewport: pure CSS
  * transition plus `IntersectionObserver`, no animation library.
  *
  * Motion is gated two independent ways, both non-negotiable: the

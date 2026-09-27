@@ -1,16 +1,9 @@
+import { LandingIcon } from '@/components/ui/LandingIcon'
 import { Reveal } from './Reveal'
 
-const AFFILIATE = [
-  'See every offer’s balance',
-  'Get your wallet-tied link',
-  'Track clicks, conversions and payouts',
-]
+const AFFILIATE = ['See offer balances', 'Get your link', 'Track clicks and payouts']
 
-const ADVERTISER = [
-  'List any niche, budget locked instantly',
-  'Watch escrow, conversions and spend',
-  'Top up escrow anytime',
-]
+const ADVERTISER = ['List any niche instantly', 'Watch escrow and spend', 'Top up anytime']
 
 export function WhatYouGet() {
   return (
@@ -18,10 +11,6 @@ export function WhatYouGet() {
       <div className="mx-auto max-w-6xl px-4 py-16">
         <Reveal>
           <h2 className="text-2xl font-semibold tracking-tight">One login, both sides</h2>
-          <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-muted">
-            No affiliate account. No advertiser account. One wallet, one identity — promote
-            offers or list your own. Nobody signs up twice.
-          </p>
         </Reveal>
 
         <div className="mt-10 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">
@@ -50,7 +39,7 @@ function Column({ title, items }: { title: string; items: string[] }) {
       <ul className="mt-3 space-y-2">
         {items.map((item) => (
           <li key={item} className="flex gap-2 text-[14px] leading-relaxed text-muted">
-            <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-escrow" aria-hidden />
+            <LandingIcon glyph="check" className="mt-[3px] h-3.5 w-3.5 shrink-0 text-escrow" />
             {item}
           </li>
         ))}

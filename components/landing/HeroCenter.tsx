@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/Badge'
 import { EscrowCounter } from './EscrowCounter'
 
-/** The hero's narrow centre column — badges, wordmark, the live escrow counter. */
+/** The hero's narrow centre column: badges, wordmark, the live escrow counter. */
 export function HeroCenter() {
   return (
     <div className="order-last flex flex-col items-center gap-5 text-center lg:order-none lg:justify-self-center lg:self-start lg:pt-2">
@@ -15,7 +15,7 @@ export function HeroCenter() {
       <EscrowCounter />
 
       <a href="#how-it-works" className="text-[12px] text-muted hover:text-text">
-        See how it works
+        How it works
       </a>
     </div>
   )

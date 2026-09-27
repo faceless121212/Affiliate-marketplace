@@ -7,10 +7,10 @@ import { useCountUp } from '@/lib/useCountUp'
 const TOTAL_LOCKED_USD = SEED_OFFERS.reduce((sum, offer) => sum + offer.escrowTotalUsd, 0)
 
 /**
- * The hero's live number — not invented, and not a claim about Nativness's
+ * The hero's live number: not invented, and not a claim about Nativness's
  * growth. It is the sum of the six seeded demo offers' escrow budgets from
  * `@/lib/store`, counted up on load and labelled honestly as the demo
- * marketplace's total: Phase 1 escrow is a number in `localStorage`, not an
+ * marketplace's total. Phase 1 escrow is a number in `localStorage`, not an
  * on-chain fact.
  */
 export function EscrowCounter() {
@@ -19,7 +19,7 @@ export function EscrowCounter() {
   return (
     // The lime radial glow this had on dark read as a soft halo; on white it
     // just muddies the number underneath, so it's dropped rather than
-    // re-tuned — the figure's size and weight carry the emphasis instead.
+    // re-tuned. The figure's size and weight carry the emphasis instead.
     <div className="relative">
       <p className="text-[11px] uppercase tracking-wide text-muted">In escrow now</p>
       <Money
@@ -28,7 +28,7 @@ export function EscrowCounter() {
         className="text-[38px] font-bold leading-none sm:text-[46px]"
       />
       <p className="mt-1 max-w-[220px] text-[11px] leading-snug text-muted">
-        Six seeded demo offers — simulated, not on-chain.
+        Simulated, not on-chain.
       </p>
     </div>
   )

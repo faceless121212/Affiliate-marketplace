@@ -1,9 +1,9 @@
 /*
  * Placeholder testimonials. Nativness has no real customers yet, so every
- * quote and name below is invented — plausible, in the same spirit as the
+ * quote and name below is invented: plausible, in the same spirit as the
  * fictional seed offers (Drayton Supply Co., Meridian Ledger, and the rest of
  * `SEED_OFFERS`), but not a real person, company, or result. Swap each one
- * for a real quote the moment there's a real user to quote — see README,
+ * for a real quote the moment there's a real user to quote, see README,
  * "Known limits", for the same note.
  */
 import { Badge } from '@/components/ui/Badge'
@@ -11,24 +11,24 @@ import { Reveal } from './Reveal'
 
 const QUOTES = [
   {
-    quote: 'I saw the balance before I clicked — spending my time, not gambling it.',
+    quote: 'I saw the balance first.',
     name: 'Priya Osei',
-    role: 'Independent affiliate marketer',
+    role: 'Marketer',
   },
   {
-    quote: 'I lock the budget first. I take the risk, not the affiliate.',
+    quote: 'I lock the budget, so I risk it.',
     name: 'Femi Adeyemi',
-    role: 'Marketing lead, Nettlecombe Trading',
+    role: 'Lead',
   },
   {
-    quote: 'No form. No waiting. Wallet connected, offer already funded.',
+    quote: 'No form. Wallet connected, offer funded.',
     name: 'Dana Iversen',
-    role: 'Growth partner',
+    role: 'Partner',
   },
   {
-    quote: 'Visible escrow before I’d touch an unfamiliar brand — that’s the proof I need.',
+    quote: 'Visible escrow before trusting a new brand.',
     name: 'Marcus Whitlow',
-    role: 'Founder, Solborne Goods',
+    role: 'Founder',
   },
 ] as const
 
@@ -42,8 +42,7 @@ export function SocialProof() {
         </Reveal>
         <Reveal delayMs={60}>
           <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-muted">
-            Nativness has no customers yet. These quotes are invented, like the seed offers — to
-            show the feel, not claim real results.
+            Nativness has no customers yet. These quotes are invented.
           </p>
         </Reveal>
 

@@ -51,9 +51,9 @@ export default function SimulatePage() {
 
       {links.length === 0 ? (
         <p className="rounded-lg border border-line bg-surface p-5 text-[13px] text-muted">
-          No links yet —{' '}
+          No links yet.{' '}
           <Link href="/app" className="text-info hover:underline">
-            browse offers
+            Browse offers
           </Link>{' '}
           to make one.
         </p>
@@ -74,7 +74,7 @@ export default function SimulatePage() {
                 const offer = getOffer(l.offerId)
                 return (
                   <option key={l.id} value={l.id}>
-                    {offer ? `${offer.name} — ${money(offer.commissionAmountUsd)} CPA` : l.offerId}
+                    {offer ? `${offer.name} (${money(offer.commissionAmountUsd)} CPA)` : l.offerId}
                   </option>
                 )
               })}
@@ -96,7 +96,7 @@ export default function SimulatePage() {
         >
           {message.kind === 'paid' && (
             <>
-              Confirmed. Paid <Money value={message.amountUsd} tone="paid" /> to your wallet —{' '}
+              Confirmed. Paid <Money value={message.amountUsd} tone="paid" /> to your wallet,{' '}
               <Money value={message.remainingUsd} tone="paid" /> left in escrow.
             </>
           )}

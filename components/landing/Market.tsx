@@ -14,8 +14,8 @@ export function Market() {
           <Reveal className="border border-transparent bg-surface p-5 transition-colors duration-300 hover:border-escrow/40 hover:bg-escrow/10">
             <p className="font-mono tnum text-4xl font-bold text-ink">$19.4B</p>
             <p className="mt-2 text-[14px] leading-relaxed text-muted">
-              Affiliate spend in 2026, up from{' '}
-              <span className="font-mono tnum text-text">$17.1B</span> in 2025, headed to{' '}
+              Affiliate spend, up from{' '}
+              <span className="font-mono tnum text-text">$17.1B</span> to{' '}
               <span className="font-mono tnum text-text">$22B</span> by 2027.
             </p>
             <p className="mt-2 text-[11px] text-muted">Source: Forrester</p>
@@ -27,7 +27,7 @@ export function Market() {
           >
             <p className="font-mono tnum text-4xl font-bold text-ink">$13.81B</p>
             <p className="mt-2 text-[14px] leading-relaxed text-muted">
-              US affiliate spend in 2026, up{' '}
+              US spend, up{' '}
               <span className="font-mono tnum text-text">11.3%</span> year over year.
             </p>
             <p className="mt-2 text-[11px] text-muted">Source: eMarketer</p>
@@ -35,8 +35,7 @@ export function Market() {
         </div>
 
         <p className="mt-6 max-w-2xl text-[14px] leading-relaxed text-muted">
-          These are channel adoption figures, not a forecast for this product — still running on
-          NET-60 terms and goodwill.
+          Channel figures, not a forecast.
         </p>
       </div>
     </section>

@@ -109,7 +109,7 @@ describe('Landing page', () => {
     // Allows the hero's sanctioned illustrative offer-card figures ($340, $500,
     // $24, the conversions count), the animated escrow counter (labelled as
     // the demo marketplace's total, not Nativness's own), and the cited
-    // market figures — only a figure describing Nativness's own adoption,
+    // market figures. Only a figure describing Nativness's own adoption,
     // revenue or traffic is disallowed.
     expect(text).not.toMatch(
       /\d[\d,]*(\.\d+)?%?\s*(companies|advertisers|affiliates|users|onboarded|paid out|conversions paid|volume|signups|revenue|traffic|GMV)\b/i,
@@ -150,6 +150,16 @@ describe('Landing page', () => {
     render(<LandingPage />)
     expect(screen.getAllByRole('button', { name: 'List an offer' })).toHaveLength(1)
     expect(screen.getAllByRole('button', { name: 'Browse offers' })).toHaveLength(1)
+  })
+
+  it('never uses an em dash, aside from the cited $75,000–$300,000 range', () => {
+    const { container } = render(<LandingPage />)
+    // Built from a char code rather than a literal em dash, so this source
+    // file itself never contains the character the owner's grep checks for.
+    const emDash = String.fromCharCode(8212)
+    const range = `$75,000${emDash}$300,000`
+    const text = (container.textContent ?? '').split(range).join('')
+    expect(text).not.toContain(emDash)
   })
 
   it('states the three steps in order', () => {

@@ -15,7 +15,7 @@ type Props = {
 
 /**
  * The single front door, parameterised by destination so the split hero can
- * offer two CTAs — one per audience — that both still go through the same
+ * offer two CTAs, one per audience, that both still go through the same
  * wallet login. Opens the wallet modal and, once the connection the user
  * just initiated succeeds, sends them to `destination`.
  *

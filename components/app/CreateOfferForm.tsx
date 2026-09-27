@@ -100,7 +100,7 @@ export function CreateOfferForm({ wallet }: { wallet: string }) {
         </Field>
       </div>
 
-      <Field label="Conversion terms" hint="Be specific — this is what affiliates get paid for.">
+      <Field label="Conversion terms" hint="Be specific. This is what affiliates get paid for.">
         <textarea
           aria-label="Conversion terms"
           rows={2}
@@ -122,7 +122,7 @@ export function CreateOfferForm({ wallet }: { wallet: string }) {
 
       <Field
         label="Escrow budget (USD)"
-        hint="Locked before launch — affiliates see the real balance."
+        hint="Locked before launch. Affiliates see the real balance."
         error={error ?? undefined}
       >
         <input

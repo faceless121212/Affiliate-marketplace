@@ -11,7 +11,7 @@ export function EscrowMeter({
 }: {
   offer: Offer
   showLabel?: boolean
-  /** Fills the bar from 0 on mount instead of rendering it already full — the
+  /** Fills the bar from 0 on mount instead of rendering it already full: the
    *  hero's one showcase card asks for this; ordinary offer cards don't. */
   animateFill?: boolean
 }) {
@@ -22,7 +22,7 @@ export function EscrowMeter({
 
   // Starts at 0 and is pushed to `pct` in an effect so the CSS width
   // transition below has something to animate. `motion-reduce:transition-none`
-  // means a reduced-motion viewer still only ever sees the final width — the
+  // means a reduced-motion viewer still only ever sees the final width: the
   // 0-to-pct jump happens with no transition to render, so nothing moves.
   const [barPct, setBarPct] = useState(animateFill ? 0 : pct)
 
@@ -35,7 +35,7 @@ export function EscrowMeter({
     <div>
       {showLabel && <span className="text-[11.5px] text-muted">Escrow remaining</span>}
       {/* The remainder is the trust signal: largest, boldest figure on the card.
-          The total is context for it, not a peer — small and muted. flex-wrap keeps
+          The total is context for it, not a peer: small and muted. flex-wrap keeps
           this from overflowing a narrow sidebar (the offer-detail aside is ~320px). */}
       <div className={`flex flex-wrap items-baseline gap-x-1.5 ${showLabel ? 'mt-0.5' : ''}`}>
         <Money

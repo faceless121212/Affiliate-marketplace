@@ -62,7 +62,7 @@ export default function OfferDetailPage({ params }: { params: Promise<{ id: stri
           {/* Escrow leads, unframed, matching the browse card: it's the
               guaranteed balance the affiliate's decision turns on, so it
               carries the most visual weight. CPA is supporting detail below
-              it, in a plain unbolded footer row — not its own headline. */}
+              it, in a plain unbolded footer row, not its own headline. */}
           <EscrowMeter offer={offer} />
           <div className="mt-3 flex items-baseline justify-between border-t border-line pt-2">
             <span className="text-[11.5px] text-muted" title="CPA: a fixed amount paid per conversion.">

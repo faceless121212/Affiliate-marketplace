@@ -1,23 +1,27 @@
+import { LandingIcon, type LandingGlyph } from '@/components/ui/LandingIcon'
 import { Reveal } from './Reveal'
 
-const STEPS = [
+const STEPS: { n: string; label: string; heading: string; body: string; glyph: LandingGlyph }[] = [
   {
     n: '01',
     label: 'Escrow',
     heading: 'Lock the budget',
-    body: 'No budget, no listing. The advertiser funds escrow first.',
+    body: 'Advertiser funds escrow first.',
+    glyph: 'lock',
   },
   {
     n: '02',
     label: 'Promotion',
     heading: 'See the balance, promote',
-    body: 'They see the balance and grab their own link.',
+    body: 'Grab your link and promote.',
+    glyph: 'link',
   },
   {
     n: '03',
     label: 'Payout',
     heading: 'Get paid on confirmation',
-    body: 'Confirmed means paid — no terms, no hold, no investigation.',
+    body: 'Confirmed means paid, instantly.',
+    glyph: 'lightning',
   },
 ]
 
@@ -37,12 +41,13 @@ export function HowItWorks() {
             >
               <Reveal delayMs={i * 80}>
                 <div className="flex items-baseline gap-2">
-                  {/* A lime-filled pill, not lime text — same fill+ink
+                  {/* A lime-filled pill, not lime text: same fill+ink
                       pattern as the badges and the escrow figure. */}
                   <span className="rounded-full bg-escrow px-1.5 py-0.5 font-mono tnum text-[11px] font-semibold text-ink">
                     {s.n}
                   </span>
                   <span className="text-[12px] text-muted">{s.label}</span>
+                  <LandingIcon glyph={s.glyph} className="ml-auto h-4 w-4 shrink-0 text-muted" />
                 </div>
                 <h3 className="mt-2 text-[15px] font-semibold">{s.heading}</h3>
                 <p className="mt-2 text-[14px] leading-relaxed text-muted">{s.body}</p>

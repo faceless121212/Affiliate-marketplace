@@ -14,7 +14,7 @@ vi.mock('@/lib/wallet/useAccount', () => ({
 }))
 
 // `params` is a Promise (React's `use()` contract for App Router dynamic
-// segments in a Client Component — see app/app/offers/[id]/page.tsx). A
+// segments in a Client Component, see app/app/offers/[id]/page.tsx). A
 // freshly-created Promise hasn't "settled" from React's point of view on
 // the first synchronous render, so `use()` suspends; wrapping the render in
 // an awaited `act` lets that resolution flush before we assert.

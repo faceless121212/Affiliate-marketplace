@@ -33,7 +33,7 @@ export function GetLinkPanel({ offer, wallet }: { offer: Offer; wallet: string }
       <div className="rounded-lg border border-line bg-surface p-4">
         <Button onClick={generate}>Get my link</Button>
         <p className="mt-2 text-[11.5px] text-muted">
-          Your wallet’s in the link — payouts land there.
+          Your wallet’s in the link. Payouts land there.
         </p>
       </div>
     )

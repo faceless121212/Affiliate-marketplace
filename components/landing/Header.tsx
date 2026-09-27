@@ -10,7 +10,7 @@ const LINKS = [
 /**
  * Denser than a marketing header: wordmark, a few links that actually go
  * somewhere, one sign-in button. No search, no language switcher, no theme
- * toggle — nothing that would just sit there doing nothing.
+ * toggle: nothing that would just sit there doing nothing.
  */
 export function Header() {
   return (

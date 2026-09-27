@@ -2,7 +2,7 @@ import { Badge } from '@/components/ui/Badge'
 
 /**
  * A slim strip above the header, x402-style: a small badge, one short true
- * line, and a link. It must never claim more than Phase 1 actually is —
+ * line, and a link. It must never claim more than Phase 1 actually is:
  * escrow here is a number in localStorage, not an on-chain balance.
  */
 export function AnnouncementBar() {

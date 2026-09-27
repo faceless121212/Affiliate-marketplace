@@ -6,8 +6,8 @@ import { Nav } from '@/components/app/Nav'
 describe('PrototypeBanner', () => {
   it('states plainly that escrow is simulated', () => {
     render(<PrototypeBanner />)
-    // Guards the honesty framing (constraint 8) — escrow is disclosed as
-    // simulated and not on-chain — rather than the exact sentence, which a
+    // Guards the honesty framing (constraint 8): escrow is disclosed as
+    // simulated and not on-chain, rather than the exact sentence, which a
     // later copy pass is free to keep tightening.
     const status = screen.getByRole('status')
     expect(status).toHaveTextContent(/escrow is simulated/i)

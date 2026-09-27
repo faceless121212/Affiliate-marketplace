@@ -14,7 +14,7 @@ export function ConnectGate() {
     <div className="mx-auto max-w-md px-4 py-24 text-center">
       <h1 className="text-xl font-semibold">Connect your wallet</h1>
       <p className="mt-2 text-[13px] text-muted">
-        Your wallet address is your account — the same one every time you connect.
+        Your wallet address is your account. It’s the same one every time you connect.
       </p>
       <Button className="mt-6" onClick={openLogin}>
         Connect wallet

@@ -23,7 +23,7 @@ export function OfferCard({ offer }: { offer: Offer }) {
         {category}
       </p>
 
-      {/* Escrow leads the card — it's the guaranteed balance, not a promise,
+      {/* Escrow leads the card: it's the guaranteed balance, not a promise,
           so it carries the most visual weight of anything here. */}
       <EscrowMeter offer={offer} />
       <p className="mt-1.5 font-mono tnum text-[10.5px] text-muted">
@@ -32,7 +32,7 @@ export function OfferCard({ offer }: { offer: Offer }) {
           : `${fundable} conversion${fundable === 1 ? '' : 's'} funded`}
       </p>
 
-      {/* CPA is supporting detail beneath the escrow figure, not the headline —
+      {/* CPA is supporting detail beneath the escrow figure, not the headline:
           the border now separates the meter from this footer instead of framing CPA. */}
       <div className="mt-3 flex items-baseline justify-between border-t border-line pt-2">
         <span className="text-[11.5px] text-muted" title="CPA: a fixed amount paid per conversion.">

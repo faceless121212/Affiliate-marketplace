@@ -20,7 +20,7 @@ export default function MyOffersPage() {
       <div>
         <h1 className="mb-1 text-lg font-semibold">List an offer</h1>
         <p className="mb-3 text-[13px] text-muted">
-          The budget locks the moment it’s created — no trust required.
+          The budget locks the moment it’s created. No trust required.
         </p>
         {wallet && <CreateOfferForm wallet={wallet} />}
       </div>

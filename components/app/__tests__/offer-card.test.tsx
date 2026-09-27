@@ -8,7 +8,7 @@ const kestrel = SEED_OFFERS.find((o) => o.name === 'Kestrel Play')!
 const halcyon = SEED_OFFERS.find((o) => o.name === 'Halcyon Tools')!
 
 describe('OfferCard', () => {
-  it('shows the escrow remainder against the total — the trust signal', () => {
+  it('shows the escrow remainder against the total: the trust signal', () => {
     render(<OfferCard offer={drayton} />)
     expect(screen.getByText('$340.00')).toBeInTheDocument()
     expect(screen.getByText(/\$500\.00/)).toBeInTheDocument()

@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'sw
 const jetbrains = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains', display: 'swap' })
 
 export const metadata: Metadata = {
-  title: 'Nativness — commission budgets locked before the offer goes live',
+  title: 'Nativness: budget locked before the offer goes live',
   description:
     'A Solana-native affiliate marketplace where the commission budget sits in escrow before affiliates ever see the offer.',
 }

@@ -3,8 +3,8 @@ import { render, screen } from '@testing-library/react'
 import { Reveal } from '@/components/landing/Reveal'
 
 describe('Reveal', () => {
-  // Asserts the gating mechanism itself — the `motion-reduce:` utilities that
-  // force the final, visible state and disable the transition — rather than
+  // Asserts the gating mechanism itself: the `motion-reduce:` utilities that
+  // force the final, visible state and disable the transition, rather than
   // any visual outcome, which jsdom cannot render anyway.
   it('carries motion-reduce utilities that force the final state and disable the transition', () => {
     render(

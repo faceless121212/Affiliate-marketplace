@@ -60,7 +60,7 @@ describe('Simulate', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Confirm conversion' }))
 
     // These are the product's two most consequential numbers on this screen
-    // (the payout and the resulting escrow balance) — they must carry the
+    // (the payout and the resulting escrow balance). They must carry the
     // same mono/tabular treatment as every other currency figure, not render
     // in the prose typeface as part of a flat interpolated string.
     const paidFigure = screen.getByText('$24.00')

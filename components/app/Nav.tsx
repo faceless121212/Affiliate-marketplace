@@ -9,7 +9,7 @@ const DESTINATIONS = [
 
 /**
  * Flat and peer-level on purpose. There is no affiliate mode and no
- * advertiser mode — one identity reaches every destination, so the UI must
+ * advertiser mode: one identity reaches every destination, so the UI must
  * not imply a second account exists.
  */
 export function Nav({ pathname }: { pathname: string }) {
