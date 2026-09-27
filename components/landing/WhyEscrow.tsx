@@ -13,7 +13,9 @@ export function WhyEscrow() {
             <LandingIcon glyph="lock" className="mt-0.5 h-4 w-4 shrink-0" />
             Escrow locks the money first.
           </p>
-          <p className="text-text">A funded unknown beats a familiar name.</p>
+          <p className="text-text">
+            A funded stranger is safer than a trusted name with no proof behind it.
+          </p>
         </Reveal>
       </div>
     </section>

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, within } from '@testing-library/react'
 import LandingPage from '@/app/page'
 
 // Mutable so individual tests can simulate a connected wallet without a
@@ -26,24 +26,70 @@ beforeEach(() => {
 })
 
 describe('Landing page', () => {
-  it('offers two CTAs, one per audience', () => {
+  // Replaces the old "offers two CTAs, one per audience" assertion: the
+  // owner's spec reverses that decision, so the hero must now carry exactly
+  // one primary call-to-action plus one smaller secondary browse link, not
+  // two equal-weight buttons forcing a visitor to pick a side upfront.
+  it('offers exactly one primary CTA in the hero, plus a secondary browse link', () => {
     render(<LandingPage />)
-    expect(screen.getAllByRole('button', { name: 'List an offer' })).toHaveLength(1)
-    expect(screen.getAllByRole('button', { name: 'Browse offers' })).toHaveLength(1)
+    const hero = screen.getByTestId('hero')
+    const primary = within(hero).getByTestId('hero-primary-cta')
+    expect(primary).toHaveTextContent('Get started')
+    expect(within(hero).getAllByTestId('hero-primary-cta')).toHaveLength(1)
+
+    const secondary = within(hero).getByRole('button', { name: /browse offers first/i })
+    expect(secondary).toBeInTheDocument()
+    // Only one clickable "browse" affordance in the hero: the secondary link.
+    expect(within(hero).queryAllByRole('button')).toHaveLength(1)
   })
 
-  it('routes the advertiser CTA to /app/my-offers once the wallet is connected', () => {
+  it('routes the hero secondary link to /app once the wallet is connected', () => {
     connected = true
     render(<LandingPage />)
-    fireEvent.click(screen.getByRole('button', { name: 'List an offer' }))
+    const hero = screen.getByTestId('hero')
+    fireEvent.click(within(hero).getByRole('button', { name: /browse offers first/i }))
+    expect(push).toHaveBeenCalledWith('/app')
+  })
+
+  it('renders the "Why Nativness" section between the hero and the problem cards', () => {
+    render(<LandingPage />)
+    const bodyChildren = Array.from(document.querySelector('main')?.children ?? [])
+    const heroIdx = bodyChildren.findIndex((el) => el.getAttribute('data-testid') === 'hero')
+    const whyIdx = bodyChildren.findIndex((el) => el.getAttribute('data-testid') === 'why-nativness')
+    const problemIdx = bodyChildren.findIndex((el) => el.getAttribute('data-testid') === 'problem')
+    expect(heroIdx).toBeGreaterThanOrEqual(0)
+    expect(whyIdx).toBeGreaterThan(heroIdx)
+    expect(problemIdx).toBeGreaterThan(whyIdx)
+
+    const why = screen.getByTestId('why-nativness')
+    expect(why).toHaveTextContent(/see the money before you commit/i)
+    expect(why).toHaveTextContent(/paid on confirmation/i)
+    expect(why).toHaveTextContent(/anyone can list/i)
+    expect(why).toHaveTextContent(/one login unlocks both sides/i)
+  })
+
+  it('renders the persona picker with both destinations reachable and no gating', () => {
+    connected = true
+    render(<LandingPage />)
+    const picker = screen.getByTestId('get-started')
+
+    fireEvent.click(within(picker).getByRole('button', { name: 'I want to promote offers' }))
+    expect(push).toHaveBeenCalledWith('/app')
+
+    push.mockClear()
+
+    // Picking the other option still works in the same session: neither
+    // choice disables or redirects away from the other view. This is a
+    // first-view preference, not an access gate.
+    fireEvent.click(within(picker).getByRole('button', { name: 'I want to list an offer' }))
     expect(push).toHaveBeenCalledWith('/app/my-offers')
   })
 
-  it('routes the affiliate CTA to /app once the wallet is connected', () => {
-    connected = true
+  it('states the persona picker is not a gate, in its own fine print', () => {
     render(<LandingPage />)
-    fireEvent.click(screen.getByRole('button', { name: 'Browse offers' }))
-    expect(push).toHaveBeenCalledWith('/app')
+    const picker = screen.getByTestId('get-started')
+    expect(picker).toHaveTextContent(/every wallet gets both/i)
+    expect(picker).toHaveTextContent(/switch anytime/i)
   })
 
   it('renders the announcement bar and header', () => {
@@ -116,11 +162,40 @@ describe('Landing page', () => {
     )
   })
 
-  it('renders the social-proof section labelled as illustrative, not real customers', () => {
+  // Re-anchored from the old "renders the social-proof section labelled as
+  // illustrative" assertion. `SocialProof.tsx` (and its invented names and
+  // quotes) is now deleted, not just unrendered, so the property worth
+  // guarding has inverted: no testimonial-style attributed quote should ever
+  // appear on the page at all, permanently, not just today.
+  it('never renders a testimonial-style attributed quote anywhere on the page', () => {
+    const { container } = render(<LandingPage />)
+    expect(screen.queryByTestId('social-proof')).not.toBeInTheDocument()
+
+    const text = container.textContent ?? ''
+    // "·" was the attribution separator ("Name · Role") unique to the
+    // deleted testimonial cards; nothing else on the page uses it.
+    expect(text).not.toContain('·')
+    // The invented names themselves must never reappear anywhere in the DOM.
+    for (const name of ['Osei', 'Adeyemi', 'Iversen', 'Whitlow']) {
+      expect(text).not.toContain(name)
+    }
+  })
+
+  it('renders "Proof, not quotes" with a live GitHub link and clearly unfilled placeholders', () => {
     render(<LandingPage />)
-    const proof = screen.getByTestId('social-proof')
-    expect(proof).toHaveTextContent(/illustrative/i)
-    expect(proof).toHaveTextContent(/no customers yet|not real quotes/i)
+    const proof = screen.getByTestId('proof-not-quotes')
+    expect(proof).toHaveTextContent(/every escrow rule is public/i)
+
+    const githubLink = within(proof).getByRole('link', { name: /github/i })
+    expect(githubLink).toHaveAttribute('href', expect.stringContaining('github.com'))
+
+    // The two owner-supplied slots and the founder-note block must render as
+    // visibly marked, unfilled placeholders, not as asserted fact.
+    const notYetFilled = within(proof).getAllByText(/not yet filled in/i)
+    expect(notYetFilled.length).toBeGreaterThanOrEqual(3)
+    expect(proof).toHaveTextContent(/\[Add: hackathon name\/track/i)
+    expect(proof).toHaveTextContent(/\[Add: real devnet payout count/i)
+    expect(proof).toHaveTextContent(/founder note/i)
   })
 
   it('renders the honest proof band with the sourced facts and an audit link', () => {
@@ -146,10 +221,16 @@ describe('Landing page', () => {
     expect(push).toHaveBeenCalledWith('/app')
   })
 
-  it('never duplicates the hero CTA labels in the repeat band', () => {
+  // Replaces the old "never duplicates the hero CTA labels in the repeat
+  // band" assertion, which checked for 'List an offer'/'Browse offers'
+  // labels that no longer exist anywhere on the page now that the hero
+  // carries only one CTA. The property worth keeping is that the repeat
+  // band's own labels stay unique, so it never collides with the hero's or
+  // the persona picker's button text.
+  it('never duplicates the repeat band CTA labels elsewhere on the page', () => {
     render(<LandingPage />)
-    expect(screen.getAllByRole('button', { name: 'List an offer' })).toHaveLength(1)
-    expect(screen.getAllByRole('button', { name: 'Browse offers' })).toHaveLength(1)
+    expect(screen.getAllByRole('button', { name: 'Start an offer' })).toHaveLength(1)
+    expect(screen.getAllByRole('button', { name: 'Browse now' })).toHaveLength(1)
   })
 
   it('never uses an em dash, aside from the cited $75,000–$300,000 range', () => {

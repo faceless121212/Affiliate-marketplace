@@ -8,12 +8,6 @@ export function Footer() {
         <Link href="/app" className="text-[13px] text-muted hover:text-text">
           Marketplace
         </Link>
-        <a
-          href="https://github.com/faceless121212/Affiliate-marketplace"
-          className="text-[13px] text-muted hover:text-text"
-        >
-          Source
-        </a>
         <p className="ml-auto text-[12px] text-muted">
           Devnet prototype. Escrow simulated.
         </p>
