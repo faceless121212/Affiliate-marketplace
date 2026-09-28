@@ -14,13 +14,17 @@ vi.mock('@/lib/wallet/useAccount', () => ({
 }))
 
 describe('Simulate', () => {
-  it('tells the user plainly that this stands in for a postback', () => {
+  // Re-anchored from /in for a real postback/: "postback" is jargon on a
+  // page reachable from the main nav, so the copy now says what a postback
+  // is instead of naming it. The property is unchanged: the page must
+  // still say plainly that it is a stand-in, not the real mechanism.
+  it('tells the user plainly that this stands in for the real confirmation', () => {
     render(
       <StoreProvider>
         <SimulatePage />
       </StoreProvider>,
     )
-    expect(screen.getByText(/in for a real postback/i)).toBeInTheDocument()
+    expect(screen.getByText(/stands in for the automatic confirmation/i)).toBeInTheDocument()
   })
 
   it('says there is nothing to simulate when the user has no links', () => {
@@ -29,7 +33,10 @@ describe('Simulate', () => {
         <SimulatePage />
       </StoreProvider>,
     )
-    expect(screen.getByText(/no links yet/i)).toBeInTheDocument()
+    // Same sentence as the My Links empty state: one state, one wording,
+    // and it names the next step rather than just reporting the absence.
+    expect(screen.getByText(/no tracking links yet/i)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Browse offers' })).toHaveAttribute('href', '/app')
   })
 
   it('decrements escrow and records a payout on confirmation', async () => {

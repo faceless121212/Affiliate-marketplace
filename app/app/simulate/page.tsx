@@ -45,17 +45,18 @@ export default function SimulatePage() {
       <header>
         <h1 className="text-lg font-semibold">Simulate a conversion</h1>
         <p className="text-[13px] text-muted">
-          A testing tool, standing in for a real postback (coming in Phase 2).
+          A testing tool. It stands in for the automatic confirmation an advertiser’s site
+          will send in Phase 2.
         </p>
       </header>
 
       {links.length === 0 ? (
         <p className="rounded-lg border border-line bg-surface p-5 text-[13px] text-muted">
-          No links yet.{' '}
+          No tracking links yet.{' '}
           <Link href="/app" className="text-info hover:underline">
             Browse offers
           </Link>{' '}
-          to make one.
+          and get your first link.
         </p>
       ) : (
         <div className="space-y-3 rounded-lg border border-line bg-surface p-4">

@@ -12,7 +12,7 @@ export function ConnectGate() {
   const openLogin = useLoginModal()
   return (
     <div className="mx-auto max-w-md px-4 py-24 text-center">
-      <h1 className="text-xl font-semibold">Connect your wallet</h1>
+      <h1 className="text-xl font-semibold">Sign in with your wallet</h1>
       <p className="mt-2 text-[13px] text-muted">
         Your wallet address is your account. It’s the same one every time you connect.
       </p>
@@ -20,7 +20,8 @@ export function ConnectGate() {
         Connect wallet
       </Button>
       <p className="mt-3 text-[12px] text-muted">
-        Needs a Solana wallet (Phantom, Solflare or Backpack) on devnet.
+        Needs a Solana wallet (Phantom, Solflare or Backpack) on devnet, Solana’s test
+        network.
       </p>
 
       {isDevMode && (

@@ -12,6 +12,11 @@ const AFFILIATE_CHIPS = ['Any niche']
  * lives with proper framing copy; the secondary link is a lower-commitment
  * escape hatch straight to the browse view, wired through the same
  * `LoginCta` front door as everything else on this page.
+ *
+ * Its label is "Browse offers", the same words the persona picker uses for
+ * the same destination. The page deliberately keeps one label per
+ * destination so a repeated button teaches rather than re-asks, which is
+ * what `landing.test.tsx` asserts as a 1:1 label/destination mapping.
  */
 export function Hero() {
   return (
@@ -35,17 +40,18 @@ export function Hero() {
             Get started
           </a>
           <LoginCta destination="/app" variant="ghost" className="px-0 py-0 text-[13px]">
-            or just browse offers first
+            Browse offers
           </LoginCta>
         </div>
       </div>
 
       {/* A symmetric three-up row: the two audience statements carry equal
-          weight on either side of the escrow counter, which stays the
-          band's focal number. Deliberately as short as its content needs,
-          no card to build a tall column around, vertically centred so all
-          three columns sit on one shared middle line. */}
-      <div className="mt-10 grid items-center gap-8 lg:grid-cols-3 lg:gap-6">
+          weight on either side of the escrow counter. Aligned to a shared
+          top edge, not vertically centred: the centre column is taller than
+          the two beside it, so centring left the side columns floating at
+          an offset that read as a layout accident rather than a
+          composition. `items-start` gives all three one line to start on. */}
+      <div className="mt-10 grid items-start gap-8 lg:grid-cols-3 lg:gap-6">
         {/* Left: advertisers ("affiliate platforms" in the owner's words). Amber, escrow-toned. */}
         <div>
           {/* Lime as text is illegible on white (~1.2:1). The audience tag

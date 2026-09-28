@@ -30,17 +30,24 @@ export function OfferCard({ offer }: { offer: Offer }) {
       {/* Escrow leads the card: it's the guaranteed balance, not a promise,
           so it carries the most visual weight of anything here. */}
       <EscrowMeter offer={offer} />
+      {/* "Covers N", not "N funded". `fundable` is how many payouts the
+          escrow can still cover, but "funded" is past tense and read as a
+          popularity signal: N conversions have already happened. That is the
+          opposite of what the number means, on the one figure an affiliate
+          uses to decide whether there is money here for them. "Covers" has
+          no past reading and implies no history, so it is also correct on a
+          brand-new offer. */}
       <p className="mt-1.5 font-mono tnum text-[10.5px] text-muted">
         {offer.status === 'depleted'
           ? 'Escrow empty'
-          : `${fundable} conversion${fundable === 1 ? '' : 's'} funded`}
+          : `Covers ${fundable} conversion${fundable === 1 ? '' : 's'}`}
       </p>
 
       {/* CPA is supporting detail beneath the escrow figure, not the headline:
           the border now separates the meter from this footer instead of framing CPA. */}
       <div className="mt-3 flex items-baseline justify-between border-t border-line pt-2">
         <span className="text-[11.5px] text-muted" title="CPA: a fixed amount paid per conversion.">
-          CPA per conversion
+          Commission per conversion
         </span>
         <Money value={offer.commissionAmountUsd} className="text-[13px]" />
       </div>

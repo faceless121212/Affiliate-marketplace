@@ -9,7 +9,7 @@ import type { Category } from '@/lib/types'
  * Hollowell Trading Co. is invented for this form, in the same spirit as
  * the seed offers (Drayton Supply Co., Fenwick Grounds, Kestrel Play, ...).
  * Never a real brand. The budget is set well above the commission so the
- * example always clears the "budget must cover at least one payout" rule.
+ * example always clears the rule that the budget must cover one payout.
  */
 export const EXAMPLE_OFFER: {
   name: string

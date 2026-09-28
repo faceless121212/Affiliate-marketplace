@@ -37,7 +37,7 @@ describe('Landing page', () => {
     expect(primary).toHaveTextContent('Get started')
     expect(within(hero).getAllByTestId('hero-primary-cta')).toHaveLength(1)
 
-    const secondary = within(hero).getByRole('button', { name: /browse offers first/i })
+    const secondary = within(hero).getByRole('button', { name: 'Browse offers' })
     expect(secondary).toBeInTheDocument()
     // Only one clickable "browse" affordance in the hero: the secondary link.
     expect(within(hero).queryAllByRole('button')).toHaveLength(1)
@@ -47,7 +47,7 @@ describe('Landing page', () => {
     connected = true
     render(<LandingPage />)
     const hero = screen.getByTestId('hero')
-    fireEvent.click(within(hero).getByRole('button', { name: /browse offers first/i }))
+    fireEvent.click(within(hero).getByRole('button', { name: 'Browse offers' }))
     expect(push).toHaveBeenCalledWith('/app')
   })
 
@@ -73,7 +73,7 @@ describe('Landing page', () => {
     render(<LandingPage />)
     const picker = screen.getByTestId('get-started')
 
-    fireEvent.click(within(picker).getByRole('button', { name: 'I want to promote offers' }))
+    fireEvent.click(within(picker).getByRole('button', { name: 'Browse offers' }))
     expect(push).toHaveBeenCalledWith('/app')
 
     push.mockClear()
@@ -81,7 +81,7 @@ describe('Landing page', () => {
     // Picking the other option still works in the same session: neither
     // choice disables or redirects away from the other view. This is a
     // first-view preference, not an access gate.
-    fireEvent.click(within(picker).getByRole('button', { name: 'I want to list an offer' }))
+    fireEvent.click(within(picker).getByRole('button', { name: 'List an offer' }))
     expect(push).toHaveBeenCalledWith('/app/my-offers')
   })
 
@@ -229,28 +229,61 @@ describe('Landing page', () => {
     expect(githubLinks.length).toBeGreaterThan(0)
   })
 
-  it('offers a repeat CTA band low on the page that routes to the same two destinations', () => {
-    connected = true
-    render(<LandingPage />)
-    expect(screen.getByTestId('repeat-cta')).toBeInTheDocument()
+  // Replaces the two assertions that guarded the repeat CTA band. That band
+  // is deleted: it re-asked, in a third set of words ("Start an offer" /
+  // "Browse now"), the same question the persona picker directly above it
+  // had just asked, and the picker already sits 86% of the way down the
+  // page, so it was never rescuing a reader from scrolling back up either.
+  it('no longer renders a second CTA band under the persona picker', () => {
+    const { container } = render(<LandingPage />)
+    expect(screen.queryByTestId('repeat-cta')).not.toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: 'Start an offer' }))
-    expect(push).toHaveBeenCalledWith('/app/my-offers')
+    const text = container.textContent ?? ''
+    expect(text).not.toContain('Start an offer')
+    expect(text).not.toContain('Browse now')
 
-    fireEvent.click(screen.getByRole('button', { name: 'Browse now' }))
-    expect(push).toHaveBeenCalledWith('/app')
+    // The persona picker is now the last thing before the footer, so it has
+    // to still be there: deleting the band must not leave the page with no
+    // closing call to action.
+    const sections = Array.from(document.querySelector('main')?.children ?? [])
+    const pickerIdx = sections.findIndex((el) => el.getAttribute('data-testid') === 'get-started')
+    expect(pickerIdx).toBe(sections.length - 2) // picker, then the footer
   })
 
-  // Replaces the old "never duplicates the hero CTA labels in the repeat
-  // band" assertion, which checked for 'List an offer'/'Browse offers'
-  // labels that no longer exist anywhere on the page now that the hero
-  // carries only one CTA. The property worth keeping is that the repeat
-  // band's own labels stay unique, so it never collides with the hero's or
-  // the persona picker's button text.
-  it('never duplicates the repeat band CTA labels elsewhere on the page', () => {
+  // The property behind the CTA cleanup, stated directly: a visitor should
+  // never meet two different words for the same place, or one word that
+  // means two places. Scoped to <main> on purpose. The header's "Sign in"
+  // also lands on /app, but it is an account action rather than an offer
+  // CTA, and naming it "Browse offers" would be worse, not better.
+  it('uses exactly one label per destination across the page body', () => {
+    connected = true
     render(<LandingPage />)
-    expect(screen.getAllByRole('button', { name: 'Start an offer' })).toHaveLength(1)
-    expect(screen.getAllByRole('button', { name: 'Browse now' })).toHaveLength(1)
+
+    const labelsByDestination = new Map<string, Set<string>>()
+    const destinationsByLabel = new Map<string, Set<string>>()
+
+    for (const button of within(screen.getByRole('main')).getAllByRole('button')) {
+      push.mockClear()
+      fireEvent.click(button)
+      const destination = push.mock.calls.at(-1)?.[0]
+      if (typeof destination !== 'string') continue
+      const label = (button.textContent ?? '').trim()
+
+      if (!labelsByDestination.has(destination)) labelsByDestination.set(destination, new Set())
+      labelsByDestination.get(destination)?.add(label)
+      if (!destinationsByLabel.has(label)) destinationsByLabel.set(label, new Set())
+      destinationsByLabel.get(label)?.add(destination)
+    }
+
+    // Both app destinations are reachable from the page body.
+    expect([...labelsByDestination.keys()].sort()).toEqual(['/app', '/app/my-offers'])
+
+    for (const [destination, labels] of labelsByDestination) {
+      expect([...labels], `${destination} is reached by more than one label`).toHaveLength(1)
+    }
+    for (const [label, destinations] of destinationsByLabel) {
+      expect([...destinations], `"${label}" points at more than one destination`).toHaveLength(1)
+    }
   })
 
   it('never uses an em dash, aside from the cited $75,000–$300,000 range', () => {

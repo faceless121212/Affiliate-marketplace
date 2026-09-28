@@ -71,7 +71,15 @@ describe('Create offer', () => {
     await user.type(screen.getByLabelText('Target URL'), 'https://example.com/underfunded')
     await user.type(screen.getByLabelText('Escrow budget (USD)'), '20')
     await user.click(screen.getByRole('button', { name: 'Lock budget and list offer' }))
-    expect(screen.getByText(/must cover at least one payout/i)).toBeInTheDocument()
+    // The message states both figures and the fix, rather than restating the
+    // rule: this is the one failure whose remedy the advertiser cannot infer
+    // from the field label.
+    expect(screen.getByText(/budget is \$20\.00/i)).toBeInTheDocument()
+    expect(screen.getByText(/one conversion pays \$50\.00/i)).toBeInTheDocument()
+    expect(screen.getByText(/at least \$50\.00/i)).toBeInTheDocument()
+    expect(screen.getByLabelText('Escrow budget (USD)').closest('label')).toContainElement(
+      screen.getByText(/raise the budget/i),
+    )
     expect(screen.queryByText('Underfunded Ltd')).toBeNull()
   })
 
@@ -90,6 +98,47 @@ describe('Create offer', () => {
     await user.type(screen.getByLabelText('Escrow budget (USD)'), '100')
     await user.click(screen.getByRole('button', { name: 'Lock budget and list offer' }))
     expect(screen.getByText(/must start with http/i)).toBeInTheDocument()
+  })
+})
+
+describe('Create offer validation messages', () => {
+  // Every message used to render in the escrow budget field's error slot,
+  // because `PayoutFields` owned the form's single `error` string. A missing
+  // offer name reported itself underneath "Escrow budget (USD)", pointing the
+  // advertiser at the one field that was not the problem.
+  it('shows a validation error against the field it is about, not the budget', async () => {
+    const user = userEvent.setup()
+    render(
+      <StoreProvider>
+        <MyOffersPage />
+      </StoreProvider>,
+    )
+    await user.click(screen.getByRole('button', { name: 'Lock budget and list offer' }))
+
+    const message = screen.getByText(/add an offer name/i)
+    expect(screen.getByLabelText('Offer name').closest('label')).toContainElement(message)
+    expect(screen.getByLabelText('Escrow budget (USD)').closest('label')).not.toContainElement(
+      message,
+    )
+  })
+
+  it('names the target URL field in its own error, since the rule is not in the label', async () => {
+    const user = userEvent.setup()
+    render(
+      <StoreProvider>
+        <MyOffersPage />
+      </StoreProvider>,
+    )
+    await user.type(screen.getByLabelText('Offer name'), 'Bad URL Co.')
+    await user.type(screen.getByLabelText('Description'), 'The target is not a web address.')
+    await user.type(screen.getByLabelText('Commission per conversion (USD)'), '10')
+    await user.type(screen.getByLabelText('Conversion terms'), 'A completed order.')
+    await user.type(screen.getByLabelText('Target URL'), 'not-a-url')
+    await user.type(screen.getByLabelText('Escrow budget (USD)'), '100')
+    await user.click(screen.getByRole('button', { name: 'Lock budget and list offer' }))
+
+    const message = screen.getByText(/must start with http/i)
+    expect(screen.getByLabelText('Target URL').closest('label')).toContainElement(message)
   })
 })
 
@@ -141,7 +190,7 @@ describe('Create offer form usability', () => {
 
     await user.click(screen.getByRole('button', { name: 'Lock budget and list offer' }))
     expect(screen.getByText('Hollowell Outdoor Co.')).toBeInTheDocument()
-    expect(screen.queryByText(/must cover at least one payout/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/raise the budget/i)).not.toBeInTheDocument()
   })
 
   it('does not create an offer just from filling the example', async () => {
@@ -153,7 +202,51 @@ describe('Create offer form usability', () => {
     )
     await user.click(screen.getByRole('button', { name: 'Fill with an example' }))
     expect(screen.queryByText('Hollowell Trading Co.')).not.toBeInTheDocument()
-    expect(screen.getByText('No offers yet. Use the form on the left.')).toBeInTheDocument()
+    // Still zero offers: the page is still showing the first-offer form and
+    // no offer list has appeared. (Re-anchored from the old "No offers yet.
+    // Use the form on the left." copy, which described a two-column layout
+    // that no longer exists.)
+    expect(screen.getByRole('heading', { name: 'List your first offer' })).toBeInTheDocument()
+    expect(screen.queryByRole('list')).toBeNull()
+  })
+})
+
+describe('My offers layout', () => {
+  it('opens the creation form by default while there are no offers', () => {
+    render(
+      <StoreProvider>
+        <MyOffersPage />
+      </StoreProvider>,
+    )
+    // An empty list behind a closed form would be a dead end for a new
+    // advertiser, so the form is the page when there is nothing to list.
+    expect(screen.getByRole('heading', { name: 'List your first offer' })).toBeInTheDocument()
+    expect(screen.getByLabelText('Offer name')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'List an offer' })).toBeNull()
+  })
+
+  it('leads with the offers once one exists, and puts creation behind a button', async () => {
+    const user = userEvent.setup()
+    render(
+      <StoreProvider>
+        <MyOffersPage />
+      </StoreProvider>,
+    )
+    await fillAndSubmit(user)
+
+    // The page is named for the list, so once there is a list it comes
+    // first and the form stops occupying the screen.
+    expect(screen.getByRole('heading', { name: 'My offers', level: 1 })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Ashcroft Rail' })).toBeInTheDocument()
+    expect(screen.queryByLabelText('Offer name')).toBeNull()
+
+    await user.click(screen.getByRole('button', { name: 'List an offer' }))
+    expect(screen.getByLabelText('Offer name')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Cancel' }))
+    expect(screen.queryByLabelText('Offer name')).toBeNull()
+    // Cancelling never costs you the list you already had.
+    expect(screen.getByRole('heading', { name: 'Ashcroft Rail' })).toBeInTheDocument()
   })
 })
 

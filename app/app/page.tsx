@@ -29,7 +29,7 @@ export default function BrowsePage() {
 
       {offers.length === 0 ? (
         <p className="rounded-lg border border-line bg-surface p-6 text-center text-[13px] text-muted">
-          No offers match that filter.
+          No offers match. Try another category, or clear the search.
         </p>
       ) : (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">

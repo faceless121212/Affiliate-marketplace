@@ -28,14 +28,14 @@ export function GetStarted() {
 
         <Reveal delayMs={80} className="mt-8 grid gap-3 sm:grid-cols-2">
           <LoginCta destination="/app" variant="secondary" className="w-full px-5 py-4 text-[14px]">
-            I want to promote offers
+            Browse offers
           </LoginCta>
           <LoginCta
             destination="/app/my-offers"
             variant="secondary"
             className="w-full px-5 py-4 text-[14px]"
           >
-            I want to list an offer
+            List an offer
           </LoginCta>
         </Reveal>
 

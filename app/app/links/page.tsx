@@ -35,7 +35,7 @@ export default function LinksPage() {
         <h2 className="mb-2 text-[13px] font-semibold">Tracking links</h2>
         {links.length === 0 ? (
           <Empty>
-            No links yet. <Link href="/app" className="text-info hover:underline">Browse offers</Link> and generate one.
+            No tracking links yet. <Link href="/app" className="text-info hover:underline">Browse offers</Link> and get your first link.
           </Empty>
         ) : (
           <Table head={['Offer', 'Clicks', 'Link']}>
@@ -58,7 +58,7 @@ export default function LinksPage() {
       <div>
         <h2 className="mb-2 text-[13px] font-semibold">Confirmed payouts</h2>
         {conversions.length === 0 ? (
-          <Empty>No confirmed conversions yet.</Empty>
+          <Empty>No payouts yet. They appear here the moment a conversion confirms.</Empty>
         ) : (
           <Table head={['Offer', 'Confirmed', 'Paid']}>
             {conversions.map((c) => (

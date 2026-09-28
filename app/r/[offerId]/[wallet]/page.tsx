@@ -35,7 +35,7 @@ export default function TrackingRedirect({
     <main className="grid min-h-dvh place-items-center px-4 text-center">
       {failed ? (
         <p className="text-[13px] text-muted">
-          This tracking link points to an offer that no longer exists.
+          This offer is no longer available. The link you followed has been taken down.
         </p>
       ) : (
         <p className="text-[13px] text-muted">Redirecting…</p>

@@ -17,15 +17,18 @@ export function EscrowCounter() {
   const value = useCountUp(TOTAL_LOCKED_USD)
 
   return (
-    // The lime radial glow this had on dark read as a soft halo; on white it
-    // just muddies the number underneath, so it's dropped rather than
-    // re-tuned. The figure's size and weight carry the emphasis instead.
+    // Deliberately smaller than the h1 above it (26/30px against 32/42px).
+    // At its old 38/46px this was the largest element on the page, which
+    // meant the first thing a visitor read was a number whose own caption
+    // says it is simulated. The headline makes the argument; this supports
+    // it. The lime radial glow this had on dark is dropped rather than
+    // re-tuned: on white it only muddied the figure underneath.
     <div className="relative">
       <p className="text-[11px] uppercase tracking-wide text-muted">In escrow now</p>
       <Money
         value={value}
         tone="escrow"
-        className="text-[38px] font-bold leading-none sm:text-[46px]"
+        className="text-[26px] font-bold leading-none sm:text-[30px]"
       />
       <p className="mt-1 max-w-[220px] text-[11px] leading-snug text-muted">
         Simulated, not on-chain.

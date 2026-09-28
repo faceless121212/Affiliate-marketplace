@@ -18,7 +18,7 @@ const renderPanel = () =>
 describe('GetLinkPanel', () => {
   it('generates a link containing the connected wallet address', async () => {
     renderPanel()
-    await userEvent.click(screen.getByRole('button', { name: 'Get my link' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Get link' }))
     expect(
       screen.getByText(`nativness.app/r/${drayton.id}/${WALLET}`),
     ).toBeInTheDocument()
@@ -26,7 +26,7 @@ describe('GetLinkPanel', () => {
 
   it('does not mint a second link when asked twice', async () => {
     renderPanel()
-    await userEvent.click(screen.getByRole('button', { name: 'Get my link' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Get link' }))
     expect(listLinksByAffiliate(WALLET)).toHaveLength(1)
   })
 
@@ -34,7 +34,7 @@ describe('GetLinkPanel', () => {
     const writeText = vi.fn().mockResolvedValue(undefined)
     Object.assign(navigator, { clipboard: { writeText } })
     renderPanel()
-    await userEvent.click(screen.getByRole('button', { name: 'Get my link' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Get link' }))
     await userEvent.click(screen.getByRole('button', { name: 'Copy' }))
     expect(writeText).toHaveBeenCalledWith(`nativness.app/r/${drayton.id}/${WALLET}`)
     expect(screen.getByRole('button', { name: 'Copied' })).toBeInTheDocument()

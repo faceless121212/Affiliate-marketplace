@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { createOffer } from '@/lib/store'
 import { useMutate } from '@/lib/store/provider'
+import { money } from '@/lib/format'
 import type { Category } from '@/lib/types'
 import { EXAMPLE_OFFER } from './createOfferExample'
 import { OfferDetailsFields, PayoutFields } from './CreateOfferFormFields'
@@ -20,10 +21,20 @@ const BLANK = {
 
 export type OfferFormState = typeof BLANK
 
+/**
+ * Which field failed, alongside what to tell the user about it.
+ *
+ * This used to be a bare `string`, which `PayoutFields` rendered in the
+ * escrow budget's error slot no matter which field had actually failed: a
+ * missing offer name reported itself underneath "Escrow budget (USD)".
+ * Naming the field lets each message render against the input it is about.
+ */
+export type OfferFormError = { field: keyof OfferFormState; message: string }
+
 export function CreateOfferForm({ wallet }: { wallet: string }) {
   const mutate = useMutate()
   const [form, setForm] = useState<OfferFormState>(BLANK)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<OfferFormError | null>(null)
 
   const set = (k: keyof OfferFormState) => (e: { target: { value: string } }) =>
     setForm((f) => ({ ...f, [k]: e.target.value }))
@@ -41,15 +52,25 @@ export function CreateOfferForm({ wallet }: { wallet: string }) {
     e.preventDefault()
     const commission = Number(form.commission)
     const budget = Number(form.budget)
+    const fail = (field: keyof OfferFormState, message: string) => setError({ field, message })
 
-    if (!form.name.trim()) return setError('Give it a name.')
-    if (!form.description.trim()) return setError('Describe what you’re selling.')
-    if (!(commission > 0)) return setError('Enter a commission above zero.')
-    if (!form.conversionTerms.trim()) return setError('Say what counts as a conversion.')
+    if (!form.name.trim())
+      return fail('name', 'Add an offer name. It’s the first thing affiliates see.')
+    if (!form.description.trim()) return fail('description', 'Describe what you’re selling.')
+    if (!(commission > 0))
+      return fail('commission', 'Commission must be above $0. This is what each conversion pays.')
+    if (!form.conversionTerms.trim())
+      return fail('conversionTerms', 'Say what counts as a conversion.')
     if (!/^https?:\/\//i.test(form.targetUrl.trim()))
-      return setError('The URL must start with http:// or https://')
+      return fail('targetUrl', 'Target URL must start with http:// or https://')
+    // Says the two numbers rather than restating the rule. This is the one
+    // failure where the advertiser cannot infer the fix from the label, and
+    // both figures are in hand at the moment it fails.
     if (!(budget >= commission))
-      return setError('Budget must cover at least one payout.')
+      return fail(
+        'budget',
+        `Budget is ${money(budget)}, but one conversion pays ${money(commission)}. Raise the budget to at least ${money(commission)}.`,
+      )
 
     mutate(() =>
       createOffer(
@@ -80,8 +101,14 @@ export function CreateOfferForm({ wallet }: { wallet: string }) {
         </Button>
       </div>
 
-      <OfferDetailsFields form={form} set={set} />
-      <PayoutFields form={form} set={set} error={error} />
+      {/* Two columns from `lg` up. The form used to run as one 360px
+          column, which stacked six fields deep enough to push the submit
+          button below the fold of a 900px screen. Side by side, the whole
+          thing fits on one screen. */}
+      <div className="grid gap-4 lg:grid-cols-2 lg:gap-6">
+        <OfferDetailsFields form={form} set={set} error={error} />
+        <PayoutFields form={form} set={set} error={error} />
+      </div>
 
       <Button type="submit">Lock budget and list offer</Button>
     </form>
