@@ -214,15 +214,19 @@ describe('Landing page', () => {
     expect(container.textContent ?? '').not.toMatch(/not yet filled in/i)
   })
 
-  it('renders the honest proof band with the sourced facts and an audit link', () => {
-    render(<LandingPage />)
-    const band = screen.getByTestId('proof-band')
-    expect(band).toHaveTextContent('Awin')
-    expect(band).toHaveTextContent('NET-60')
-    expect(band).toHaveTextContent('2.2/5')
-    expect(
-      screen.getByRole('link', { name: /audit the source on github/i }),
-    ).toHaveAttribute('href', expect.stringContaining('github.com'))
+  it('keeps the sourced competitor facts and an auditable source link on the page', () => {
+    // The dedicated proof band was removed as a duplicate of the Problem
+    // section. What must survive is the property it was guarding: those facts
+    // are still stated with their sources, and the source is still auditable.
+    const { container } = render(<LandingPage />)
+    const text = container.textContent ?? ''
+    for (const fact of ['Awin', 'NET-60', '2.2/5', 'October 2025', 'Trustpilot']) {
+      expect(text).toContain(fact)
+    }
+    const githubLinks = screen
+      .getAllByRole('link')
+      .filter((a) => (a.getAttribute('href') ?? '').includes('github.com'))
+    expect(githubLinks.length).toBeGreaterThan(0)
   })
 
   it('offers a repeat CTA band low on the page that routes to the same two destinations', () => {
