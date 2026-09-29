@@ -9,7 +9,7 @@ const TOTAL_LOCKED = SEED_OFFERS.reduce((sum, offer) => sum + offer.escrowTotalU
  * Asymmetric split: argument left, the product working right.
  *
  * The old hero centred everything in a max-w-2xl column and put a 46px
- * escrow counter below the h1 — so the largest element on the page was a
+ * escrow counter below the h1, so the largest element on the page was a
  * number whose own caption said it was simulated. The counter is gone; the
  * demo card carries the same figure in context, where it reads as a product
  * rather than a claim.
@@ -62,21 +62,21 @@ export function Hero() {
           </div>
 
           <dl className="mt-9 flex flex-wrap gap-x-8 gap-y-3 border-t border-line pt-5 text-[12px] text-muted">
-            <div>
+            <div className="flex flex-col-reverse">
+              <dt>locked across demo offers</dt>
               <dd className="mb-0.5 font-mono tnum text-[19px] font-bold tracking-tight text-ink">
                 {money(TOTAL_LOCKED)}
               </dd>
-              <dt>locked in escrow</dt>
             </div>
-            <div>
+            <div className="flex flex-col-reverse">
+              <dt>demo offers</dt>
               <dd className="mb-0.5 font-mono tnum text-[19px] font-bold tracking-tight text-ink">
                 {SEED_OFFERS.length}
               </dd>
-              <dt>live offers</dt>
             </div>
-            <div>
-              <dd className="mb-0.5 text-[19px] font-bold tracking-tight text-text">Instant</dd>
+            <div className="flex flex-col-reverse">
               <dt>payout on confirm</dt>
+              <dd className="mb-0.5 text-[19px] font-bold tracking-tight text-text">Instant</dd>
             </div>
           </dl>
         </div>

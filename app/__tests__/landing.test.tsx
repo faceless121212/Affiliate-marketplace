@@ -35,6 +35,7 @@ describe('Landing page', () => {
     const hero = screen.getByTestId('hero')
     const primary = within(hero).getByTestId('hero-primary-cta')
     expect(primary).toHaveTextContent('Get started')
+    expect(primary).toHaveAttribute('href', '#get-started')
     expect(within(hero).getAllByTestId('hero-primary-cta')).toHaveLength(1)
 
     const secondary = within(hero).getByRole('link', { name: 'Browse offers' })
