@@ -14,8 +14,8 @@ const FIGURES = [
 ] as const
 
 /**
- * The page's breather: 40px of vertical rhythm against the 88-92px every
- * section around it uses. Sitting between a tall bento and a tall closing
+ * The page's breather: 40px of vertical padding, less than half that of the
+ * redesigned sections around it. Sitting between a tall bento and a tall closing
  * CTA, its shortness is what makes the page's rhythm legible. It is not
  * unfinished; it is the rest between two bars.
  *

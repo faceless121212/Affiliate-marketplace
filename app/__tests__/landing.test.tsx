@@ -327,7 +327,7 @@ describe('Landing page', () => {
     render(<LandingPage />)
     const market = screen.getByTestId('market')
     expect(market).toHaveAttribute('data-shape', 'band')
-    // The breather: a quarter the vertical rhythm of its neighbours.
-    expect(market.className).toMatch(/\bpy-10\b/)
+    // The breather: less than half the vertical padding of the redesigned sections around it.
+    expect(market.className).toMatch(/(^|\s)py-10(\s|$)/)
   })
 })

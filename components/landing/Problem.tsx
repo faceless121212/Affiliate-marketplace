@@ -43,7 +43,7 @@ export function Problem() {
             Nobody has fixed affiliate trust.
           </h2>
           <p className="mt-3.5 text-[14px] leading-relaxed text-muted">
-            Affiliates work first, trust comes after. Every fact here is sourced.
+            Affiliates work first, trust comes after.
           </p>
         </Reveal>
 
@@ -59,7 +59,7 @@ export function Problem() {
                 {fact.heading}
               </h3>
               <p className="mt-1.5 text-[14px] leading-relaxed text-muted">{fact.body}</p>
-              <p className="mt-1.5 text-[11px] text-muted opacity-75">{fact.source}</p>
+              <p className="mt-1.5 text-[11px] text-muted">{fact.source}</p>
             </Reveal>
           ))}
         </div>
