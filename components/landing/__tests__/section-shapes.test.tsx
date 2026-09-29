@@ -12,12 +12,20 @@ import LandingPage from '@/app/page'
  * for.
  */
 describe('Landing section shapes', () => {
+  // Every direct child of <main>, unfiltered. A <section> reports its
+  // data-shape; anything else reports its tag, so a section demoted to a <div>
+  // (which would silently drop out of a tag filter) shows up as "<div>".
   const shapesOf = () => {
     render(<LandingPage />)
-    return Array.from(document.querySelector('main')?.children ?? [])
-      .filter((el) => el.tagName === 'SECTION')
-      .map((el) => el.getAttribute('data-shape'))
+    return Array.from(document.querySelector('main')?.children ?? []).map((el) =>
+      el.tagName === 'SECTION' ? el.getAttribute('data-shape') : `<${el.tagName.toLowerCase()}>`,
+    )
   }
+
+  it('lays the page out as exactly split, rail, bento, typesplit, band, centred', () => {
+    // Pins the order, the count, and that each one is a real <section>.
+    expect(shapesOf()).toEqual(['split', 'rail', 'bento', 'typesplit', 'band', 'centred'])
+  })
 
   it('gives every section a declared shape', () => {
     const shapes = shapesOf()

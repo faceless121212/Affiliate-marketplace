@@ -130,7 +130,7 @@ describe('Landing page', () => {
     // Guards the honesty framing (constraint 8), not the exact wording:
     // escrow is disclosed as simulated and not on-chain, in one sentence.
     // (Matched as one regex, not two separate getByText calls, since the
-    // escrow counter lower on the page also says "not on-chain" on its own.)
+    // demo card's footer also says "simulated" on its own.)
     expect(screen.getByText(/escrow is simulated.*not on-chain/i)).toBeInTheDocument()
   })
 
@@ -139,10 +139,13 @@ describe('Landing page', () => {
   // that the page still makes the one-identity claim somewhere, not that the
   // hero is where it lives.
   it('states that one wallet covers both sides', () => {
-    const { container } = render(<LandingPage />)
-    const text = container.textContent ?? ''
-    expect(text).toMatch(/one wallet/i)
-    expect(text).toMatch(/both sides/i)
+    render(<LandingPage />)
+    // Scoped to the bento: /one wallet/ also matches GetStarted's heading, so
+    // a page-wide match passes with the bento's own claim deleted. Both the
+    // heading and the sentence under it are asserted, separately.
+    const bento = within(screen.getByTestId('bento'))
+    expect(bento.getByRole('heading', { name: /one wallet, both sides/i })).toBeInTheDocument()
+    expect(bento.getByText(/one login for both sides/i)).toBeInTheDocument()
   })
 
   // The old "shows a real offer card with a locked escrow balance" test
@@ -202,8 +205,9 @@ describe('Landing page', () => {
   it('makes no numeric claim about Nativness itself', () => {
     const { container } = render(<LandingPage />)
     const text = container.textContent ?? ''
-    // Allows the animated escrow counter (labelled as the demo marketplace's
-    // total, not Nativness's own) and the cited market figures. Only a
+    // Allows the live demo card and the hero's locked-escrow figure (both
+    // labelled as the demo marketplace's, not Nativness's own) and the cited
+    // market figures. Only a
     // figure describing Nativness's own adoption, revenue or traffic is
     // disallowed.
     expect(text).not.toMatch(
@@ -315,14 +319,12 @@ describe('Landing page', () => {
     }
   })
 
-  it('never uses an em dash, aside from the cited $75,000–$300,000 range', () => {
+  it('never uses an em dash anywhere on the page', () => {
     const { container } = render(<LandingPage />)
     // Built from a char code rather than a literal em dash, so this source
     // file itself never contains the character the owner's grep checks for.
     const emDash = String.fromCharCode(8212)
-    const range = `$75,000${emDash}$300,000`
-    const text = (container.textContent ?? '').split(range).join('')
-    expect(text).not.toContain(emDash)
+    expect(container.textContent ?? '').not.toContain(emDash)
   })
 
   it('states the three steps in order', () => {
