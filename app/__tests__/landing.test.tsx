@@ -258,12 +258,12 @@ describe('Landing page', () => {
     expect(text).not.toContain('Start an offer')
     expect(text).not.toContain('Browse now')
 
-    // The persona picker is now the last thing before the footer, so it has
-    // to still be there: deleting the band must not leave the page with no
-    // closing call to action.
+    // The persona picker is the last section in <main> (the footer sits
+    // outside it), so it has to still be there: deleting the band must not
+    // leave the page with no closing call to action.
     const sections = Array.from(document.querySelector('main')?.children ?? [])
     const pickerIdx = sections.findIndex((el) => el.getAttribute('data-testid') === 'get-started')
-    expect(pickerIdx).toBe(sections.length - 2) // picker, then the footer
+    expect(pickerIdx).toBe(sections.length - 1)
   })
 
   // The property behind the CTA cleanup, unchanged by Task 1: a visitor
@@ -271,7 +271,7 @@ describe('Landing page', () => {
   // that means two places. Scoped to <main>: the header's "Sign in" also
   // lands on /app, but it is an account action rather than an offer CTA.
   // The footer's "Marketplace" link is likewise site navigation, not an offer
-  // CTA (the footer renders inside <main>, so it is skipped explicitly).
+  // CTA; the footer sits outside <main>, so this scope already excludes it.
   it('uses exactly one label per destination across the page body', () => {
     render(<LandingPage />)
     const labelsByDestination = new Map<string, Set<string>>()
@@ -279,7 +279,7 @@ describe('Landing page', () => {
 
     for (const link of within(screen.getByRole('main')).getAllByRole('link')) {
       const destination = link.getAttribute('href') ?? ''
-      if (!destination.startsWith('/app') || link.closest('footer')) continue
+      if (!destination.startsWith('/app')) continue
       const label = (link.textContent ?? '').trim()
       if (!labelsByDestination.has(destination)) labelsByDestination.set(destination, new Set())
       labelsByDestination.get(destination)?.add(label)

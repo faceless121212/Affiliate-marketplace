@@ -14,10 +14,10 @@ import { Reveal } from './Reveal'
  */
 export function GetStarted() {
   return (
-    <section id="get-started" data-testid="get-started" className="border-t border-line">
-      <div className="mx-auto max-w-2xl px-4 py-16 text-center">
+    <section id="get-started" data-testid="get-started" data-shape="centred" className="py-23">
+      <div className="mx-auto max-w-2xl px-4 text-center">
         <Reveal>
-          <h2 className="text-2xl font-semibold tracking-tight">
+          <h2 className="text-[36px] font-semibold tracking-[-0.03em]">
             One wallet. Then tell us why you’re here.
           </h2>
           <p className="mt-3 text-[14px] leading-relaxed text-muted">
