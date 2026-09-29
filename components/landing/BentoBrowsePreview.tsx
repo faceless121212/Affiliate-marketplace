@@ -22,8 +22,8 @@ export function BentoBrowsePreview() {
             className="flex items-center gap-2.5 rounded-[9px] border border-line bg-surface px-3 py-2.5"
           >
             <OfferAvatar offer={offer} />
-            <span className="min-w-0 flex-1 truncate text-[12px] font-semibold">{offer.name}</span>
-            <Money value={offer.escrowRemainingUsd} className="text-[12px] font-bold" />
+            <span className="min-w-0 flex-1 truncate text-caption font-semibold">{offer.name}</span>
+            <Money value={offer.escrowRemainingUsd} className="text-caption font-bold" />
             <span className="h-1.5 w-13 shrink-0 overflow-hidden rounded-full bg-inset">
               <span className="block h-full rounded-full bg-escrow" style={{ width: `${pct}%` }} />
             </span>

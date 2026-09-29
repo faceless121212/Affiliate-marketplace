@@ -29,7 +29,7 @@ export function Header() {
   return (
     <header data-testid="site-header" className="border-b border-line">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 sm:gap-x-6">
-        <Link href="/" className="text-[15px] font-semibold tracking-tight">
+        <Link href="/" className="text-lead font-semibold tracking-tight">
           Nativness
         </Link>
         <nav className="flex gap-3 sm:gap-4" aria-label="Main">
@@ -39,14 +39,14 @@ export function Header() {
               href={l.href}
               // The /app link must not prefetch: its layout mounts the wallet providers.
               prefetch={false}
-              className="whitespace-nowrap text-[13px] text-muted hover:text-text"
+              className="whitespace-nowrap text-body text-muted hover:text-text"
             >
               {l.label}
             </Link>
           ))}
         </nav>
         <div className="ml-auto">
-          <LoginCta variant="secondary" className="px-3.5 py-1.5 text-[13px]">
+          <LoginCta variant="secondary" className="px-3.5 py-1.5 text-body">
             Sign in
           </LoginCta>
         </div>

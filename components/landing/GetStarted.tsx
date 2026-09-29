@@ -17,30 +17,30 @@ export function GetStarted() {
     <section id="get-started" data-testid="get-started" data-shape="centred" className="py-23">
       <div className="mx-auto max-w-2xl px-4 text-center">
         <Reveal>
-          <h2 className="text-[36px] font-semibold leading-[1.1] tracking-[-0.03em] text-balance">
+          <h2 className="text-title-sm font-semibold leading-[1.1] tracking-[-0.03em] text-balance sm:text-title">
             One wallet. Then tell us why you’re here.
           </h2>
-          <p className="mt-3 text-[14px] leading-relaxed text-muted">
+          <p className="mt-3 text-body leading-relaxed text-muted">
             Connecting a wallet creates your account, no email, no password. Right after, pick
             what brought you here today:
           </p>
         </Reveal>
 
         <Reveal delayMs={80} className="mt-8 grid gap-3 sm:grid-cols-2">
-          <LoginCta destination="/app" variant="secondary" className="w-full px-5 py-4 text-[14px]">
+          <LoginCta destination="/app" variant="secondary" className="w-full px-5 py-4 text-body">
             Browse offers
           </LoginCta>
           <LoginCta
             destination="/app/my-offers"
             variant="secondary"
-            className="w-full px-5 py-4 text-[14px]"
+            className="w-full px-5 py-4 text-body"
           >
             List an offer
           </LoginCta>
         </Reveal>
 
         <Reveal delayMs={140}>
-          <p className="mt-4 text-[12px] text-muted">
+          <p className="mt-4 text-caption text-muted">
             Either choice just decides what you see first. Every wallet gets both. Switch anytime
             from the nav.
           </p>

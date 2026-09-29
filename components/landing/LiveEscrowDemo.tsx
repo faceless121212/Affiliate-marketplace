@@ -98,19 +98,19 @@ export function LiveEscrowDemo() {
       className="overflow-hidden rounded-2xl border border-line bg-canvas shadow-card-lg"
     >
       <div className="flex items-center justify-between border-b border-line bg-surface px-4 py-2.5">
-        <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.09em] text-muted">
+        <span className="flex items-center gap-2 font-mono text-caption uppercase tracking-[0.09em] text-muted">
           <span className="h-1.5 w-1.5 rounded-full bg-paid" aria-hidden />
           Live demo marketplace
         </span>
-        <span className="font-mono text-[10px] uppercase tracking-[0.09em] text-muted">Devnet</span>
+        <span className="font-mono text-caption uppercase tracking-[0.09em] text-muted">Devnet</span>
       </div>
 
       <div className="p-5">
         <div className="mb-3.5 flex items-center gap-2.5">
           <OfferAvatar offer={OFFER} />
           <div className="min-w-0">
-            <p className="truncate text-[15px] font-semibold">{OFFER.name}</p>
-            <p className="text-[11.5px] text-muted">Ecommerce</p>
+            <p className="truncate text-lead font-semibold">{OFFER.name}</p>
+            <p className="text-caption text-muted">Ecommerce</p>
           </div>
           {OFFER.verified && (
             <span className="ml-auto">
@@ -125,28 +125,28 @@ export function LiveEscrowDemo() {
         <div data-testid="demo-remaining">
           <EscrowMeter offer={{ ...OFFER, escrowRemainingUsd: remaining }} />
         </div>
-        <p className="mt-1.5 font-mono tnum text-[10.5px] text-muted">
+        <p className="mt-1.5 font-mono tnum text-caption text-muted">
           Covers {covers} conversion{covers === 1 ? '' : 's'}
         </p>
 
-        <div className="mt-3.5 flex items-baseline justify-between border-t border-line pt-2.5 text-[11.5px] text-muted">
+        <div className="mt-3.5 flex items-baseline justify-between border-t border-line pt-2.5 text-caption text-muted">
           <span>Commission per conversion</span>
-          <Money value={OFFER.commissionAmountUsd} className="text-[13px]" />
+          <Money value={OFFER.commissionAmountUsd} className="text-body" />
         </div>
 
         <div className="mt-3 h-8">
           <p
-            className={`flex h-full items-center gap-2 rounded-lg border border-paid/20 bg-paid/[0.07] px-3 text-[12px] text-paid transition-opacity duration-500 ${
+            className={`flex h-full items-center gap-2 rounded-lg border border-paid/20 bg-paid/[0.07] px-3 text-caption text-paid transition-opacity duration-500 ${
               justPaid ? 'opacity-100' : 'opacity-0'
             }`}
             aria-hidden
           >
-            Conversion confirmed, <Money value={OFFER.commissionAmountUsd} tone="paid" className="text-[12px]" /> paid
+            Conversion confirmed, <Money value={OFFER.commissionAmountUsd} tone="paid" className="text-caption" /> paid
           </p>
         </div>
       </div>
 
-      <p className="border-t border-line bg-surface p-2.5 text-center text-[11px] text-muted">
+      <p className="border-t border-line bg-surface p-2.5 text-center text-caption text-muted">
         Real data from the demo marketplace. Escrow is simulated in Phase 1.
       </p>
     </div>

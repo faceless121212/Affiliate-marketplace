@@ -39,10 +39,10 @@ export function Problem() {
     >
       <div className="mx-auto grid max-w-6xl items-start gap-10 px-4 lg:grid-cols-[0.82fr_1.18fr] lg:gap-18">
         <Reveal>
-          <h2 className="text-[30px] font-semibold leading-[1.1] tracking-[-0.035em] sm:text-[38px]">
+          <h2 className="text-title-sm font-semibold leading-[1.1] tracking-[-0.03em] sm:text-title">
             Nobody has fixed affiliate trust.
           </h2>
-          <p className="mt-3.5 text-[14px] leading-relaxed text-muted">
+          <p className="mt-3.5 text-body leading-relaxed text-muted">
             Affiliates work first, trust comes after.
           </p>
         </Reveal>
@@ -54,12 +54,12 @@ export function Problem() {
               delayMs={i * 70}
               className="border-t border-depleted/20 py-5 first:border-t-0 first:pt-0"
             >
-              <h3 className="flex items-center gap-2.5 text-[17px] font-semibold tracking-[-0.015em]">
+              <h3 className="flex items-center gap-2.5 text-heading font-semibold tracking-[-0.015em]">
                 <LandingIcon glyph={fact.glyph} className="h-5 w-5 shrink-0 text-depleted" />
                 {fact.heading}
               </h3>
-              <p className="mt-1.5 text-[14px] leading-relaxed text-muted">{fact.body}</p>
-              <p className="mt-1.5 text-[11px] text-muted">{fact.source}</p>
+              <p className="mt-1.5 text-body leading-relaxed text-muted">{fact.body}</p>
+              <p className="mt-1.5 text-caption text-muted">{fact.source}</p>
             </Reveal>
           ))}
         </div>

@@ -37,7 +37,7 @@ export function HowItWorks() {
     >
       <div className="mx-auto max-w-6xl px-4">
         <Reveal>
-          <h2 className="text-[36px] font-semibold leading-[1.1] tracking-[-0.03em]">How payouts happen</h2>
+          <h2 className="text-title-sm font-semibold leading-[1.1] tracking-[-0.03em] sm:text-title">How payouts happen</h2>
         </Reveal>
 
         <ol className="relative mt-14 grid gap-9 sm:grid-cols-3">
@@ -53,14 +53,14 @@ export function HowItWorks() {
             <li key={s.n} className="relative text-center">
               <Reveal delayMs={i * 80}>
                 <span
-                  className={`mx-auto mb-4 grid h-10 w-10 place-items-center rounded-full font-mono text-[13px] font-bold shadow-[0_0_0_7px_var(--color-surface)] ${
+                  className={`mx-auto mb-4 grid h-10 w-10 place-items-center rounded-full font-mono text-body font-bold shadow-[0_0_0_7px_var(--color-surface)] ${
                     i === 2 ? 'border-2 border-inset bg-canvas text-text' : 'bg-escrow text-ink'
                   }`}
                 >
                   {s.n}
                 </span>
-                <h3 className="text-[18px] font-semibold tracking-[-0.015em]">{s.heading}</h3>
-                <p className="mx-auto mt-1.5 max-w-[26em] text-[14px] leading-relaxed text-muted">
+                <h3 className="text-heading font-semibold tracking-[-0.015em]">{s.heading}</h3>
+                <p className="mx-auto mt-1.5 max-w-[26em] text-body leading-relaxed text-muted">
                   {s.body}
                 </p>
               </Reveal>

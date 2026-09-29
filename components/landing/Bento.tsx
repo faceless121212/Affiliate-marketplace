@@ -47,8 +47,8 @@ export function Bento() {
     <section data-testid="bento" data-shape="bento" className="border-b border-line py-23">
       <div className="mx-auto max-w-6xl px-4">
         <Reveal className="mb-10 flex flex-col justify-between gap-3 sm:flex-row sm:items-end sm:gap-10">
-          <h2 className="text-[36px] font-semibold leading-[1.1] tracking-[-0.03em]">One wallet, both sides</h2>
-          <p className="max-w-[24em] text-[14px] leading-relaxed text-muted sm:text-right">
+          <h2 className="text-title-sm font-semibold leading-[1.1] tracking-[-0.03em] sm:text-title">One wallet, both sides</h2>
+          <p className="max-w-[24em] text-body leading-relaxed text-muted sm:text-right">
             One login for both sides. The same wallet that promotes an offer today can fund one
             tomorrow.
           </p>
@@ -59,10 +59,10 @@ export function Bento() {
             size to content. */}
         <div className="grid grid-cols-2 gap-4 sm:auto-rows-[minmax(174px,auto)] lg:grid-cols-4">
           <Reveal className="col-span-2 row-span-2 flex flex-col rounded-2xl border border-line bg-canvas p-6 shadow-card-lg">
-            <h3 className="text-[18px] font-semibold tracking-[-0.015em]">
+            <h3 className="text-heading font-semibold tracking-[-0.015em]">
               See the money before you commit
             </h3>
-            <p className="mt-1.5 text-[13.5px] leading-relaxed text-muted">
+            <p className="mt-1.5 text-body leading-relaxed text-muted">
               Every offer shows its live escrow balance, not a promise from an advertiser you’ve
               never worked with.
             </p>
@@ -80,8 +80,8 @@ export function Bento() {
               <span className="mb-auto grid h-9 w-9 place-items-center rounded-[10px] border border-inset bg-canvas">
                 <LandingIcon glyph={cell.glyph} className="h-5 w-5 text-ink" />
               </span>
-              <h3 className="mt-4 text-[16px] font-semibold tracking-[-0.015em]">{cell.heading}</h3>
-              <p className="mt-1.5 text-[13.5px] leading-relaxed text-muted">{cell.body}</p>
+              <h3 className="mt-4 text-lead font-semibold tracking-[-0.015em]">{cell.heading}</h3>
+              <p className="mt-1.5 text-body leading-relaxed text-muted">{cell.body}</p>
             </Reveal>
           ))}
         </div>

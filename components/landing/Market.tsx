@@ -31,15 +31,15 @@ export function Market() {
       <Reveal className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-14 gap-y-6 px-4">
         {FIGURES.map((figure) => (
           <p key={figure.value} className="flex items-baseline gap-3">
-            <span className="font-mono tnum text-[30px] font-bold leading-none tracking-[-0.025em] text-ink">
+            <span className="font-mono tnum text-title-sm font-bold leading-none tracking-[-0.025em] text-ink">
               {figure.value}
             </span>
-            <span className="max-w-[19em] text-[13px] leading-snug text-muted">
+            <span className="max-w-[19em] text-body leading-snug text-muted">
               {figure.caption}. Source: {figure.source}
             </span>
           </p>
         ))}
-        <span className="text-[11.5px] text-muted sm:ml-auto">Channel figures, not a forecast.</span>
+        <span className="text-caption text-muted sm:ml-auto">Channel figures, not a forecast.</span>
       </Reveal>
     </section>
   )

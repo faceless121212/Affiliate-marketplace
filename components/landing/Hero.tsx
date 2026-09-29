@@ -41,13 +41,13 @@ export function Hero() {
           }}
         />
 
-        <div className="relative">
-          <h1 className="text-[38px] font-bold leading-[1.04] tracking-[-0.035em] sm:text-[54px]">
+        <div className="relative min-w-0">
+          <h1 className="text-display-sm font-bold leading-[1.04] tracking-[-0.035em] sm:text-display">
             Escrow first.
             <br />
             Trust follows.
           </h1>
-          <p className="mt-5 max-w-[30em] text-[16px] leading-relaxed text-muted">
+          <p className="mt-5 max-w-[30em] text-lead leading-relaxed text-muted">
             Advertisers lock the commission budget before the offer goes live. Affiliates see a
             guaranteed balance, not a promise.
           </p>
@@ -56,36 +56,36 @@ export function Hero() {
             <LoginCta
               destination="#get-started"
               data-testid="hero-primary-cta"
-              className="px-7 py-3.5 text-[15px]"
+              className="px-7 py-3.5 text-lead"
             >
               Get started
             </LoginCta>
-            <LoginCta destination="/app" variant="ghost" className="px-0 py-0 text-[14px]">
+            <LoginCta destination="/app" variant="ghost" className="px-0 py-0 text-body">
               Browse offers
             </LoginCta>
           </div>
 
-          <dl className="mt-9 flex flex-wrap gap-x-8 gap-y-3 border-t border-line pt-5 text-[12px] text-muted">
+          <dl className="mt-9 flex flex-wrap gap-x-8 gap-y-3 border-t border-line pt-5 text-caption text-muted">
             <div className="flex flex-col-reverse">
               <dt>locked across demo offers</dt>
-              <dd className="mb-0.5 font-mono tnum text-[19px] font-bold tracking-tight text-ink">
+              <dd className="mb-0.5 font-mono tnum text-heading font-bold tracking-tight text-ink">
                 {money(TOTAL_LOCKED)}
               </dd>
             </div>
             <div className="flex flex-col-reverse">
               <dt>demo offers</dt>
-              <dd className="mb-0.5 font-mono tnum text-[19px] font-bold tracking-tight text-ink">
+              <dd className="mb-0.5 font-mono tnum text-heading font-bold tracking-tight text-ink">
                 {SEED_OFFERS.length}
               </dd>
             </div>
             <div className="flex flex-col-reverse">
               <dt>payout on confirm</dt>
-              <dd className="mb-0.5 text-[19px] font-bold tracking-tight text-text">Instant</dd>
+              <dd className="mb-0.5 text-heading font-bold tracking-tight text-text">Instant</dd>
             </div>
           </dl>
         </div>
 
-        <div className="relative">
+        <div className="relative min-w-0">
           <LiveEscrowDemo />
         </div>
       </div>

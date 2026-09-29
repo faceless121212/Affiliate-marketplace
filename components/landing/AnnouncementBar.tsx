@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/Badge'
 export function AnnouncementBar() {
   return (
     <div className="border-b border-line bg-surface">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-2 px-4 py-2 text-[12px]">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-2 px-4 py-2 text-caption">
         <Badge tone="escrow">Devnet</Badge>
         <p className="text-muted">
           Phase 1: escrow is simulated, not on-chain.
