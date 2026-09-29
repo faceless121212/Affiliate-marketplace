@@ -13,6 +13,10 @@ vi.mock('next/link', () => ({
   default: ({
     href,
     children,
+    // Consumed here, never forwarded: `prefetch` is a next/link prop, not a
+    // DOM attribute, and spreading it onto <a> makes React warn on every run.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    prefetch: _prefetch,
     ...rest
   }: { href: string; children: React.ReactNode } & Record<string, unknown>) =>
     React.createElement('a', { href, ...rest }, children),

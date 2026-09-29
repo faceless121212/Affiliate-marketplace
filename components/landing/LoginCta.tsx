@@ -5,7 +5,7 @@ type Props = {
   destination?: string
   children?: React.ReactNode
   className?: string
-  variant?: 'primary' | 'paid' | 'secondary' | 'ghost'
+  variant?: 'primary' | 'secondary' | 'ghost'
   'data-testid'?: string
 }
 
@@ -28,7 +28,6 @@ export function LoginCta({
 }: Props) {
   const variantClass = {
     primary: 'bg-escrow text-ink hover:brightness-95',
-    paid: 'bg-paid text-white hover:brightness-110',
     secondary: 'border border-inset bg-surface text-text hover:border-muted',
     ghost: 'text-muted hover:text-text',
   }[variant]
