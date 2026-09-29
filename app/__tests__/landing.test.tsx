@@ -59,21 +59,26 @@ describe('Landing page', () => {
     expect(within(hero).getByRole('link', { name: 'Browse offers' })).toHaveAttribute('href', '/app')
   })
 
-  it('renders the "Why Nativness" section between the hero and the problem cards', () => {
+  // WhyNativness and WhatYouGet said the same things in two consecutive
+  // equal-column grids, so they merge into one bento. The property worth
+  // guarding is that no claim was lost in the merge, not that a section with
+  // a particular testid still exists.
+  it('keeps every merged claim in the bento, between the hero and the problem section', () => {
     render(<LandingPage />)
-    const bodyChildren = Array.from(document.querySelector('main')?.children ?? [])
-    const heroIdx = bodyChildren.findIndex((el) => el.getAttribute('data-testid') === 'hero')
-    const whyIdx = bodyChildren.findIndex((el) => el.getAttribute('data-testid') === 'why-nativness')
-    const problemIdx = bodyChildren.findIndex((el) => el.getAttribute('data-testid') === 'problem')
+    const sections = Array.from(document.querySelector('main')?.children ?? [])
+    const heroIdx = sections.findIndex((el) => el.getAttribute('data-testid') === 'hero')
+    const bentoIdx = sections.findIndex((el) => el.getAttribute('data-testid') === 'bento')
+    const problemIdx = sections.findIndex((el) => el.getAttribute('data-testid') === 'problem')
     expect(heroIdx).toBeGreaterThanOrEqual(0)
-    expect(whyIdx).toBeGreaterThan(heroIdx)
-    expect(problemIdx).toBeGreaterThan(whyIdx)
+    expect(bentoIdx).toBeGreaterThan(heroIdx)
+    expect(problemIdx).toBeGreaterThan(bentoIdx)
 
-    const why = screen.getByTestId('why-nativness')
-    expect(why).toHaveTextContent(/see the money before you commit/i)
-    expect(why).toHaveTextContent(/paid on confirmation/i)
-    expect(why).toHaveTextContent(/anyone can list/i)
-    expect(why).toHaveTextContent(/one login unlocks both sides/i)
+    const bento = screen.getByTestId('bento')
+    expect(bento).toHaveAttribute('data-shape', 'bento')
+    expect(bento).toHaveTextContent(/see the money before you commit/i)
+    expect(bento).toHaveTextContent(/paid on confirmation/i)
+    expect(bento).toHaveTextContent(/anyone can list/i)
+    expect(bento).toHaveTextContent(/locked, not promised/i)
   })
 
   it('renders the persona picker with both destinations reachable and no gating', () => {
