@@ -33,6 +33,9 @@ export function LoginCta({
   return (
     <Link
       href={destination}
+      // Off on purpose: the destination's layout mounts WalletProviders, so
+      // a viewport prefetch would pull the wallet chunks back onto this page.
+      prefetch={false}
       className={`inline-flex items-center justify-center rounded-[9px] px-5 py-2.5 text-[14px] font-semibold transition ${variantClass} ${className}`}
     >
       {children}

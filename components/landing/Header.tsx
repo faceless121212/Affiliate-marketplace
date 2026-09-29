@@ -37,6 +37,8 @@ export function Header() {
             <Link
               key={l.href}
               href={l.href}
+              // The /app link must not prefetch: its layout mounts the wallet providers.
+              prefetch={false}
               className="whitespace-nowrap text-[13px] text-muted hover:text-text"
             >
               {l.label}
