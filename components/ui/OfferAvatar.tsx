@@ -11,7 +11,7 @@ const DIMENSIONS = { default: 40, large: 56 } as const
  * beside it (by the caller) stays the only accessible label.
  *
  * The mark is inlined as raw SVG markup (`AVATAR_MARKS`, extracted from
- * `public/avatars/*.svg` ahead of time) rather than loaded via `<img src>`,
+ * `avatarMarks.generated.ts`) rather than loaded via `<img src>`,
  * because only an inlined `<path fill="currentColor">` picks up the tint
  * colour set on the wrapping element — an `<img>` cannot inherit
  * `currentColor` and would render invisible against its tile.
@@ -36,14 +36,14 @@ export function OfferAvatar({
       style={{ width: dimension, height: dimension, background: tile }}
     >
       <svg
-        viewBox="0 0 2048 2048"
+        viewBox="0 0 24 24"
         width={glyphSize}
         height={glyphSize}
         fill="none"
         aria-hidden="true"
         style={{ color: markColor }}
-        // AVATAR_MARKS is generated once from our own committed assets in
-        // public/avatars/, not user input, so injecting it as markup is safe.
+        // AVATAR_MARKS is a fixed set of hand-authored marks in this repo,
+        // never user input, so injecting it as markup is safe.
         dangerouslySetInnerHTML={{ __html: mark }}
       />
     </span>

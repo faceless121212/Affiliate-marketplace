@@ -1,7 +1,7 @@
 /**
  * Deterministic mark + colour assignment for `OfferAvatar`.
  *
- * Both the mark (one of eight geometric svgs in `public/avatars/`) and the
+ * Both the mark (one of eight hand-authored marks in `components/ui/avatarMarks.generated.ts`) and the
  * tint are derived from a single hash of the offer id, so the same offer
  * always renders the same avatar and a freshly created offer gets one
  * automatically — no array index, no lookup table to keep in sync.
