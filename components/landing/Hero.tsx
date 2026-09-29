@@ -3,7 +3,10 @@ import { LiveEscrowDemo } from './LiveEscrowDemo'
 import { SEED_OFFERS } from '@/lib/store'
 import { money } from '@/lib/format'
 
-const TOTAL_LOCKED = SEED_OFFERS.reduce((sum, offer) => sum + offer.escrowTotalUsd, 0)
+// What is still locked, not what was ever deposited: escrowTotalUsd includes
+// money already paid out in seed conversions, and the demo card beside this
+// figure shows a remaining balance, so summing totals would contradict it.
+const TOTAL_LOCKED = SEED_OFFERS.reduce((sum, offer) => sum + offer.escrowRemainingUsd, 0)
 
 /**
  * Asymmetric split: argument left, the product working right.
@@ -14,8 +17,9 @@ const TOTAL_LOCKED = SEED_OFFERS.reduce((sum, offer) => sum + offer.escrowTotalU
  * demo card carries the same figure in context, where it reads as a product
  * rather than a claim.
  *
- * The trust row states only what the page can source: escrow locked across
- * the seeded offers (computed, not asserted), the offer count, and a product
+ * The trust row states only what the page can source: escrow still locked
+ * across the seeded offers (the sum of their remaining balances, computed
+ * not asserted), the offer count, and a product
  * property. No adoption, revenue or traffic figure about Nativness itself.
  */
 export function Hero() {

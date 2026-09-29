@@ -1,6 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, within } from '@testing-library/react'
 import LandingPage from '@/app/page'
+import { SEED_OFFERS } from '@/lib/store'
+import { money } from '@/lib/format'
 
 // Overrides the global setup mock for this file only, so CTA destinations
 // can be asserted against a real spy instead of a throwaway vi.fn().
@@ -51,6 +53,23 @@ describe('Landing page', () => {
     // The wordmark belongs in the header; repeating it here bought nothing but
     // height in the tallest column.
     expect(within(hero).queryByText('Nativness')).toBeNull()
+  })
+
+  // The figure must be what is still locked (the remaining balances), not what
+  // was ever deposited: the demo card beside it shows a remaining balance, so
+  // summing escrowTotalUsd would put two contradicting numbers on screen.
+  // Computed from the store so it cannot drift from the seed data.
+  it('states locked escrow as the sum of remaining balances across the demo offers', () => {
+    render(<LandingPage />)
+    const hero = screen.getByTestId('hero')
+    const expected = SEED_OFFERS.reduce((sum, o) => sum + o.escrowRemainingUsd, 0)
+    const label = within(hero).getByText('locked across demo offers')
+    const figure = label.parentElement?.querySelector('dd')
+    expect(figure).toHaveTextContent(money(expected))
+    // And it is not the lifetime total, which paid-out conversions have already spent.
+    const lifetime = SEED_OFFERS.reduce((sum, o) => sum + o.escrowTotalUsd, 0)
+    expect(lifetime).not.toBe(expected)
+    expect(figure).not.toHaveTextContent(money(lifetime))
   })
 
   it('sends the hero secondary link to /app', () => {
