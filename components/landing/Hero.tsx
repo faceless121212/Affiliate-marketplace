@@ -50,7 +50,7 @@ export function Hero() {
 
           <div className="mt-7 flex flex-wrap items-center gap-5">
             <LoginCta
-              destination="/app"
+              destination="#get-started"
               data-testid="hero-primary-cta"
               className="px-7 py-3.5 text-[15px]"
             >

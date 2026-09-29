@@ -267,11 +267,6 @@ describe('Landing page', () => {
     for (const link of within(screen.getByRole('main')).getAllByRole('link')) {
       const destination = link.getAttribute('href') ?? ''
       if (!destination.startsWith('/app') || link.closest('footer')) continue
-      // The redesigned hero's primary CTA ("Get started") and the picker's
-      // "Browse offers" both land on /app by design (Task 4 brief). It is the
-      // page's single primary action, asserted by its own test, so it is
-      // exempt from the one-label rule; every other link is still held to it.
-      if (link.getAttribute('data-testid') === 'hero-primary-cta') continue
       const label = (link.textContent ?? '').trim()
       if (!labelsByDestination.has(destination)) labelsByDestination.set(destination, new Set())
       labelsByDestination.get(destination)?.add(label)
