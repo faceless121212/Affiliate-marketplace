@@ -158,7 +158,9 @@ No new colour tokens. Shadows are defined once and reused.
 
 ## 9. Performance — a prerequisite, not a follow-up
 
-The landing page shipped **509 KB of JS against a 300 KB budget** at the start of this work (`scripts/measure-sli.mjs`, `BUDGETS.landingJsKB`), because `WalletProviders` is mounted in the root layout and pulls the Solana wallet adapter onto a purely static marketing page. The redesign brought it to **212 KB**.
+The landing page shipped **509 KB of JS against a 300 KB budget** at the start of this work (`scripts/measure-sli.mjs`, `BUDGETS.landingJsKB`), because `WalletProviders` is mounted in the root layout and pulls the Solana wallet adapter onto a purely static marketing page. The redesign brought it to **252 KB**, verified by running `BASE_URL=<server> node scripts/measure-sli.mjs` against a fresh production build.
+
+> **Measuring this correctly matters.** `scripts/measure-sli.mjs` defaults to `localhost:3005` and silently reports whatever is serving there, so a run against a stale server, a dev server, or a different build yields a plausible-looking number that does not reproduce. Figures of 212-226 KB were recorded during this work that way. Always pass `BASE_URL` explicitly and build first.
 
 `LiveEscrowDemo` adds client JS. Therefore **lazy-loading `WalletProviders` is task 1 of the implementation, before any redesign work.** It is expected to free 500–700 KB, several times what the demo costs. If it does not, the demo is reconsidered before it is built.
 
