@@ -6,6 +6,7 @@ type Props = {
   children?: React.ReactNode
   className?: string
   variant?: 'primary' | 'paid' | 'secondary' | 'ghost'
+  'data-testid'?: string
 }
 
 /**
@@ -23,6 +24,7 @@ export function LoginCta({
   children = 'Enter Nativness',
   className = '',
   variant = 'primary',
+  'data-testid': testId,
 }: Props) {
   const variantClass = {
     primary: 'bg-escrow text-ink hover:brightness-95',
@@ -33,6 +35,7 @@ export function LoginCta({
   return (
     <Link
       href={destination}
+      data-testid={testId}
       // Off on purpose: the destination's layout mounts WalletProviders, so
       // a viewport prefetch would pull the wallet chunks back onto this page.
       prefetch={false}

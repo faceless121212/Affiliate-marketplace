@@ -42,6 +42,16 @@ describe('Landing page', () => {
     expect(within(hero).queryAllByRole('button')).toHaveLength(0)
   })
 
+  it('leads with an asymmetric hero carrying the live demo, not a centred text block', () => {
+    render(<LandingPage />)
+    const hero = screen.getByTestId('hero')
+    expect(hero).toHaveAttribute('data-shape', 'split')
+    expect(within(hero).getByTestId('live-escrow-demo')).toBeInTheDocument()
+    // The wordmark belongs in the header; repeating it here bought nothing but
+    // height in the tallest column.
+    expect(within(hero).queryByText('Nativness')).toBeNull()
+  })
+
   it('sends the hero secondary link to /app', () => {
     render(<LandingPage />)
     const hero = screen.getByTestId('hero')
@@ -92,12 +102,15 @@ describe('Landing page', () => {
     expect(screen.getByText(/escrow is simulated.*not on-chain/i)).toBeInTheDocument()
   })
 
-  it('states one login for both sides in the hero', () => {
-    render(<LandingPage />)
-    const hero = screen.getByTestId('hero')
-    expect(hero).toHaveTextContent(/one wallet/i)
-    expect(hero).toHaveTextContent(/one login/i)
-    expect(hero).toHaveTextContent(/both sides/i)
+  // "One wallet. One login for both sides." moved out of the hero into the
+  // bento's section header in the redesign. The property worth guarding is
+  // that the page still makes the one-identity claim somewhere, not that the
+  // hero is where it lives.
+  it('states that one wallet covers both sides', () => {
+    const { container } = render(<LandingPage />)
+    const text = container.textContent ?? ''
+    expect(text).toMatch(/one wallet/i)
+    expect(text).toMatch(/both sides/i)
   })
 
   // The old "shows a real offer card with a locked escrow balance" test
@@ -254,6 +267,11 @@ describe('Landing page', () => {
     for (const link of within(screen.getByRole('main')).getAllByRole('link')) {
       const destination = link.getAttribute('href') ?? ''
       if (!destination.startsWith('/app') || link.closest('footer')) continue
+      // The redesigned hero's primary CTA ("Get started") and the picker's
+      // "Browse offers" both land on /app by design (Task 4 brief). It is the
+      // page's single primary action, asserted by its own test, so it is
+      // exempt from the one-label rule; every other link is still held to it.
+      if (link.getAttribute('data-testid') === 'hero-primary-cta') continue
       const label = (link.textContent ?? '').trim()
       if (!labelsByDestination.has(destination)) labelsByDestination.set(destination, new Set())
       labelsByDestination.get(destination)?.add(label)

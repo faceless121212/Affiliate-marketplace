@@ -1,109 +1,90 @@
-import { Badge } from '@/components/ui/Badge'
-import { LandingIcon } from '@/components/ui/LandingIcon'
-import { HeroCenter } from './HeroCenter'
 import { LoginCta } from './LoginCta'
+import { LiveEscrowDemo } from './LiveEscrowDemo'
+import { SEED_OFFERS } from '@/lib/store'
+import { money } from '@/lib/format'
 
-const ADVERTISER_CHIPS = ['Any niche']
-const AFFILIATE_CHIPS = ['Any niche']
+const TOTAL_LOCKED = SEED_OFFERS.reduce((sum, offer) => sum + offer.escrowTotalUsd, 0)
 
 /**
- * One primary action, not two. "Get started" points at the `GetStarted`
- * section below (`#get-started`), where the actual wallet-connect decision
- * lives with proper framing copy; the secondary link is a lower-commitment
- * escape hatch straight to the browse view, wired through the same
- * `LoginCta` front door as everything else on this page.
+ * Asymmetric split: argument left, the product working right.
  *
- * Its label is "Browse offers", the same words the persona picker uses for
- * the same destination. The page deliberately keeps one label per
- * destination so a repeated button teaches rather than re-asks, which is
- * what `landing.test.tsx` asserts as a 1:1 label/destination mapping.
+ * The old hero centred everything in a max-w-2xl column and put a 46px
+ * escrow counter below the h1 — so the largest element on the page was a
+ * number whose own caption said it was simulated. The counter is gone; the
+ * demo card carries the same figure in context, where it reads as a product
+ * rather than a claim.
+ *
+ * The trust row states only what the page can source: escrow locked across
+ * the seeded offers (computed, not asserted), the offer count, and a product
+ * property. No adoption, revenue or traffic figure about Nativness itself.
  */
 export function Hero() {
   return (
-    <section data-testid="hero" className="mx-auto max-w-6xl px-4 py-16 lg:py-20">
-      <div className="mx-auto max-w-2xl text-center">
-        <h1 className="text-[32px] font-bold leading-[1.08] tracking-tight sm:text-[42px]">
-          Escrow first. Trust follows.
-        </h1>
-        <p className="mt-4 text-[15px] leading-relaxed text-muted">
-          Nativness is the affiliate marketplace where the budget is locked before the offer goes
-          live, so affiliates see a guaranteed balance instead of a promise, and advertisers
-          don’t need a reputation to get taken seriously.
-        </p>
+    <section
+      data-testid="hero"
+      data-shape="split"
+      className="relative overflow-hidden border-b border-line"
+    >
+      <div className="relative mx-auto grid max-w-6xl items-center gap-16 px-4 py-22 lg:grid-cols-[1.05fr_0.95fr]">
+        {/* Decorative only. Sits behind the right column and bleeds off the
+            edge; text lives in the left column, clear of it. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-56 -top-36 h-[760px] w-[760px] rounded-full opacity-90 blur-2xl"
+          style={{
+            background:
+              'radial-gradient(circle, rgb(195 255 0 / 0.5) 0%, rgb(195 255 0 / 0.14) 38%, transparent 66%)',
+          }}
+        />
 
-        <div className="mt-6 flex flex-col items-center gap-2">
-          <a
-            href="#get-started"
-            data-testid="hero-primary-cta"
-            className="rounded-[8px] bg-escrow px-7 py-3.5 text-[15px] font-semibold text-ink transition hover:brightness-95"
-          >
-            Get started
-          </a>
-          <LoginCta destination="/app" variant="ghost" className="px-0 py-0 text-[13px]">
-            Browse offers
-          </LoginCta>
+        <div className="relative">
+          <h1 className="text-[38px] font-bold leading-[1.04] tracking-[-0.035em] sm:text-[54px]">
+            Escrow first.
+            <br />
+            Trust follows.
+          </h1>
+          <p className="mt-5 max-w-[30em] text-[16px] leading-relaxed text-muted">
+            Advertisers lock the commission budget before the offer goes live. Affiliates see a
+            guaranteed balance, not a promise.
+          </p>
+
+          <div className="mt-7 flex flex-wrap items-center gap-5">
+            <LoginCta
+              destination="/app"
+              data-testid="hero-primary-cta"
+              className="px-7 py-3.5 text-[15px]"
+            >
+              Get started
+            </LoginCta>
+            <LoginCta destination="/app" variant="ghost" className="px-0 py-0 text-[14px]">
+              Browse offers
+            </LoginCta>
+          </div>
+
+          <dl className="mt-9 flex flex-wrap gap-x-8 gap-y-3 border-t border-line pt-5 text-[12px] text-muted">
+            <div>
+              <dd className="mb-0.5 font-mono tnum text-[19px] font-bold tracking-tight text-ink">
+                {money(TOTAL_LOCKED)}
+              </dd>
+              <dt>locked in escrow</dt>
+            </div>
+            <div>
+              <dd className="mb-0.5 font-mono tnum text-[19px] font-bold tracking-tight text-ink">
+                {SEED_OFFERS.length}
+              </dd>
+              <dt>live offers</dt>
+            </div>
+            <div>
+              <dd className="mb-0.5 text-[19px] font-bold tracking-tight text-text">Instant</dd>
+              <dt>payout on confirm</dt>
+            </div>
+          </dl>
+        </div>
+
+        <div className="relative">
+          <LiveEscrowDemo />
         </div>
       </div>
-
-      {/* A symmetric three-up row: the two audience statements carry equal
-          weight on either side of the escrow counter. Aligned to a shared
-          top edge, not vertically centred: the centre column is taller than
-          the two beside it, so centring left the side columns floating at
-          an offset that read as a layout accident rather than a
-          composition. `items-start` gives all three one line to start on. */}
-      <div className="mt-10 grid items-start gap-8 lg:grid-cols-3 lg:gap-6">
-        {/* Left: advertisers ("affiliate platforms" in the owner's words). Amber, escrow-toned. */}
-        <div>
-          {/* Lime as text is illegible on white (~1.2:1). The audience tag
-              carries the colour as a small fill swatch instead, with the
-              label itself in legible black. */}
-          <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-text">
-            <span className="h-1.5 w-4 rounded-full bg-escrow" aria-hidden />
-            For affiliate platforms
-          </p>
-          <p className="mt-3 flex items-start gap-2 text-[14px] leading-relaxed text-muted">
-            <LandingIcon glyph="lock" className="mt-0.5 h-5 w-5 shrink-0 text-ink" />
-            Your budget locks in escrow first.
-          </p>
-
-          <div className="mt-4 flex flex-wrap gap-1.5">
-            {ADVERTISER_CHIPS.map((chip) => (
-              <Badge key={chip} tone="escrow">
-                {chip}
-              </Badge>
-            ))}
-          </div>
-        </div>
-
-        {/* Centre: narrow, restrained. Reads last on mobile. */}
-        <HeroCenter />
-
-        {/* Right: affiliates. Green, paid-toned. Default source order already
-            places this third on mobile (after the centre column is pushed
-            last) and third in the desktop grid, so no order override is needed. */}
-        <div>
-          <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-paid">
-            <span className="h-1.5 w-4 rounded-full bg-paid" aria-hidden />
-            For affiliates
-          </p>
-          <p className="mt-3 flex items-start gap-2 text-[14px] leading-relaxed text-muted">
-            <LandingIcon glyph="lightning" className="mt-0.5 h-5 w-5 shrink-0 text-paid" />
-            Get paid the instant it confirms.
-          </p>
-
-          <div className="mt-4 flex flex-wrap gap-1.5">
-            {AFFILIATE_CHIPS.map((chip) => (
-              <Badge key={chip} tone="paid">
-                {chip}
-              </Badge>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <p className="mt-10 text-center text-[12px] text-muted">
-        One wallet. One login for both sides.
-      </p>
     </section>
   )
 }

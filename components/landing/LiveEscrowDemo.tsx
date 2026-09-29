@@ -6,7 +6,9 @@ import { Badge } from '@/components/ui/Badge'
 import { OfferAvatar } from '@/components/ui/OfferAvatar'
 import { SEED_OFFERS } from '@/lib/store'
 
-const OFFER = SEED_OFFERS[0]
+// Looked up by id, not position: a reorder of the seed array must not change
+// which offer the hero demonstrates.
+const OFFER = SEED_OFFERS.find((o) => o.id === 'of_seed_drayton') ?? SEED_OFFERS[0]
 const TICK_MS = 3400
 
 /**
@@ -31,6 +33,8 @@ export function LiveEscrowDemo() {
     // silently-jumping figure: no timer starts at all.
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
 
+    let resetTimeout: ReturnType<typeof setTimeout> | undefined
+
     const id = setInterval(() => {
       setRemaining((value) => {
         // Reset rather than go negative. The balance can never fund a
@@ -40,10 +44,14 @@ export function LiveEscrowDemo() {
         return value - OFFER.commissionAmountUsd
       })
       setJustPaid(true)
-      setTimeout(() => setJustPaid(false), 2100)
+      clearTimeout(resetTimeout)
+      resetTimeout = setTimeout(() => setJustPaid(false), 2100)
     }, TICK_MS)
 
-    return () => clearInterval(id)
+    return () => {
+      clearInterval(id)
+      clearTimeout(resetTimeout)
+    }
   }, [])
 
   const pct = Math.max(0, Math.min(100, (remaining / OFFER.escrowTotalUsd) * 100))
