@@ -1,31 +1,31 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, within } from '@testing-library/react'
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen, within } from '@testing-library/react'
 import LandingPage from '@/app/page'
-
-// Mutable so individual tests can simulate a connected wallet without a
-// second vi.mock factory per test.
-let connected = false
-const push = vi.fn()
-
-vi.mock('@/lib/wallet/useAccount', () => ({
-  useAccount: () => ({ wallet: connected ? 'DemoWallet111' : null, connected, connecting: false }),
-  useLoginModal: () => () => {},
-}))
 
 // Overrides the global setup mock for this file only, so CTA destinations
 // can be asserted against a real spy instead of a throwaway vi.fn().
+const push = vi.fn()
+
 vi.mock('next/navigation', () => ({
   usePathname: () => '/',
   useRouter: () => ({ push, replace: vi.fn(), back: vi.fn(), prefetch: vi.fn() }),
   useSearchParams: () => new URLSearchParams(),
 }))
 
-beforeEach(() => {
-  connected = false
-  push.mockClear()
-})
-
 describe('Landing page', () => {
+  // The landing page is static marketing. It must render with no wallet
+  // context at all: no provider, no adapter bundle, no mocks in this file.
+  // Sign-in happens at /app, behind ConnectGate.
+  it('renders with no wallet context, and every CTA is a plain link', () => {
+    render(<LandingPage />)
+    const main = screen.getByRole('main')
+    const ctas = within(main)
+      .getAllByRole('link')
+      .filter((a) => (a.getAttribute('href') ?? '').startsWith('/app'))
+    expect(ctas.length).toBeGreaterThan(0)
+    expect(within(main).queryAllByRole('button')).toHaveLength(0)
+  })
+
   // Replaces the old "offers two CTAs, one per audience" assertion: the
   // owner's spec reverses that decision, so the hero must now carry exactly
   // one primary call-to-action plus one smaller secondary browse link, not
@@ -37,18 +37,15 @@ describe('Landing page', () => {
     expect(primary).toHaveTextContent('Get started')
     expect(within(hero).getAllByTestId('hero-primary-cta')).toHaveLength(1)
 
-    const secondary = within(hero).getByRole('button', { name: 'Browse offers' })
+    const secondary = within(hero).getByRole('link', { name: 'Browse offers' })
     expect(secondary).toBeInTheDocument()
-    // Only one clickable "browse" affordance in the hero: the secondary link.
-    expect(within(hero).queryAllByRole('button')).toHaveLength(1)
+    expect(within(hero).queryAllByRole('button')).toHaveLength(0)
   })
 
-  it('routes the hero secondary link to /app once the wallet is connected', () => {
-    connected = true
+  it('sends the hero secondary link to /app', () => {
     render(<LandingPage />)
     const hero = screen.getByTestId('hero')
-    fireEvent.click(within(hero).getByRole('button', { name: 'Browse offers' }))
-    expect(push).toHaveBeenCalledWith('/app')
+    expect(within(hero).getByRole('link', { name: 'Browse offers' })).toHaveAttribute('href', '/app')
   })
 
   it('renders the "Why Nativness" section between the hero and the problem cards', () => {
@@ -69,20 +66,13 @@ describe('Landing page', () => {
   })
 
   it('renders the persona picker with both destinations reachable and no gating', () => {
-    connected = true
     render(<LandingPage />)
     const picker = screen.getByTestId('get-started')
-
-    fireEvent.click(within(picker).getByRole('button', { name: 'Browse offers' }))
-    expect(push).toHaveBeenCalledWith('/app')
-
-    push.mockClear()
-
-    // Picking the other option still works in the same session: neither
-    // choice disables or redirects away from the other view. This is a
-    // first-view preference, not an access gate.
-    fireEvent.click(within(picker).getByRole('button', { name: 'List an offer' }))
-    expect(push).toHaveBeenCalledWith('/app/my-offers')
+    expect(within(picker).getByRole('link', { name: 'Browse offers' })).toHaveAttribute('href', '/app')
+    expect(within(picker).getByRole('link', { name: 'List an offer' })).toHaveAttribute(
+      'href',
+      '/app/my-offers',
+    )
   })
 
   it('states the persona picker is not a gate, in its own fine print', () => {
@@ -250,34 +240,28 @@ describe('Landing page', () => {
     expect(pickerIdx).toBe(sections.length - 2) // picker, then the footer
   })
 
-  // The property behind the CTA cleanup, stated directly: a visitor should
-  // never meet two different words for the same place, or one word that
-  // means two places. Scoped to <main> on purpose. The header's "Sign in"
-  // also lands on /app, but it is an account action rather than an offer
-  // CTA, and naming it "Browse offers" would be worse, not better.
+  // The property behind the CTA cleanup, unchanged by Task 1: a visitor
+  // should never meet two different words for the same place, or one word
+  // that means two places. Scoped to <main>: the header's "Sign in" also
+  // lands on /app, but it is an account action rather than an offer CTA.
+  // The footer's "Marketplace" link is likewise site navigation, not an offer
+  // CTA (the footer renders inside <main>, so it is skipped explicitly).
   it('uses exactly one label per destination across the page body', () => {
-    connected = true
     render(<LandingPage />)
-
     const labelsByDestination = new Map<string, Set<string>>()
     const destinationsByLabel = new Map<string, Set<string>>()
 
-    for (const button of within(screen.getByRole('main')).getAllByRole('button')) {
-      push.mockClear()
-      fireEvent.click(button)
-      const destination = push.mock.calls.at(-1)?.[0]
-      if (typeof destination !== 'string') continue
-      const label = (button.textContent ?? '').trim()
-
+    for (const link of within(screen.getByRole('main')).getAllByRole('link')) {
+      const destination = link.getAttribute('href') ?? ''
+      if (!destination.startsWith('/app') || link.closest('footer')) continue
+      const label = (link.textContent ?? '').trim()
       if (!labelsByDestination.has(destination)) labelsByDestination.set(destination, new Set())
       labelsByDestination.get(destination)?.add(label)
       if (!destinationsByLabel.has(label)) destinationsByLabel.set(label, new Set())
       destinationsByLabel.get(label)?.add(destination)
     }
 
-    // Both app destinations are reachable from the page body.
     expect([...labelsByDestination.keys()].sort()).toEqual(['/app', '/app/my-offers'])
-
     for (const [destination, labels] of labelsByDestination) {
       expect([...labels], `${destination} is reached by more than one label`).toHaveLength(1)
     }

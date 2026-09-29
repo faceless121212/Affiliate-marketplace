@@ -1,12 +1,7 @@
-'use client'
-
-import { useEffect, useRef } from 'react'
-import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/Button'
-import { useAccount, useLoginModal } from '@/lib/wallet/useAccount'
+import Link from 'next/link'
 
 type Props = {
-  /** Where this CTA sends the visitor. Both audience CTAs share this one front door. */
+  /** Where this CTA sends the visitor. */
   destination?: string
   children?: React.ReactNode
   className?: string
@@ -14,45 +9,33 @@ type Props = {
 }
 
 /**
- * The single front door, parameterised by destination so the split hero can
- * offer two CTAs, one per audience, that both still go through the same
- * wallet login. Opens the wallet modal and, once the connection the user
- * just initiated succeeds, sends them to `destination`.
+ * A plain link, deliberately.
  *
- * The ref matters: someone already connected who deliberately visits the
- * landing page should not be bounced away from it. Each rendered instance of
- * this component keeps its own ref, so clicking one CTA never causes another
- * CTA elsewhere on the page to redirect.
+ * This used to open the wallet modal in place, which meant the landing page
+ * had to mount `WalletProviders` and therefore shipped the whole Solana
+ * adapter (~700KB) onto a static marketing page. Sign-in now happens at the
+ * destination, where `components/app/ConnectGate.tsx` already presents it
+ * properly ("Sign in with your wallet") instead of a modal over marketing
+ * copy. The landing page ships no wallet code at all.
  */
 export function LoginCta({
   destination = '/app',
   children = 'Enter Nativness',
   className = '',
-  variant,
+  variant = 'primary',
 }: Props) {
-  const { connected } = useAccount()
-  const openLogin = useLoginModal()
-  const router = useRouter()
-  const requested = useRef(false)
-
-  useEffect(() => {
-    if (connected && requested.current) router.push(destination)
-  }, [connected, router, destination])
-
+  const variantClass = {
+    primary: 'bg-escrow text-ink hover:brightness-95',
+    paid: 'bg-paid text-white hover:brightness-110',
+    secondary: 'border border-inset bg-surface text-text hover:border-muted',
+    ghost: 'text-muted hover:text-text',
+  }[variant]
   return (
-    <Button
-      variant={variant}
-      className={`px-5 py-2.5 text-[14px] ${className}`}
-      onClick={() => {
-        if (connected) {
-          router.push(destination)
-          return
-        }
-        requested.current = true
-        openLogin()
-      }}
+    <Link
+      href={destination}
+      className={`inline-flex items-center justify-center rounded-[9px] px-5 py-2.5 text-[14px] font-semibold transition ${variantClass} ${className}`}
     >
       {children}
-    </Button>
+    </Link>
   )
 }

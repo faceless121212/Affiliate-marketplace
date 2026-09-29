@@ -8,8 +8,22 @@ import { WalletBadge } from '@/components/app/WalletBadge'
 import { ConnectGate } from '@/components/app/ConnectGate'
 import { useAccount } from '@/lib/wallet/useAccount'
 import { useMounted } from '@/lib/useMounted'
+import { WalletProviders } from '@/lib/wallet/provider'
 
+/**
+ * Split in two on purpose: `AppShell` calls `useAccount()`, which reads the
+ * wallet context, so the provider has to sit above it. It cannot live inside
+ * `AppShell`'s own returned tree.
+ */
 export default function AppLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <WalletProviders>
+      <AppShell>{children}</AppShell>
+    </WalletProviders>
+  )
+}
+
+function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const { wallet, connected } = useAccount()
   const mounted = useMounted()

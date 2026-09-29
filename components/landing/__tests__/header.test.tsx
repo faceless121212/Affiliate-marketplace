@@ -44,6 +44,6 @@ describe('Landing header', () => {
 
   it('still offers one sign-in action', () => {
     render(<Header />)
-    expect(screen.getByRole('button', { name: 'Sign in' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Sign in' })).toBeInTheDocument()
   })
 })
