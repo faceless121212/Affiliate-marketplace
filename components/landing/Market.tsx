@@ -1,43 +1,46 @@
 import { Reveal } from './Reveal'
 
+const FIGURES = [
+  {
+    value: '$19.4B',
+    caption: 'Affiliate spend, up from $17.1B to $22B by 2027',
+    source: 'Forrester',
+  },
+  {
+    value: '$13.81B',
+    caption: 'US spend, up 11.3% year over year',
+    source: 'eMarketer',
+  },
+] as const
+
+/**
+ * The page's breather: 40px of vertical rhythm against the 88-92px every
+ * section around it uses. Sitting between a tall bento and a tall closing
+ * CTA, its shortness is what makes the page's rhythm legible. It is not
+ * unfinished; it is the rest between two bars.
+ *
+ * Both figures keep their attribution inline.
+ */
 export function Market() {
   return (
-    <section data-testid="market" className="border-t border-line bg-escrow/5">
-      <div className="mx-auto max-w-6xl px-4 py-16">
-        <Reveal>
-          <h2 className="text-2xl font-semibold tracking-tight">
-            The channel is growing. Its infrastructure isn’t.
-          </h2>
-        </Reveal>
-
-        <div className="mt-10 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">
-          <Reveal className="border border-transparent bg-surface p-5 transition-colors duration-300 hover:border-escrow/40 hover:bg-escrow/10">
-            <p className="font-mono tnum text-4xl font-bold text-ink">$19.4B</p>
-            <p className="mt-2 text-[14px] leading-relaxed text-muted">
-              Affiliate spend, up from{' '}
-              <span className="font-mono tnum text-text">$17.1B</span> to{' '}
-              <span className="font-mono tnum text-text">$22B</span> by 2027.
-            </p>
-            <p className="mt-2 text-[11px] text-muted">Source: Forrester</p>
-          </Reveal>
-
-          <Reveal
-            delayMs={80}
-            className="border border-transparent bg-surface p-5 transition-colors duration-300 hover:border-escrow/40 hover:bg-escrow/10"
-          >
-            <p className="font-mono tnum text-4xl font-bold text-ink">$13.81B</p>
-            <p className="mt-2 text-[14px] leading-relaxed text-muted">
-              US spend, up{' '}
-              <span className="font-mono tnum text-text">11.3%</span> year over year.
-            </p>
-            <p className="mt-2 text-[11px] text-muted">Source: eMarketer</p>
-          </Reveal>
-        </div>
-
-        <p className="mt-6 max-w-2xl text-[14px] leading-relaxed text-muted">
-          Channel figures, not a forecast.
-        </p>
-      </div>
+    <section
+      data-testid="market"
+      data-shape="band"
+      className="border-b border-line bg-escrow/[0.07] py-10"
+    >
+      <Reveal className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-14 gap-y-6 px-4">
+        {FIGURES.map((figure) => (
+          <p key={figure.value} className="flex items-baseline gap-3">
+            <span className="font-mono tnum text-[30px] font-bold leading-none tracking-[-0.025em] text-ink">
+              {figure.value}
+            </span>
+            <span className="max-w-[19em] text-[13px] leading-snug text-muted">
+              {figure.caption}. Source: {figure.source}
+            </span>
+          </p>
+        ))}
+        <span className="text-[11.5px] text-muted sm:ml-auto">Channel figures, not a forecast.</span>
+      </Reveal>
     </section>
   )
 }

@@ -322,4 +322,12 @@ describe('Landing page', () => {
     render(<LandingPage />)
     expect(screen.getByTestId('problem')).toHaveAttribute('data-shape', 'typesplit')
   })
+
+  it('renders the market figures as a thin band, not a card grid', () => {
+    render(<LandingPage />)
+    const market = screen.getByTestId('market')
+    expect(market).toHaveAttribute('data-shape', 'band')
+    // The breather: a quarter the vertical rhythm of its neighbours.
+    expect(market.className).toMatch(/\bpy-10\b/)
+  })
 })
