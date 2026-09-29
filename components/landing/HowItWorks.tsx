@@ -1,56 +1,68 @@
-import { LandingIcon, type LandingGlyph } from '@/components/ui/LandingIcon'
 import { Reveal } from './Reveal'
 
-const STEPS: { n: string; label: string; heading: string; body: string; glyph: LandingGlyph }[] = [
+const STEPS = [
   {
     n: '01',
-    label: 'Escrow',
     heading: 'Lock the budget',
-    body: 'Advertiser funds escrow first.',
-    glyph: 'lock',
+    body: 'The advertiser funds escrow before the offer is visible to anyone.',
   },
   {
     n: '02',
-    label: 'Promotion',
     heading: 'See the balance, promote',
-    body: 'Grab your link and promote.',
-    glyph: 'link',
+    body: 'Affiliates read the real remaining balance, then take a tracking link.',
   },
   {
     n: '03',
-    label: 'Payout',
     heading: 'Get paid on confirmation',
-    body: 'Confirmed means paid, instantly.',
-    glyph: 'lightning',
+    body: 'Confirmed means paid. No NET-60, no minimum threshold.',
   },
-]
+] as const
 
+/**
+ * A full-bleed tinted band, deliberately ignoring the max-w-6xl container
+ * every other section obeys. The three steps sit on a horizontal rail rather
+ * than in three bordered boxes: the old version was one more equal-column
+ * card grid in a page made entirely of equal-column card grids.
+ *
+ * The rail line is hidden below `sm`, where the steps stack and a horizontal
+ * connector would point at nothing.
+ */
 export function HowItWorks() {
   return (
-    <section id="how-it-works" data-testid="how-it-works" className="border-t border-line">
-      <div className="mx-auto max-w-6xl px-4 py-16">
+    <section
+      id="how-it-works"
+      data-testid="how-it-works"
+      data-shape="rail"
+      className="border-b border-line bg-surface py-23"
+    >
+      <div className="mx-auto max-w-6xl px-4">
         <Reveal>
-          <h2 className="text-2xl font-semibold tracking-tight">How payouts happen</h2>
+          <h2 className="text-[36px] font-semibold tracking-[-0.03em]">How payouts happen</h2>
         </Reveal>
 
-        <ol className="mt-10 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-3">
+        <ol className="relative mt-14 grid gap-9 sm:grid-cols-3">
+          <span
+            aria-hidden
+            className="absolute left-[16%] right-[16%] top-[19px] hidden h-0.5 sm:block"
+            style={{
+              background:
+                'linear-gradient(90deg, var(--color-escrow), var(--color-escrow) 66%, var(--color-inset))',
+            }}
+          />
           {STEPS.map((s, i) => (
-            <li
-              key={s.n}
-              className="border border-transparent bg-surface p-5 transition-colors duration-300 hover:border-escrow/40 hover:bg-escrow/5"
-            >
+            <li key={s.n} className="relative text-center">
               <Reveal delayMs={i * 80}>
-                <div className="flex items-baseline gap-2">
-                  {/* A lime-filled pill, not lime text: same fill+ink
-                      pattern as the badges and the escrow figure. */}
-                  <span className="rounded-full bg-escrow px-1.5 py-0.5 font-mono tnum text-[11px] font-semibold text-ink">
-                    {s.n}
-                  </span>
-                  <span className="text-[12px] text-muted">{s.label}</span>
-                  <LandingIcon glyph={s.glyph} className="ml-auto h-5 w-5 shrink-0 text-ink" />
-                </div>
-                <h3 className="mt-2 text-[15px] font-semibold">{s.heading}</h3>
-                <p className="mt-2 text-[14px] leading-relaxed text-muted">{s.body}</p>
+                <span
+                  className={`mx-auto mb-4 grid h-10 w-10 place-items-center rounded-full font-mono text-[13px] font-bold shadow-[0_0_0_7px_var(--color-surface)] ${
+                    i === 2 ? 'border-2 border-inset bg-canvas text-text' : 'bg-escrow text-ink'
+                  }`}
+                >
+                  {s.n}
+                </span>
+                <h3 className="text-[18px] font-semibold tracking-[-0.015em]">{s.heading}</h3>
+                <p className="mx-auto mt-1.5 max-w-[26em] text-[14px] leading-relaxed text-muted">
+                  {s.body}
+                </p>
               </Reveal>
             </li>
           ))}

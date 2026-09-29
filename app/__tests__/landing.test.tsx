@@ -308,4 +308,13 @@ describe('Landing page', () => {
     expect(promoteIdx).toBeGreaterThan(lockIdx)
     expect(payoutIdx).toBeGreaterThan(promoteIdx)
   })
+
+  it('renders the payout steps on a full-bleed rail, not in a bordered card grid', () => {
+    render(<LandingPage />)
+    const steps = screen.getByTestId('how-it-works')
+    expect(steps).toHaveAttribute('data-shape', 'rail')
+    // The band itself is full-bleed: it must not be the element carrying the
+    // page's standard max-width container.
+    expect(steps.className).not.toMatch(/max-w-6xl/)
+  })
 })
