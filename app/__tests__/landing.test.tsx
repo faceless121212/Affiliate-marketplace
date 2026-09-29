@@ -79,6 +79,13 @@ describe('Landing page', () => {
     expect(bento).toHaveTextContent(/paid on confirmation/i)
     expect(bento).toHaveTextContent(/anyone can list/i)
     expect(bento).toHaveTextContent(/locked, not promised/i)
+    // The fourth WhyNativness claim, and the four WhatYouGet claims.
+    expect(bento).toHaveTextContent(/one login/i)
+    expect(bento).toHaveTextContent(/same wallet/i)
+    expect(bento).toHaveTextContent(/track clicks and payouts/i)
+    expect(bento).toHaveTextContent(/watch escrow/i)
+    expect(bento).toHaveTextContent(/top up/i)
+    expect(bento).toHaveTextContent(/any niche/i)
   })
 
   it('renders the persona picker with both destinations reachable and no gating', () => {

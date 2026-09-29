@@ -5,7 +5,7 @@ import { BentoBrowsePreview } from './BentoBrowsePreview'
 const CELLS: { heading: string; body: string; glyph: LandingGlyph; wide?: boolean }[] = [
   {
     heading: 'Paid on confirmation',
-    body: 'Not on a schedule. No NET-30/NET-60, no minimum payout threshold.',
+    body: 'Released the moment a conversion is confirmed, not at the end of a billing cycle.',
     glyph: 'lightning',
   },
   {
@@ -15,8 +15,20 @@ const CELLS: { heading: string; body: string; glyph: LandingGlyph; wide?: boolea
   },
   {
     heading: 'Anyone can list',
-    body: 'No enterprise minimum, no sales call, no weeks-long approval.',
+    body: 'List any niche instantly. No enterprise minimum, no sales call, no weeks-long approval.',
     glyph: 'check',
+    wide: true,
+  },
+  {
+    heading: 'Track clicks and payouts',
+    body: 'See every click and every confirmed payout against your wallet.',
+    glyph: 'chart',
+    wide: true,
+  },
+  {
+    heading: 'Watch escrow and top up',
+    body: 'Follow spend against your locked budget, and add to it any time.',
+    glyph: 'wallet',
     wide: true,
   },
 ]
@@ -37,8 +49,8 @@ export function Bento() {
         <Reveal className="mb-10 flex flex-col justify-between gap-3 sm:flex-row sm:items-end sm:gap-10">
           <h2 className="text-[36px] font-semibold tracking-[-0.03em]">One wallet, both sides</h2>
           <p className="max-w-[24em] text-[14px] leading-relaxed text-muted sm:text-right">
-            One wallet. One login for both sides. The same wallet that promotes an offer today can
-            fund one tomorrow.
+            One login for both sides. The same wallet that promotes an offer today can fund one
+            tomorrow.
           </p>
         </Reveal>
 
