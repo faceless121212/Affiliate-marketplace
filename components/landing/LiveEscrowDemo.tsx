@@ -30,28 +30,63 @@ export function LiveEscrowDemo() {
   const [justPaid, setJustPaid] = useState(false)
 
   useEffect(() => {
-    // A viewer who asked for less motion gets the card at rest, not a
-    // silently-jumping figure: no timer starts at all.
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    // Read live and subscribed to, not sampled once: a viewer who turns
+    // reduced motion on mid-session must have the timer stop, not keep
+    // running until they reload.
+    const query = window.matchMedia?.('(prefers-reduced-motion: reduce)')
 
-    let resetTimeout: ReturnType<typeof setTimeout> | undefined
+    // The running balance lives here rather than inside a state updater, so
+    // the tick can tell a payout from a reset without a side effect in an
+    // updater function. It survives stop/start when the preference flips.
+    let balance = OFFER.escrowRemainingUsd
+    let intervalId: ReturnType<typeof setInterval> | undefined
+    let paidTimeout: ReturnType<typeof setTimeout> | undefined
 
-    const id = setInterval(() => {
-      setRemaining((value) => {
+    const tick = () => {
+      const next = balance - OFFER.commissionAmountUsd
+      if (next < 0) {
         // Reset rather than go negative. The balance can never fund a
         // payout it cannot cover, which is the rule the real store enforces
-        // in lib/store/conversions.ts.
-        if (value - OFFER.commissionAmountUsd < 0) return OFFER.escrowRemainingUsd
-        return value - OFFER.commissionAmountUsd
-      })
+        // in lib/store/conversions.ts. Nothing was paid on this tick, so
+        // no "Conversion confirmed" flash.
+        balance = OFFER.escrowRemainingUsd
+        setRemaining(balance)
+        return
+      }
+      balance = next
+      setRemaining(balance)
       setJustPaid(true)
-      clearTimeout(resetTimeout)
-      resetTimeout = setTimeout(() => setJustPaid(false), 2100)
-    }, TICK_MS)
+      clearTimeout(paidTimeout)
+      paidTimeout = setTimeout(() => setJustPaid(false), 2100)
+    }
+
+    const stop = () => {
+      clearInterval(intervalId)
+      clearTimeout(paidTimeout)
+      intervalId = undefined
+    }
+
+    const start = () => {
+      if (intervalId === undefined) intervalId = setInterval(tick, TICK_MS)
+    }
+
+    // A viewer who asked for less motion gets the card at rest, not a
+    // silently-jumping figure: no timer runs at all.
+    const onPreferenceChange = () => {
+      if (query?.matches) {
+        stop()
+        setJustPaid(false)
+      } else {
+        start()
+      }
+    }
+
+    if (!query?.matches) start()
+    query?.addEventListener?.('change', onPreferenceChange)
 
     return () => {
-      clearInterval(id)
-      clearTimeout(resetTimeout)
+      query?.removeEventListener?.('change', onPreferenceChange)
+      stop()
     }
   }, [])
 
