@@ -35,7 +35,7 @@ export function Problem() {
     <section
       data-testid="problem"
       data-shape="typesplit"
-      className="border-b border-line bg-depleted/5 py-22"
+      className="border-b border-line bg-depleted/5 grain py-22"
     >
       <div className="mx-auto grid max-w-6xl items-start gap-10 px-4 lg:grid-cols-[0.82fr_1.18fr] lg:gap-18">
         <Reveal>

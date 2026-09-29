@@ -8,8 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "art": "node --env-file-if-exists=.env.local scripts/generate-landing-art.mjs"
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@solana/wallet-adapter-base": "^0.9.28",

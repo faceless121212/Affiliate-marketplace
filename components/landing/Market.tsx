@@ -26,7 +26,7 @@ export function Market() {
     <section
       data-testid="market"
       data-shape="band"
-      className="border-b border-line bg-escrow/[0.07] py-10"
+      className="border-b border-line bg-escrow/[0.07] grain py-10"
     >
       <Reveal className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-14 gap-y-6 px-4">
         {FIGURES.map((figure) => (

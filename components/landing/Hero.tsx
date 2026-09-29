@@ -32,12 +32,33 @@ export function Hero() {
       <div className="relative mx-auto grid max-w-6xl items-center gap-16 px-4 py-22 lg:grid-cols-[1.05fr_0.95fr]">
         {/* Decorative only. Sits behind the right column and bleeds off the
             edge; text lives in the left column, clear of it. */}
+        {/* A gradient mesh, not a single blurred circle.
+ *
+            Four overlapping light sources at different scales and hues: two lime
+            blooms of different sizes, a cool green one low and left to keep the
+            field from reading as one flat tint, and a white one top-right that
+            knocks the centre back so the mesh has somewhere to breathe. Depth
+            comes from the layers disagreeing with each other; one radial can only
+            ever look like one radial.
+
+            This is hand-built on purpose. Three fal.ai generations were spent
+            trying to produce this image, and the third converged on a green blur
+            on black, which is a radial gradient rendered as a 13KB raster with no
+            alpha channel. CSS does it exactly, at no weight, in the real token
+            colour, and stays sharp at any viewport. Generation is good at content
+            and bad at controlled decorative form, the same finding recorded in
+            components/ui/LandingIcon.tsx. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-56 -top-36 h-[760px] w-[760px] rounded-full opacity-90 blur-2xl"
+          className="pointer-events-none absolute -inset-y-1/3 -right-1/4 w-[85%]"
           style={{
-            background:
-              'radial-gradient(circle, rgb(195 255 0 / 0.5) 0%, rgb(195 255 0 / 0.14) 38%, transparent 66%)',
+            background: [
+              'radial-gradient(55% 45% at 72% 26%, rgb(195 255 0 / 0.50), transparent 70%)',
+              'radial-gradient(38% 52% at 90% 58%, rgb(195 255 0 / 0.26), transparent 72%)',
+              'radial-gradient(44% 40% at 52% 80%, rgb(41 118 67 / 0.10), transparent 70%)',
+              'radial-gradient(34% 30% at 96% 12%, rgb(255 255 255 / 0.85), transparent 68%)',
+            ].join(','),
+            filter: 'blur(44px)',
           }}
         />
 

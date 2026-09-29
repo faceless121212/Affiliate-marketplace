@@ -85,6 +85,36 @@
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 }
 
+/*
+ * Paper grain for the tinted section bands, which were flat washes.
+ *
+ * feTurbulence rather than a generated texture: `stitchTiles` makes it seamless
+ * by construction, it is isotropic by definition, it is a few hundred bytes
+ * inline, and it costs no request. A generated tile was tried first and came
+ * back with strong vertical streaks that read as brushed wood however the prompt
+ * was worded, because "evenly random with no direction" is the one thing an
+ * image model has no reason to be good at.
+ *
+ * Applied via ::before so it never becomes a stacking-context problem for the
+ * content above it, and kept under 4% so it reads as material rather than dirt.
+ */
+.grain {
+  position: relative;
+  isolation: isolate;
+}
+.grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+@media (prefers-reduced-transparency: reduce) {
+  .grain::before { display: none; }
+}
+
 html, body {
   background: var(--color-canvas);
   color: var(--color-text);

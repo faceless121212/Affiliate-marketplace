@@ -33,7 +33,7 @@ export function HowItWorks() {
       id="how-it-works"
       data-testid="how-it-works"
       data-shape="rail"
-      className="border-b border-line bg-surface py-23"
+      className="border-b border-line bg-surface grain py-23"
     >
       <div className="mx-auto max-w-6xl px-4">
         <Reveal>
