@@ -5,7 +5,7 @@ import { BentoBrowsePreview } from './BentoBrowsePreview'
 const CELLS: { heading: string; body: string; glyph: LandingGlyph; wide?: boolean }[] = [
   {
     heading: 'Paid on confirmation',
-    body: 'Released when confirmed, not at month end.',
+    body: 'Released the moment it’s confirmed, not at month end.',
     glyph: 'lightning',
   },
   {
@@ -54,9 +54,10 @@ export function Bento() {
           </p>
         </Reveal>
 
-        {/* Fixed row height only from sm up: at phone widths the 1x1 cells are ~150px
-            wide and their copy needs more than 174px, so rows size to content there. */}
-        <div className="grid grid-cols-2 gap-4 sm:auto-rows-[174px] lg:grid-cols-4">
+        {/* Rows are at least 174px from sm up, but may grow: a hard 174px ceiling clipped
+            copy at phone widths and would at 200% text zoom (WCAG 1.4.4). Below sm rows
+            size to content. */}
+        <div className="grid grid-cols-2 gap-4 sm:auto-rows-[minmax(174px,auto)] lg:grid-cols-4">
           <Reveal className="col-span-2 row-span-2 flex flex-col rounded-2xl border border-line bg-canvas p-6 shadow-card-lg">
             <h3 className="text-[18px] font-semibold tracking-[-0.015em]">
               See the money before you commit
