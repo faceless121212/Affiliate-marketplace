@@ -11,6 +11,16 @@ export function money(n: number): string {
   })
 }
 
+/**
+ * How full an escrow bar is, as a 0-100 percentage. The one place this is
+ * clamped, so EscrowMeter, the landing's live demo and its browse preview
+ * cannot disagree about an over-drawn or zero-total offer.
+ */
+export function escrowFillPct(remainingUsd: number, totalUsd: number): number {
+  if (!(totalUsd > 0)) return 0
+  return Math.max(0, Math.min(100, (remainingUsd / totalUsd) * 100))
+}
+
 export function shortAddress(address: string): string {
   if (address.length <= 10) return address
   return `${address.slice(0, 4)}…${address.slice(-4)}`

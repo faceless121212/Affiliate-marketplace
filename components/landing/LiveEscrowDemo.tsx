@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Money } from '@/components/ui/Money'
+import { EscrowMeter } from '@/components/app/EscrowMeter'
 import { Badge } from '@/components/ui/Badge'
 import { OfferAvatar } from '@/components/ui/OfferAvatar'
 import { SEED_OFFERS } from '@/lib/store'
@@ -54,7 +55,6 @@ export function LiveEscrowDemo() {
     }
   }, [])
 
-  const pct = Math.max(0, Math.min(100, (remaining / OFFER.escrowTotalUsd) * 100))
   const covers = Math.floor(remaining / OFFER.commissionAmountUsd)
 
   return (
@@ -84,21 +84,11 @@ export function LiveEscrowDemo() {
           )}
         </div>
 
-        <p className="text-[11.5px] text-muted">Escrow remaining</p>
-        <p className="mt-0.5 flex flex-wrap items-baseline gap-x-1.5">
-          <span data-testid="demo-remaining">
-            <Money value={remaining} tone="escrow" className="text-[28px] font-bold leading-none" />
-          </span>
-          <span className="font-mono tnum text-[12px] text-muted">
-            / <Money value={OFFER.escrowTotalUsd} tone="muted" className="text-[12px]" />
-          </span>
-        </p>
-
-        <div className="mt-3 h-2 overflow-hidden rounded-full bg-inset">
-          <div
-            className="h-full rounded-full bg-escrow transition-[width] duration-700 ease-out motion-reduce:transition-none"
-            style={{ width: `${pct}%` }}
-          />
+        {/* The app's own meter, fed the running balance, so the demo is the
+            product's component rather than a lookalike. The wrapper carries
+            the test hook: EscrowMeter is shared and stays free of it. */}
+        <div data-testid="demo-remaining">
+          <EscrowMeter offer={{ ...OFFER, escrowRemainingUsd: remaining }} />
         </div>
         <p className="mt-1.5 font-mono tnum text-[10.5px] text-muted">
           Covers {covers} conversion{covers === 1 ? '' : 's'}

@@ -1,6 +1,7 @@
 import { Money } from '@/components/ui/Money'
 import { OfferAvatar } from '@/components/ui/OfferAvatar'
 import { SEED_OFFERS } from '@/lib/store'
+import { escrowFillPct } from '@/lib/format'
 
 /**
  * A miniature of the Browse grid, built from the same seeded offers /app
@@ -14,10 +15,7 @@ export function BentoBrowsePreview() {
   return (
     <div aria-hidden className="mt-3.5 grid min-h-0 flex-1 grid-cols-1 grid-rows-3 gap-2.5">
       {SEED_OFFERS.slice(0, 3).map((offer) => {
-        const pct =
-          offer.escrowTotalUsd > 0
-            ? Math.max(0, Math.min(100, (offer.escrowRemainingUsd / offer.escrowTotalUsd) * 100))
-            : 0
+        const pct = escrowFillPct(offer.escrowRemainingUsd, offer.escrowTotalUsd)
         return (
           <div
             key={offer.id}

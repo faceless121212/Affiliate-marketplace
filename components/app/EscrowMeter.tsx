@@ -1,6 +1,13 @@
 import { Money } from '@/components/ui/Money'
+import { escrowFillPct } from '@/lib/format'
 import type { Offer } from '@/lib/types'
 
+/**
+ * The escrow remainder, its total and the fill bar. Shared by the app's offer
+ * surfaces and the landing page's live demo, so they cannot drift apart. Kept
+ * free of hooks and wallet code on purpose: the landing page imports it, and
+ * must not inherit the app's client bundle.
+ */
 export function EscrowMeter({
   offer,
   showLabel = true,
@@ -8,9 +15,7 @@ export function EscrowMeter({
   offer: Offer
   showLabel?: boolean
 }) {
-  const pct = offer.escrowTotalUsd
-    ? Math.max(0, Math.min(100, (offer.escrowRemainingUsd / offer.escrowTotalUsd) * 100))
-    : 0
+  const pct = escrowFillPct(offer.escrowRemainingUsd, offer.escrowTotalUsd)
   const empty = offer.status === 'depleted'
 
   return (

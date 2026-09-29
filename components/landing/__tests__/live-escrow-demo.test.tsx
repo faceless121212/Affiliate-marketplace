@@ -16,6 +16,13 @@ function stubMotion(reduced: boolean) {
   })) as unknown as typeof window.matchMedia
 }
 
+// The hook wraps the whole EscrowMeter (label, remainder, total), so read the
+// remainder as the first currency amount in it.
+function remainingFigure(): string {
+  const text = screen.getByTestId('demo-remaining').textContent ?? ''
+  return text.match(/-?\$[\d,]+\.\d{2}/)?.[0] ?? ''
+}
+
 beforeEach(() => vi.useFakeTimers())
 afterEach(() => vi.useRealTimers())
 
@@ -42,7 +49,7 @@ describe('LiveEscrowDemo', () => {
     render(<LiveEscrowDemo />)
     // 14 payouts of $24 exhaust $340 down to $4, which cannot fund a 15th.
     act(() => { vi.advanceTimersByTime(3400 * 20) })
-    const figure = screen.getByTestId('demo-remaining').textContent ?? ''
+    const figure = remainingFigure()
     expect(figure).not.toContain('-')
     const value = Number(figure.replace(/[^0-9.]/g, ''))
     expect(value).toBeGreaterThanOrEqual(0)
