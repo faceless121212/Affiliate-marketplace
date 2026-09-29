@@ -74,6 +74,8 @@ It cannot survive async reads. Each of the **11 component call sites** would oth
 Call sites to migrate:
 `app/layout.tsx`, `app/app/page.tsx`, `app/app/simulate/page.tsx`, `app/app/offers/[id]/page.tsx`, `app/app/links/page.tsx`, `app/app/my-offers/page.tsx`, `app/r/[offerId]/[wallet]/page.tsx`, `components/landing/EscrowCounter.tsx`, `components/app/TopUpDialog.tsx`, `components/app/GetLinkPanel.tsx`, `components/app/CreateOfferForm.tsx`.
 
+> **Note (landing redesign):** `components/landing/EscrowCounter.tsx` was deleted. `components/landing/Hero.tsx` now computes the locked-escrow figure and `components/landing/LiveEscrowDemo.tsx` shows one offer draining; both read `SEED_OFFERS` directly, so this call site no longer exists and the paragraph below applies to those two components instead.
+
 `components/landing/EscrowCounter.tsx` is on the **public landing page**. It currently sums `SEED_OFFERS` locally. It must not start making an authenticated request, and it must not make the marketing page wait on a database round trip. It reads from a cached, public, unauthenticated endpoint or stays a build-time constant.
 
 ---

@@ -67,9 +67,10 @@ The app carries a permanent banner saying the same thing. It is not dismissible.
 Six fictional offers seed on first load, across ecommerce, iGaming, dating and SaaS. No real
 brand names are used. Two are Verified; one (Fenwick Grounds) is nearly exhausted and one
 (Halcyon Tools) has zero escrow, so both degraded states are visible without simulating your
-way there. The landing page's live escrow counter is the sum of these six offers'
-`escrowTotalUsd` — real seed data, labelled honestly as the demo marketplace's total, not a
-claim about Nativness's own traction.
+way there. The landing page's hero states the escrow still locked across these six offers (the
+sum of their `escrowRemainingUsd`, computed from the store) and shows one of them draining in
+`LiveEscrowDemo`, which reuses the app's `EscrowMeter`. It is real seed data, labelled honestly
+as the demo marketplace's, not a claim about Nativness's own traction.
 
 **The landing page's social-proof quotes (`components/landing/SocialProof.tsx`) are
 placeholders.** Nativness has no customers yet, so every name, company and quote there is

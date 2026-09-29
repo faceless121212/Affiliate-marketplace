@@ -2,15 +2,15 @@ import { LoginCta } from './LoginCta'
 import { Reveal } from './Reveal'
 
 /**
- * The page's one real wallet-connect decision point, with the framing copy
- * the hero's old CTAs never had. Connecting creates the account (see
- * `lib/wallet/useAccount.ts`'s `ensureUser` call): there is no separate
- * signup step. The two options below are a first-view preference only, each
- * just a `LoginCta` pointed at a different destination; neither restricts
- * the other. Both `/app` and `/app/my-offers` stay reachable by any
- * connected wallet from the app nav (`components/app/Nav.tsx`) regardless of
- * which option was clicked, and nothing about the choice is persisted, so
- * there is no state anywhere that could turn this into a gate.
+ * The page's closing call to action: two plain links, one per first-view
+ * preference ("Browse offers" to /app, "List an offer" to /app/my-offers).
+ * Neither connects a wallet here. Sign-in happens at the destination, where
+ * `components/app/ConnectGate.tsx` presents it, and connecting creates the
+ * account (`lib/wallet/useAccount.ts`'s `ensureUser`), so there is no separate
+ * signup step. The choice only decides what a visitor sees first: both routes
+ * stay reachable to any connected wallet from the app nav
+ * (`components/app/Nav.tsx`), and nothing about it is persisted, so there is
+ * no state anywhere that could turn this into a gate.
  */
 export function GetStarted() {
   return (
