@@ -317,4 +317,9 @@ describe('Landing page', () => {
     // page's standard max-width container.
     expect(steps.className).not.toMatch(/max-w-6xl/)
   })
+
+  it('sets the problem section as a type split, heading left', () => {
+    render(<LandingPage />)
+    expect(screen.getByTestId('problem')).toHaveAttribute('data-shape', 'typesplit')
+  })
 })

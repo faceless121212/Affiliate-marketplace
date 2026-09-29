@@ -1,53 +1,65 @@
 import { LandingIcon, type LandingGlyph } from '@/components/ui/LandingIcon'
 import { Reveal } from './Reveal'
 
-const CLAIMS: { heading: string; body: string; source: string; glyph: LandingGlyph }[] = [
+const FACTS: { heading: string; body: string; source: string; glyph: LandingGlyph }[] = [
   {
     heading: 'Paid in months, maybe.',
     body: 'Rakuten’s NET-60 rates 2.2/5 on Trustpilot; CJ Affiliate reports stuck commissions.',
-    source: 'Rakuten Advertising, Trustpilot; CJ Affiliate complaints',
+    source: 'Source: Rakuten Advertising, Trustpilot; CJ Affiliate complaints',
     glyph: 'clock',
   },
   {
     heading: 'Smaller networks offer no recourse.',
     body: 'iGaming and dating networks are offshore, fragmented.',
-    source: 'Industry reporting',
+    source: 'Source: Industry reporting',
     glyph: 'warning',
   },
   {
     heading: 'Networks disappear.',
     body: 'ShareASale folded into Awin, October 2025.',
-    source: 'ShareASale / Awin, October 2025',
+    source: 'Source: ShareASale / Awin, October 2025',
     glyph: 'warning',
   },
 ]
 
+/**
+ * A type split: the heading is pinned left and set large, the evidence sits
+ * small on the right. Nothing else on the page has this proportion, which is
+ * the point.
+ *
+ * Every fact keeps its source line. These three claims are the only outside
+ * credibility the page has, and the redesign must not weaken them.
+ */
 export function Problem() {
   return (
-    <section data-testid="problem" className="border-t border-line bg-depleted/5">
-      <div className="mx-auto max-w-6xl px-4 py-16">
+    <section
+      data-testid="problem"
+      data-shape="typesplit"
+      className="border-b border-line bg-depleted/5 py-22"
+    >
+      <div className="mx-auto grid max-w-6xl items-start gap-10 px-4 lg:grid-cols-[0.82fr_1.18fr] lg:gap-18">
         <Reveal>
-          <h2 className="text-2xl font-semibold tracking-tight">
+          <h2 className="text-[30px] font-semibold leading-[1.1] tracking-[-0.035em] sm:text-[38px]">
             Nobody has fixed affiliate trust.
           </h2>
-          <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-muted">
-            Affiliates work first, trust comes after.
+          <p className="mt-3.5 text-[14px] leading-relaxed text-muted">
+            Affiliates work first, trust comes after. Every fact here is sourced.
           </p>
         </Reveal>
 
-        <div className="mt-10 grid gap-x-6 gap-y-4 sm:grid-cols-2">
-          {CLAIMS.map((c, i) => (
+        <div className="flex flex-col">
+          {FACTS.map((fact, i) => (
             <Reveal
-              key={c.heading}
+              key={fact.heading}
               delayMs={i * 70}
-              className="rounded-lg border border-transparent p-4 transition-colors duration-300 hover:border-line hover:bg-surface"
+              className="border-t border-depleted/20 py-5 first:border-t-0 first:pt-0"
             >
-              <h3 className="flex items-start gap-2 text-[15px] font-semibold">
-                <LandingIcon glyph={c.glyph} className="mt-0.5 h-6 w-6 shrink-0 text-depleted" />
-                {c.heading}
+              <h3 className="flex items-center gap-2.5 text-[17px] font-semibold tracking-[-0.015em]">
+                <LandingIcon glyph={fact.glyph} className="h-5 w-5 shrink-0 text-depleted" />
+                {fact.heading}
               </h3>
-              <p className="mt-2 text-[14px] leading-relaxed text-muted">{c.body}</p>
-              <p className="mt-2 text-[11px] text-muted">Source: {c.source}</p>
+              <p className="mt-1.5 text-[14px] leading-relaxed text-muted">{fact.body}</p>
+              <p className="mt-1.5 text-[11px] text-muted opacity-75">{fact.source}</p>
             </Reveal>
           ))}
         </div>
