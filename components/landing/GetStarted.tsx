@@ -17,7 +17,7 @@ export function GetStarted() {
     <section id="get-started" data-testid="get-started" data-shape="centred" className="py-23">
       <div className="mx-auto max-w-2xl px-4 text-center">
         <Reveal>
-          <h2 className="text-[36px] font-semibold tracking-[-0.03em]">
+          <h2 className="text-[36px] font-semibold leading-[1.1] tracking-[-0.03em] text-balance">
             One wallet. Then tell us why you’re here.
           </h2>
           <p className="mt-3 text-[14px] leading-relaxed text-muted">

@@ -12,7 +12,7 @@ import { SEED_OFFERS } from '@/lib/store'
  */
 export function BentoBrowsePreview() {
   return (
-    <div aria-hidden className="mt-3.5 grid min-h-0 flex-1 grid-rows-3 gap-2.5">
+    <div aria-hidden className="mt-3.5 grid min-h-0 flex-1 grid-cols-1 grid-rows-3 gap-2.5">
       {SEED_OFFERS.slice(0, 3).map((offer) => {
         const pct =
           offer.escrowTotalUsd > 0

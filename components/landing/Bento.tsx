@@ -5,7 +5,7 @@ import { BentoBrowsePreview } from './BentoBrowsePreview'
 const CELLS: { heading: string; body: string; glyph: LandingGlyph; wide?: boolean }[] = [
   {
     heading: 'Paid on confirmation',
-    body: 'Released the moment a conversion is confirmed, not at the end of a billing cycle.',
+    body: 'Released when confirmed, not at month end.',
     glyph: 'lightning',
   },
   {
@@ -47,14 +47,16 @@ export function Bento() {
     <section data-testid="bento" data-shape="bento" className="border-b border-line py-23">
       <div className="mx-auto max-w-6xl px-4">
         <Reveal className="mb-10 flex flex-col justify-between gap-3 sm:flex-row sm:items-end sm:gap-10">
-          <h2 className="text-[36px] font-semibold tracking-[-0.03em]">One wallet, both sides</h2>
+          <h2 className="text-[36px] font-semibold leading-[1.1] tracking-[-0.03em]">One wallet, both sides</h2>
           <p className="max-w-[24em] text-[14px] leading-relaxed text-muted sm:text-right">
             One login for both sides. The same wallet that promotes an offer today can fund one
             tomorrow.
           </p>
         </Reveal>
 
-        <div className="grid auto-rows-[174px] grid-cols-2 gap-4 lg:grid-cols-4">
+        {/* Fixed row height only from sm up: at phone widths the 1x1 cells are ~150px
+            wide and their copy needs more than 174px, so rows size to content there. */}
+        <div className="grid grid-cols-2 gap-4 sm:auto-rows-[174px] lg:grid-cols-4">
           <Reveal className="col-span-2 row-span-2 flex flex-col rounded-2xl border border-line bg-canvas p-6 shadow-card-lg">
             <h3 className="text-[18px] font-semibold tracking-[-0.015em]">
               See the money before you commit

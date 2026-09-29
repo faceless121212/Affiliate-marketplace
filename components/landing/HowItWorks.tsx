@@ -37,7 +37,7 @@ export function HowItWorks() {
     >
       <div className="mx-auto max-w-6xl px-4">
         <Reveal>
-          <h2 className="text-[36px] font-semibold tracking-[-0.03em]">How payouts happen</h2>
+          <h2 className="text-[36px] font-semibold leading-[1.1] tracking-[-0.03em]">How payouts happen</h2>
         </Reveal>
 
         <ol className="relative mt-14 grid gap-9 sm:grid-cols-3">
