@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 import { ensureUser } from '@/lib/store'
 import { readDemoWallet } from './demoWallet'
 
@@ -26,9 +25,4 @@ export function useAccount() {
   }, [wallet])
 
   return { wallet, connected: (connected || !!demo) && !!wallet, connecting }
-}
-
-export function useLoginModal() {
-  const { setVisible } = useWalletModal()
-  return () => setVisible(true)
 }
