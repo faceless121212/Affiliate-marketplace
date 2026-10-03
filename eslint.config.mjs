@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Standalone Vite prototype with its own toolchain.
+    "nativness-site/**",
   ]),
 ]);
 
