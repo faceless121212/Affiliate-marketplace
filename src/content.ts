@@ -1,6 +1,35 @@
-export type Post = { slug: string; title: string; excerpt: string; img: string; date: string; minutes: number; tag: string; body: (string | { h: string })[] }
+import { marked } from 'marked'
 
-export const POSTS: Post[] = [
+export type Post = { slug: string; title: string; excerpt: string; img: string; date: string; minutes: number; tag: string; body: (string | { h: string })[]; html?: string }
+
+// Long-form articles live as markdown in src/posts, with front matter for the card.
+const files = import.meta.glob('./posts/*.md', { query: '?raw', import: 'default', eager: true }) as Record<string, string>
+
+const longDate = (iso: string) =>
+  new Date(`${iso}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
+
+function fromMarkdown(raw: string): Post {
+  const [, front = '', text = ''] = raw.split(/^---\s*$/m)
+  const meta: Record<string, string> = {}
+  for (const line of front.split('\n')) {
+    const m = line.match(/^(\w+):\s*(.*)$/)
+    if (m) meta[m[1]] = m[2].replace(/^"(.*)"$/, '$1').replace(/\\"/g, '"')
+  }
+  const article = text.replace(/^\s*# .*$/m, '').trim()
+  const html = (marked.parse(article, { async: false }) as string)
+    .replace(/<a href="http/g, '<a target="_blank" rel="noopener noreferrer" href="http')
+    .replace(/<table>/g, '<div class="lp-table"><table>')
+    .replace(/<\/table>/g, '</table></div>')
+  return {
+    slug: meta.slug, title: meta.title, excerpt: meta.description, img: meta.cover, tag: `For ${meta.audience.toLowerCase()}`,
+    date: longDate(meta.published), minutes: parseFloat(meta.readingTime), body: [], html,
+  }
+}
+
+const ARTICLES: Post[] = Object.values(files).map(fromMarkdown).sort((a, b) => a.slug.localeCompare(b.slug))
+
+
+const NOTES: Post[] = [
   {
     slug: 'why-escrow-first', tag: 'Product', date: '3 October 2026', minutes: 3, img: 'blog-escrow',
     title: 'Why the budget is locked before the offer goes live',
@@ -43,6 +72,8 @@ export const POSTS: Post[] = [
     ],
   },
 ]
+
+export const POSTS: Post[] = [...ARTICLES, ...NOTES]
 
 export type Doc = { title: string; updated: string; intro: string; sections: { h: string; p: string[] }[] }
 

@@ -59,9 +59,11 @@ export function BlogPost({ slug }: { slug: string }) {
         <a href="#/blog" className="lp-back">← All posts</a>
         <span className="lp-post-tag">{p.tag}</span>
         <h1>{p.title}</h1>
-        <small>{p.date} · {p.minutes} min read</small>
+        {!p.html && <small>{p.date} · {p.minutes} min read</small>}
         <img src={`/img/${p.img}.jpg`} alt="" />
-        {p.body.map((b, i) => typeof b === 'string' ? <p key={i}>{b}</p> : <h2 key={i}>{b.h}</h2>)}
+        {p.html
+          ? <div className="lp-md" dangerouslySetInnerHTML={{ __html: p.html }} />
+          : p.body.map((b, i) => typeof b === 'string' ? <p key={i}>{b}</p> : <h2 key={i}>{b.h}</h2>)}
         <a href="#/app" className="lp-btn lp-btn-lime lp-btn-lg">Browse funded offers</a>
       </article>
     </Shell>

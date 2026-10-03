@@ -205,3 +205,20 @@
 .lp-stack-dots button { width: 10px; height: 10px; border-radius: 3px; background: rgba(0,0,0,0.2); transition: background .2s, width .2s; }
 .lp-stack-dots button.on { background: #000; width: 24px; }
 @media (prefers-reduced-motion: reduce) { .lp-card { transition: none; } }
+
+/* Markdown articles */
+.lp-md { width: 100%; display: flex; flex-direction: column; gap: 16px; }
+.lp-md h2 { font-size: 26px; letter-spacing: -0.03em; line-height: 1.15; margin-top: 22px; }
+.lp-md p, .lp-md li { font-size: 17px; line-height: 1.65; color: #262626; }
+.lp-md > p:first-child { font-size: 14px; color: #747474; }
+.lp-md em { color: #747474; }
+.lp-md ul, .lp-md ol { padding-left: 22px; display: flex; flex-direction: column; gap: 8px; }
+.lp-md a { text-decoration: underline; text-decoration-color: #c3ff00; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.lp-md a:hover { background: #c3ff00; }
+.lp-md code { font-family: ui-monospace, Menlo, monospace; font-size: 0.82em; background: #fafafa; border: 1px solid #f0f0f0; border-radius: 4px; padding: 1px 5px; word-break: break-all; }
+.lp-table { width: 100%; overflow-x: auto; border: 1px solid #e5e5e5; border-radius: 12px; }
+.lp-table table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 14px; line-height: 1.45; }
+.lp-table th { text-align: left; background: #fafafa; font-weight: 700; white-space: nowrap; }
+.lp-table th, .lp-table td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+.lp-table tr:last-child td { border-bottom: 0; }
+.lp-table td:first-child { font-weight: 600; }

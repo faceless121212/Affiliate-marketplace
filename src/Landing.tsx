@@ -302,7 +302,7 @@ export default function Landing() {
             <h2>From the blog</h2>
             <a href="#/blog" className="lp-btn lp-btn-outline">All posts</a>
           </div>
-          <div className="lp-posts">{POSTS.map(p => <PostCard key={p.slug} slug={p.slug} />)}</div>
+          <div className="lp-posts">{POSTS.slice(0, 3).map(p => <PostCard key={p.slug} slug={p.slug} />)}</div>
         </section>
       </main>
 
