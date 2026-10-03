@@ -90,6 +90,17 @@ export default function MarketApp() {
   const byId = (id: string) => offers.find(o => o.id === id)!
   const featured = offers.find(o => o.id === featuredId) ?? offers[0]
   const toastTimer = useRef(0)
+  const listRef = useRef<HTMLDivElement>(null)
+  const [confirmOut, setConfirmOut] = useState(false)
+  const viewAll = () => {
+    setCat('all'); setQuery('')
+    window.setTimeout(() => {
+      const el = listRef.current
+      if (!el) return
+      const header = document.querySelector<HTMLElement>('.mx-header')?.offsetHeight ?? 0
+      window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - header - 12, behavior: 'smooth' })
+    }, 0)
+  }
   const say = (m: string) => {
     setToast(m)
     window.clearTimeout(toastTimer.current)
@@ -115,6 +126,7 @@ export default function MarketApp() {
   }
 
   const disconnect = () => {
+    setConfirmOut(false)
     active?.disconnect().catch(() => {})
     rememberWallet(null)
     setWallet(null); setWalletName(''); setActive(null)
@@ -230,7 +242,7 @@ export default function MarketApp() {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#747474" strokeWidth="2" strokeLinecap="round" aria-hidden><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
           </label>
           {wallet ? (
-            <button className="mx-btn" onClick={disconnect} title={`${walletName}: ${wallet}. Click to disconnect.`}>
+            <button className="mx-btn" onClick={() => setConfirmOut(true)} title={`${walletName}: ${wallet}. Click to disconnect.`}>
               <span className="mx-dot" /> {shortAddress(wallet)} · {money(earned)} earned
             </button>
           ) : (
@@ -306,11 +318,11 @@ export default function MarketApp() {
                     <em>{money(o.escrowRemainingUsd)}</em>
                   </button>
                 ))}
-                <button className="mx-btn mx-btn-block" onClick={() => setCat('all')}>View all ({offers.length})</button>
+                <button className="mx-btn mx-btn-block" onClick={viewAll}>View all ({offers.length})</button>
               </aside>
             </section>
 
-            <div className="mx-section-head">
+            <div className="mx-section-head" ref={listRef}>
               <h2>Offers <span>{visible.length}</span></h2>
               <p className="mx-muted">Every balance below is what is still locked, not what was ever deposited.</p>
             </div>
@@ -408,6 +420,20 @@ export default function MarketApp() {
           </section>
         )}
       </main>
+
+      {confirmOut && wallet && (
+        <div className="mx-overlay" onClick={() => setConfirmOut(false)}>
+          <div className="mx-dialog" role="alertdialog" aria-modal="true" aria-labelledby="mx-out-title" onClick={e => e.stopPropagation()}
+            onKeyDown={e => { if (e.key === 'Escape') setConfirmOut(false) }}>
+            <h2 id="mx-out-title">Disconnect wallet?</h2>
+            <p>{walletName} {shortAddress(wallet)} will be signed out of Nativness. You can connect it again at any time.</p>
+            <div className="mx-dialog-actions">
+              <button className="mx-btn" autoFocus onClick={() => setConfirmOut(false)}>Stay connected</button>
+              <button className="mx-btn mx-btn-danger" onClick={disconnect}>Disconnect</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {toast && <div className="mx-toast" role="status">{toast}</div>}
     </div>
