@@ -222,3 +222,5 @@
 .lp-table th, .lp-table td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
 .lp-table tr:last-child td { border-bottom: 0; }
 .lp-table td:first-child { font-weight: 600; }
+.lp-md pre { width: 100%; background: #0a0a0a; color: #f0f0f0; border-radius: 12px; padding: 18px 20px; overflow-x: auto; font-size: 13.5px; line-height: 1.6; }
+.lp-md pre code { background: none; border: 0; padding: 0; color: inherit; font-size: inherit; word-break: normal; white-space: pre; }
