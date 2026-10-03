@@ -1,15 +1,13 @@
-import { useMemo, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { SEED_OFFERS, CATEGORIES, money, categoryLabel, payoutsLeft, type Offer, type Category } from './data'
-import { detectWallets, connectWallet, shortAddress, type WalletOption } from './wallet'
+import { detectWallets, onWalletsChanged, rememberWallet, rememberedWallet, shortAddress, type WalletOption } from './wallet'
 import './app.css'
 
-type Tab = 'offers' | 'my' | 'links' | 'simulate'
+type Tab = 'offers' | 'my' | 'links' | 'conversions'
 type Link = { id: string; offerId: string; clicks: number }
 type Payout = { id: string; offerId: string; amountUsd: number; seeded?: boolean }
 
-const DEMO_WALLET = 'Demo7xKqNativnessPrototypeWalletAddress9demo'
-
-// One seeded payout per conversion the demo offers have already paid, newest first.
+// One payout per conversion the listed offers have already paid, newest first.
 const SEED_PAYOUTS: Payout[] = SEED_OFFERS.flatMap(o => {
   const n = Math.min(3, Math.round((o.escrowTotalUsd - o.escrowRemainingUsd) / o.commissionUsd))
   return Array.from({ length: n }, (_, i) => ({ id: `${o.id}-${i}`, offerId: o.id, amountUsd: o.commissionUsd, seeded: true }))
@@ -91,22 +89,24 @@ export default function MarketApp() {
 
   const byId = (id: string) => offers.find(o => o.id === id)!
   const featured = offers.find(o => o.id === featuredId) ?? offers[0]
-  const say = (m: string) => { setToast(m); window.setTimeout(() => setToast(''), 2600) }
+  const toastTimer = useRef(0)
+  const say = (m: string) => {
+    setToast(m)
+    window.clearTimeout(toastTimer.current)
+    toastTimer.current = window.setTimeout(() => setToast(''), 2600)
+  }
   const needWallet = () => { if (wallet) return false; say('Connect a wallet first.'); return true }
 
-  const connect = async (option: WalletOption | null) => {
+  const connect = async (option: WalletOption, silent = false) => {
     setMenu(null)
-    if (!option) {
-      setWallet(DEMO_WALLET); setWalletName('Demo wallet'); setActive(null)
-      say('Demo wallet connected. Nothing of value moves.')
-      return
-    }
-    setBusy(true)
+    setBusy(!silent)
     try {
-      const address = await connectWallet(option)
+      const address = await option.connect(silent)
       setWallet(address); setWalletName(option.name); setActive(option)
-      say(`${option.name} connected. The address is your account.`)
+      rememberWallet(option.id)
+      if (!silent) say(`${option.name} connected. The address is your account.`)
     } catch (err) {
+      if (silent) return
       const rejected = (err as { code?: number })?.code === 4001
       say(rejected ? `${option.name} connection was rejected.` : `Could not connect ${option.name}. Check that it is unlocked.`)
     } finally {
@@ -115,10 +115,29 @@ export default function MarketApp() {
   }
 
   const disconnect = () => {
-    active?.provider.disconnect?.().catch(() => {})
+    active?.disconnect().catch(() => {})
+    rememberWallet(null)
     setWallet(null); setWalletName(''); setActive(null)
     say('Wallet disconnected.')
   }
+
+  // Wallets announce themselves asynchronously, so keep an open menu current,
+  // restore the last wallet if it is still authorised, and honour #/app?connect.
+  useEffect(() => {
+    let restored = false
+    const sync = () => {
+      const options = detectWallets()
+      setMenu(m => (m ? options : m))
+      const last = rememberedWallet()
+      const match = !restored && last ? options.find(o => o.id === last) : undefined
+      if (match) { restored = true; connect(match, true) }
+    }
+    const off = onWalletsChanged(sync)
+    sync()
+    if (window.location.hash.includes('connect') && !rememberedWallet()) setMenu(detectWallets())
+    return off
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const visible = useMemo(() => offers.filter(o => {
     if (cat === 'verified' && !o.verified) return false
@@ -170,7 +189,7 @@ export default function MarketApp() {
   }
 
   const TABS: { id: Tab; label: string }[] = [
-    { id: 'offers', label: 'Offers' }, { id: 'my', label: 'My offers' }, { id: 'links', label: 'Links' }, { id: 'simulate', label: 'Simulate' },
+    { id: 'offers', label: 'Offers' }, { id: 'my', label: 'My offers' }, { id: 'links', label: 'Links' }, { id: 'conversions', label: 'Conversions' },
   ]
   const CHIPS: { id: typeof cat; label: string }[] = [
     { id: 'all', label: 'All' }, { id: 'verified', label: 'Verified' }, { id: 'funded', label: 'Funded' },
@@ -180,7 +199,7 @@ export default function MarketApp() {
 
   return (
     <div className="mx">
-      <div className="mx-ticker" aria-label="Recent demo payouts">
+      <div className="mx-ticker" aria-label="Recent payouts">
         <div className="mx-ticker-run">
           {[...payouts, ...payouts].map((p, i) => (
             <span key={i}><em>Paid</em> <b>{money(p.amountUsd)}</b> from {byId(p.offerId)?.name ?? 'offer'} escrow</span>
@@ -223,10 +242,11 @@ export default function MarketApp() {
               {menu && (
                 <div className="mx-menu" role="menu">
                   {menu.map(o => (
-                    <button key={o.name} role="menuitem" onClick={() => connect(o)}>{o.name}<small>Detected</small></button>
+                    <button key={o.id} role="menuitem" onClick={() => connect(o)}>
+                      <span>{o.icon && <img src={o.icon} alt="" width={20} height={20} />}{o.name}</span><small>{o.chain}</small>
+                    </button>
                   ))}
-                  {menu.length === 0 && <p>No Solana wallet extension found. Install Phantom, Solflare or Backpack, or use the demo wallet.</p>}
-                  <button role="menuitem" onClick={() => connect(null)}>Demo wallet<small>No extension needed</small></button>
+                  {menu.length === 0 && <p>No wallet found in this browser. Install a wallet extension such as Phantom, MetaMask, Solflare or Backpack, then reload.</p>}
                 </div>
               )}
             </div>
@@ -240,8 +260,6 @@ export default function MarketApp() {
           </div>
         )}
       </header>
-
-      <div className="mx-banner">Prototype on Solana devnet. Escrow balances and conversions are simulated, and every offer is fictional.</div>
 
       <main className="mx-main">
         {tab === 'offers' && (
@@ -264,7 +282,7 @@ export default function MarketApp() {
                   <div className="mx-feature-side">
                     <div className="mx-actions">
                       <button className="mx-btn mx-btn-lime" disabled={state(featured) === 'empty'} onClick={() => getLink(featured)}>Get link</button>
-                      <button className="mx-btn" onClick={() => setTab('simulate')}>Simulate</button>
+                      <button className="mx-btn" onClick={() => setTab('conversions')}>Conversions</button>
                     </div>
                     <h2 className="mx-label">Escrow</h2>
                     <dl className="mx-dl">
@@ -356,13 +374,13 @@ export default function MarketApp() {
           </section>
         )}
 
-        {(tab === 'links' || tab === 'simulate') && (
+        {(tab === 'links' || tab === 'conversions') && (
           <section className="mx-card mx-list mx-wide">
-            <h1>{tab === 'links' ? 'Your tracking links' : 'Simulate a conversion'}</h1>
+            <h1>{tab === 'links' ? 'Your tracking links' : 'Confirm a conversion'}</h1>
             <p className="mx-muted">
               {tab === 'links'
                 ? 'One link per offer. Earnings appear the moment a conversion is confirmed.'
-                : 'There is no postback endpoint in this prototype. Confirm a conversion here to watch escrow pay out.'}
+                : 'Confirm a conversion on one of your links to release its payout from escrow.'}
             </p>
             {links.length === 0 && (
               <div className="mx-empty">
@@ -381,9 +399,9 @@ export default function MarketApp() {
                   </span>
                   <span className="mx-right"><b>{l.clicks}</b><small>confirmed</small></span>
                   <span className="mx-right"><b>{money(o.escrowRemainingUsd)}</b><small>escrow left</small></span>
-                  {tab === 'simulate'
+                  {tab === 'conversions'
                     ? <button className="mx-btn mx-btn-lime" disabled={state(o) === 'empty'} onClick={() => confirm(l)}>Confirm, pay {money(o.commissionUsd)}</button>
-                    : <button className="mx-btn" onClick={() => setTab('simulate')}>Simulate</button>}
+                    : <button className="mx-btn" onClick={() => setTab('conversions')}>Confirm</button>}
                 </div>
               )
             })}

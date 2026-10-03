@@ -48,7 +48,7 @@ function TileIcon({ name }: { name: string }) {
 }
 
 const count = (c: Category) => SEED_OFFERS.filter(o => o.category === c).length
-const plural = (n: number) => `${n} demo offer${n === 1 ? '' : 's'}`
+const plural = (n: number) => `${n} offer${n === 1 ? '' : 's'}`
 const verticals = CATEGORIES.filter(c => count(c.value) > 0)
 
 const TILES = [
@@ -75,12 +75,12 @@ export function Footer() {
         <div><h4>For advertisers</h4><a href="#/app">List an offer</a><a href="#/app">Top up escrow</a><a href="#/blog/writing-conversion-terms">Writing terms</a></div>
         <div><h4>Company</h4><a href="#/blog">Blog</a><a href="#/terms">Terms of Use</a><a href="#/privacy">Privacy Policy</a></div>
       </div>
-      <div className="lp-wrap lp-footer-base">© 2026 Nativness. Phase 1 prototype on Solana devnet: escrow balances and conversions are simulated, and all offers are fictional.</div>
+      <div className="lp-wrap lp-footer-base">© 2026 Nativness. All rights reserved.</div>
     </footer>
   )
 }
 
-const demo = SEED_OFFERS[0]
+const sample = SEED_OFFERS[0]
 const N = SEED_OFFERS.length
 const POS = ['front', 'second', 'third']
 
@@ -136,8 +136,8 @@ export default function Landing() {
     <div className="lp">
       <div className="lp-bar">
         <span className="lp-bar-dot" />
-        Phase 1 prototype on Solana devnet. Escrow is simulated and no real funds move.
-        <a href="#/app">Try the demo</a>
+        Connect any Solana or Ethereum wallet and start promoting funded offers.
+        <a href="#/app?connect">Connect wallet</a>
       </div>
 
       <header className="lp-header">
@@ -151,8 +151,8 @@ export default function Landing() {
             <a href="#/blog">Blog</a>
           </nav>
           <div className="lp-header-right">
-            <span className="lp-net">Solana, devnet</span>
-            <a href="#/app" className="lp-btn lp-btn-outline lp-btn-sm">Connect wallet</a>
+            <span className="lp-net">Solana</span>
+            <a href="#/app?connect" className="lp-btn lp-btn-outline lp-btn-sm">Connect wallet</a>
           </div>
         </div>
       </header>
@@ -172,15 +172,15 @@ export default function Landing() {
         </section>
 
         <section className="lp-wrap lp-stats">
-          <div><b>{money(TOTAL_LOCKED)}</b><span>Locked across demo offers</span></div>
-          <div><b>{SEED_OFFERS.length}</b><span>Demo offers</span></div>
+          <div><b>{money(TOTAL_LOCKED)}</b><span>Locked in escrow</span></div>
+          <div><b>{SEED_OFFERS.length}</b><span>Offers</span></div>
           <div><b>{verticals.length}</b><span>Verticals</span></div>
           <div><b>0 days</b><span>Payout wait after confirmation</span></div>
           <div><b>1 wallet</b><span>For affiliates and advertisers</span></div>
         </section>
 
-        <section className="lp-wrap lp-marks" aria-label="Demo offers on the marketplace">
-          <p>Offers live in the demo marketplace. All six are fictional.</p>
+        <section className="lp-wrap lp-marks" aria-label="Offers on the marketplace">
+          <p>Offers on the marketplace</p>
           <div className="lp-marks-row">
             {SEED_OFFERS.map(o => (
               <a key={o.id} href="#/app" className={o.escrowRemainingUsd > 0 ? '' : 'off'}>
@@ -230,8 +230,8 @@ export default function Landing() {
               <h3>Lock the budget.</h3>
               <p>The advertiser funds escrow before the offer is visible to anyone.</p>
               <div className="lp-mini">
-                <div className="lp-mini-row"><span>Escrow deposit</span><b>{money(demo.escrowTotalUsd)}</b></div>
-                <div className="lp-mini-row"><span>Per conversion</span><b>{money(demo.commissionUsd)}</b></div>
+                <div className="lp-mini-row"><span>Escrow deposit</span><b>{money(sample.escrowTotalUsd)}</b></div>
+                <div className="lp-mini-row"><span>Per conversion</span><b>{money(sample.commissionUsd)}</b></div>
                 <div className="lp-mini-status"><i style={{ background: '#16a34a' }} /> Funded. Offer is live.</div>
               </div>
             </article>
@@ -240,8 +240,8 @@ export default function Landing() {
               <h3>See the balance, promote.</h3>
               <p>Affiliates read the real remaining balance, then take a tracking link.</p>
               <div className="lp-mini">
-                <div className="lp-mini-row"><span>{demo.name}</span><b>{money(demo.escrowRemainingUsd)} left</b></div>
-                <div className="lp-meter"><i style={{ width: `${(demo.escrowRemainingUsd / demo.escrowTotalUsd) * 100}%` }} /></div>
+                <div className="lp-mini-row"><span>{sample.name}</span><b>{money(sample.escrowRemainingUsd)} left</b></div>
+                <div className="lp-meter"><i style={{ width: `${(sample.escrowRemainingUsd / sample.escrowTotalUsd) * 100}%` }} /></div>
                 <div className="lp-mini-link">nativness.app/r/drayton</div>
               </div>
             </article>
@@ -250,7 +250,7 @@ export default function Landing() {
               <h3>Get paid on confirmation.</h3>
               <p>Confirmed means paid. No NET-60, no minimum threshold.</p>
               <div className="lp-mini">
-                <div className="lp-mini-row"><span>Conversion confirmed</span><b style={{ color: '#16a34a' }}>+{money(demo.commissionUsd)}</b></div>
+                <div className="lp-mini-row"><span>Conversion confirmed</span><b style={{ color: '#16a34a' }}>+{money(sample.commissionUsd)}</b></div>
                 <div className="lp-mini-row"><span>Sent to</span><b>your wallet</b></div>
                 <div className="lp-mini-status"><i style={{ background: '#16a34a' }} /> Paid on confirmation.</div>
               </div>
@@ -288,9 +288,9 @@ export default function Landing() {
             </div>
             <div className="lp-biz-body">
               <p>Connecting a wallet creates a single identity that can promote other people’s offers and list its own. There is no separate affiliate or advertiser account.</p>
-              <p><b>Works with Phantom, Solflare or Backpack.</b><br />The wallet is your identity here, not a payment rail.</p>
+              <p><b>Works with Phantom, MetaMask, Solflare, Backpack and other wallets.</b><br />The wallet is your identity here, not a payment rail.</p>
               <div className="lp-biz-cta">
-                <a href="#/app" className="lp-btn lp-btn-lime lp-btn-lg">Connect wallet</a>
+                <a href="#/app?connect" className="lp-btn lp-btn-lime lp-btn-lg">Connect wallet</a>
                 <a href="#/app" className="lp-btn lp-btn-outline lp-btn-lg">Browse offers</a>
               </div>
             </div>

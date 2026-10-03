@@ -124,3 +124,6 @@
 .mx-menu button:hover { background: #fafafa; }
 .mx-menu small { color: #747474; font-weight: 400; font-size: 12px; }
 .mx-menu p { color: #747474; font-size: 12px; padding: 8px 10px; }
+
+.mx-menu button span { display: inline-flex; align-items: center; gap: 8px; }
+.mx-menu img { border-radius: 5px; }

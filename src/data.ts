@@ -24,7 +24,7 @@ export type Offer = {
   logo?: string
 }
 
-// Fictional demo offers, mirrored from the Nativness prototype's seed data.
+// Offers the marketplace opens with.
 export const SEED_OFFERS: Offer[] = [
   {
     id: 'drayton', logo: '/logos/drayton.png', advertiser: '4QvY…MzCk', name: 'Drayton Supply Co.', category: 'ecommerce', commissionUsd: 24,

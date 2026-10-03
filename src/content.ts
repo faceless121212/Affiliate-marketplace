@@ -12,8 +12,6 @@ export const POSTS: Post[] = [
       'Nativness changes the order. An advertiser funds the commission budget before the offer is visible to anyone. The offer page then shows the balance that is still locked, not a rate and a hope.',
       { h: 'What that changes for affiliates' },
       'You can read how many payouts an offer can still fund before you spend anything. If the balance is nearly gone, you can see that too and decide not to invest in creative.',
-      { h: 'Where the prototype is today' },
-      'This is Phase 1. Escrow balances are simulated in your browser and nothing moves on-chain. The mechanic is real in the interface so that it can be tested before real funds are involved.',
     ],
   },
   {
@@ -48,20 +46,20 @@ export const POSTS: Post[] = [
 
 export type Doc = { title: string; updated: string; intro: string; sections: { h: string; p: string[] }[] }
 
-const DRAFT = 'Draft for a prototype. It has not been reviewed by a lawyer and the bracketed details must be completed before launch.'
+const DRAFT = 'Draft. It has not been reviewed by a lawyer and the bracketed details must be completed before launch.'
 
 export const TERMS: Doc = {
   title: 'Terms of Use', updated: '3 October 2026', intro: DRAFT,
   sections: [
     { h: '1. Who we are', p: ['Nativness is operated by [legal entity name], [registered address]. These terms apply to the Nativness website and web application.', 'By using Nativness you agree to these terms. If you do not agree, do not use it.'] },
-    { h: '2. Prototype status', p: ['Nativness is a Phase 1 prototype running against Solana devnet. Escrow balances, conversions and payouts are simulated. No real funds are held, moved or paid, and nothing shown has monetary value.', 'All offers currently listed are fictional demonstration data.'] },
-    { h: '3. Your wallet', p: ['You sign in by connecting a Solana wallet. Your wallet address is your account. We never ask for and never receive your private key or seed phrase.', 'You are responsible for the security of your wallet and for all activity carried out with it.'] },
+    { h: '2. Current status', p: ['Nativness does not currently hold, move or pay real funds. Escrow balances, conversions and payouts shown in the app are records kept in the app, not on-chain transactions, and have no monetary value.'] },
+    { h: '3. Your wallet', p: ['You sign in by connecting a crypto wallet, such as Phantom or MetaMask. Your wallet address is your account. We never ask for and never receive your private key or seed phrase.', 'You are responsible for the security of your wallet and for all activity carried out with it.'] },
     { h: '4. Advertisers', p: ['When you list an offer you must describe it accurately and state clearly what counts as a conversion. You must have the right to promote the product or service and must comply with the laws that apply to it, including advertising, gambling and consumer protection rules.', 'The commission budget you lock is committed to confirmed conversions under the terms you published.'] },
     { h: '5. Affiliates', p: ['You must promote offers honestly and within each offer’s terms. Incentivised, automated or fraudulent traffic is prohibited unless an offer expressly allows it.', 'A payout is due only for a conversion that is confirmed under the offer’s published terms and only while the offer’s escrow balance can cover it.'] },
     { h: '6. Prohibited use', p: ['You may not use Nativness to break the law, to mislead other users, to interfere with the service, or to list or promote illegal goods or services.'] },
     { h: '7. No advice', p: ['Nothing on Nativness is financial, legal or tax advice. You are responsible for your own tax and regulatory obligations.'] },
-    { h: '8. Disclaimers and liability', p: ['The prototype is provided as is, without warranties of any kind. To the extent the law allows, we are not liable for indirect or consequential loss arising from your use of it.'] },
-    { h: '9. Changes and ending use', p: ['We may change or withdraw the prototype at any time. We may update these terms and will change the date above when we do.'] },
+    { h: '8. Disclaimers and liability', p: ['Nativness is provided as is, without warranties of any kind. To the extent the law allows, we are not liable for indirect or consequential loss arising from your use of it.'] },
+    { h: '9. Changes and ending use', p: ['We may change or withdraw the service at any time. We may update these terms and will change the date above when we do.'] },
     { h: '10. Governing law and contact', p: ['These terms are governed by the laws of [jurisdiction]. Questions can be sent to [contact email].'] },
   ],
 }
@@ -70,11 +68,11 @@ export const PRIVACY: Doc = {
   title: 'Privacy Policy', updated: '3 October 2026', intro: DRAFT,
   sections: [
     { h: '1. Who is responsible', p: ['[Legal entity name], [registered address], is responsible for personal data handled through Nativness. Contact: [contact email].'] },
-    { h: '2. What the prototype handles', p: ['Your public wallet address, when you connect a wallet. We never receive your private key or seed phrase.', 'Offers you create, tracking links you take and simulated conversions and payouts.'] },
-    { h: '3. Where it is stored', p: ['In Phase 1 this information is kept in your own browser’s local storage. It is not sent to a Nativness server, and it is not shared across devices. Clearing your browser’s site data deletes it.'] },
-    { h: '4. What we do not collect', p: ['We do not ask for your name, email address, payment card or identity documents. The prototype sets no advertising or analytics cookies.'] },
-    { h: '5. Third parties', p: ['Fonts are loaded from Google Fonts, so your browser makes a request to Google when a page loads. Your wallet extension is provided by its own developer under its own privacy policy.', 'Solana is a public blockchain. Any transaction a wallet makes on it is public and permanent. The prototype itself makes none.'] },
-    { h: '6. Your rights', p: ['Depending on where you live, you may have the right to access, correct, delete or object to the use of your personal data. Because Phase 1 data stays in your browser, you can delete it yourself at any time. For anything else, write to [contact email].'] },
-    { h: '7. Changes', p: ['A later phase will add a database and a server. This policy will be rewritten before that happens, and the date above will change.'] },
+    { h: '2. What we handle', p: ['Your public wallet address, when you connect a wallet. We never receive your private key or seed phrase.', 'Offers you create, tracking links you take and simulated conversions and payouts.'] },
+    { h: '3. Where it is stored', p: ['This information is kept in your own browser. The wallet you last connected is remembered in local storage. It is not sent to a Nativness server, and it is not shared across devices. Clearing your browser’s site data deletes it.'] },
+    { h: '4. What we do not collect', p: ['We do not ask for your name, email address, payment card or identity documents. We set no advertising or analytics cookies.'] },
+    { h: '5. Third parties', p: ['Fonts are loaded from Google Fonts, so your browser makes a request to Google when a page loads. Your wallet extension is provided by its own developer under its own privacy policy.', 'Blockchains are public. Any transaction a wallet makes on one is public and permanent. Nativness itself asks your wallet to make none.'] },
+    { h: '6. Your rights', p: ['Depending on where you live, you may have the right to access, correct, delete or object to the use of your personal data. Because this data stays in your browser, you can delete it yourself at any time. For anything else, write to [contact email].'] },
+    { h: '7. Changes', p: ['A later release will add a database and a server. This policy will be rewritten before that happens, and the date above will change.'] },
   ],
 }

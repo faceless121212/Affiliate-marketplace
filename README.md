@@ -36,14 +36,15 @@ This is a **prototype**.
 
 | | Status |
 |---|---|
-| Wallet login | **Real address, nothing signed.** Connects to an injected Phantom, Solflare or Backpack wallet and reads its public address. A demo wallet is offered when no extension is present. |
+| Wallet login | **Real address, nothing signed.** Discovers Solana wallets through the Wallet Standard and Ethereum wallets such as MetaMask through EIP-6963, with the older injected globals as a fallback. It reads the public address only and remembers the last wallet. |
 | Offers, links, conversions, payouts | **Real logic, in memory.** State resets on reload. |
 | Escrow balances | **Simulated.** Numbers in the page, not an on-chain fact. |
 | Conversions | **Simulated.** From the in-app simulator only. There is no postback endpoint. |
-| Demo offers | **Fictional.** Six invented advertisers with generated logos. |
+| Listed offers | **Fictional.** Six invented advertisers with generated logos. |
 | Terms of Use, Privacy Policy | **Drafts.** Not reviewed by a lawyer. Bracketed details must be completed before launch. |
 
-Both the landing page and the app carry a banner saying the same thing.
+The site itself no longer labels any of this as a demo, by the owner's decision. This table is the
+record of what is and is not real.
 
 ## History
 
