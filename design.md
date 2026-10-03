@@ -1,7 +1,8 @@
 # Landing page redesign
 
-**Status:** approved, not yet implemented
-**Date:** 2026-09-29
+**Status:** IMPLEMENTED and shipped to `main`. Everything below section 13 describes
+what the page is now, not a proposal.
+**Date:** 2026-09-29, status corrected 2026-10-03
 **Scope:** `app/page.tsx` and `components/landing/` only. No app screens, no design tokens, no dark mode.
 
 ---
@@ -221,3 +222,56 @@ The current page passes contrast on every rendered text node. That must hold. Sp
 - The **"Verified" badge**, which is a hardcoded seed boolean, always `false` for user-created offers and never defined in the UI. It is an unearned trust claim on a product arguing trust claims are worthless. It belongs to Phase 2b and is the owner's call, not this redesign's.
 - Any `/app` screen.
 - The Phase 2a data layer.
+
+---
+
+## 14. What shipped, and what a later design pass must not quietly break
+
+Added 2026-10-03, so a session picking this doc up cold does not mistake a
+finished page for a plan.
+
+**Four design decisions are enforced by tests, not by convention.** Changing any
+of them is legitimate; changing them *by accident* is what these stop.
+
+| Enforced by | What it holds |
+|---|---|
+| `components/landing/__tests__/section-shapes.test.tsx` | Six sections, declared `data-shape` values in the exact order `split, rail, bento, typesplit, band, centred`, no two neighbours alike, exactly one centred. This is section 4's governing rule made mechanical. |
+| `components/landing/__tests__/type-scale.test.ts` | No raw `text-[Npx]` anywhere under `components/landing/`. The scale is six semantic steps in `globals.css`. It had drifted to seventeen distinct sizes before this. |
+| `components/landing/__tests__/no-wallet-code.test.ts` | No `@solana` or `lib/wallet` import reachable from `app/page.tsx` or `components/landing/`. This is what holds landing JS at 252KB against a 300KB budget. |
+| `app/__tests__/landing.test.tsx` | The honesty guarantees: every competitor and market figure names its source, no numeric claim about Nativness's own marketplace, never a testimonial-style attributed quote, no em dash, and one label per destination 1:1. |
+
+**Generation lost to hand-authoring three times on this page.** Recorded so it is
+not attempted a fourth time without a reason:
+
+1. *Icons* — roughly 30 fal.ai generations across four styles returned 16-50KB
+   files with inconsistent stroke weight that turned to mush at 20px. Replaced by
+   hand-authored glyphs at ~200 bytes each (`components/ui/LandingIcon.tsx`).
+2. *Hero artwork* — three generations. The first returned a photographed room
+   corner with a horizon and a hard edge. The second, after tightening the
+   prompt, a flat uniform wash with no transparent edge to bleed off. The third
+   converged on a green blur on black, which is a radial gradient rendered as a
+   13KB raster with no alpha. Replaced by a four-layer CSS gradient mesh in
+   `Hero.tsx`.
+3. *Offer avatar marks* — traced from generated raster art, 182KB for eight
+   shapes, including a 21KB circle and a 46KB triangle, every one a solid
+   silhouette that became a coloured dot at 20px. Replaced by hand-authored
+   geometry at 1.1KB total (`components/ui/avatarMarks.generated.ts`, whose
+   `.generated` suffix is now historical — do not re-trace them).
+
+The pattern each time: generation is good at content and bad at precisely
+controlled decorative form, and every visual on this page is the latter at small
+sizes. A paper-grain texture was also generated and discarded for directional
+streaking; it is an `feTurbulence` filter in `globals.css` instead.
+
+**The wallet connect work was reverted** (`dc8be00`). An allow-list of three
+wallets narrowed sign-in so that anyone using another Solana-capable wallet could
+not sign in at all. `autoConnect` is therefore on again, and that is the
+behaviour that drew MetaMask's phishing warning on the deployed site. The site is
+on a `*.vercel.app` subdomain, a host with 2,096 subdomains on MetaMask's public
+blocklist, which a fresh subdomain requesting wallet access inherits. Known,
+deliberately not acted on.
+
+**Still open, and the owner's call:** the `Verified` badge is a hardcoded seed
+boolean, always `false` for anything a user creates, and is never defined in the
+UI. It is the one unearned trust claim on a product arguing trust claims are
+worthless. Section 13 leaves it out of scope; Phase 2b is scoped to fix it.
