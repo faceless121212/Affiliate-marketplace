@@ -1,11 +1,11 @@
 # Nativness
 
-A Solana-native affiliate marketplace where the commission budget is locked in escrow before
-the offer goes live. Affiliates see a guaranteed balance instead of a promise; a confirmed
-conversion releases payment to the affiliate's wallet.
+An affiliate marketplace where the commission budget is locked in escrow before the offer goes
+live. Affiliates see a guaranteed balance instead of a promise, and a confirmed conversion
+releases payment to the affiliate's wallet.
 
-One login, both sides. Connecting a wallet creates a single identity that can promote
-other people's offers and list its own — there is no separate affiliate or advertiser account.
+One login, both sides. Connecting a wallet creates a single identity that can promote other
+people's offers and list its own.
 
 ## Running it
 
@@ -14,125 +14,39 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:3000. You need a Solana wallet extension (Phantom, Solflare or
-Backpack) set to **devnet**. Nothing of value moves: the wallet is an identity here, not a
-payment rail.
+Then open the URL Vite prints. `npm run build` type-checks and builds for production.
 
-```bash
-npm test          # 116 unit and component tests (Vitest 5)
-npm run lint       # ESLint
-npx tsc --noEmit   # type-check
-npm run build      # production build
-```
+Built with Vite, React 18 and TypeScript. Styling is plain CSS in a white, black and lime palette.
 
-Built on Next.js 16.3.6 (App Router, Turbopack) with React 19.2.8, Tailwind v4, and Vitest 5.
+## What is in here
+
+| Route | What it is |
+|---|---|
+| `#/` | Landing page |
+| `#/app` | Marketplace: browse offers, take tracking links, simulate conversions, list and top up offers |
+| `#/blog`, `#/blog/<slug>` | Blog index and posts |
+| `#/terms`, `#/privacy` | Draft legal pages |
+
+Source lives in `src/`. Copy for the blog and legal pages is in `src/content.ts`, demo offers in
+`src/data.ts`, and the wallet connector in `src/wallet.ts`.
 
 ## What is real, and what is not
 
-This is **Phase 1: frontend only**. Being precise about the boundary:
+This is a **prototype**.
 
 | | Status |
 |---|---|
-| Wallet login | **Real.** `@solana/wallet-adapter-react` on devnet. The address is the account. |
-| Offers, links, conversions, payouts | **Real logic, local persistence.** State lives in `localStorage`. |
-| Escrow balances | **Simulated.** A number in `localStorage`, not an on-chain fact. |
+| Wallet login | **Real address, nothing signed.** Connects to an injected Phantom, Solflare or Backpack wallet and reads its public address. A demo wallet is offered when no extension is present. |
+| Offers, links, conversions, payouts | **Real logic, in memory.** State resets on reload. |
+| Escrow balances | **Simulated.** Numbers in the page, not an on-chain fact. |
 | Conversions | **Simulated.** From the in-app simulator only. There is no postback endpoint. |
-| Verified tier | **Real field, seeded values.** Two demo offers are Verified. Users cannot self-verify; there is no review path yet. |
+| Demo offers | **Fictional.** Six invented advertisers with generated logos. |
+| Terms of Use, Privacy Policy | **Drafts.** Not reviewed by a lawyer. Bracketed details must be completed before launch. |
 
-The app carries a permanent banner saying the same thing. It is not dismissible.
+Both the landing page and the app carry a banner saying the same thing.
 
-### Known limits
+## History
 
-- **Persistence is per-browser.** Reconnecting the same address returns you to the same account
-  *in the same browser profile*. Cross-device continuity needs the Phase 2 database.
-- **The wallet gate is client-side.** There is no server session and nothing secret behind it,
-  so this is not a security hole — but it is not authentication either.
-- **No attribution integrity.** With no postback endpoint there are no duplicate-conversion
-  checks. Deferred deliberately to Phase 2.
-- **Devnet only.** No mainnet, no real funds.
-- **The dependency tree has known-vulnerable packages.** `npm audit` reports 12 advisories, all
-  moderate severity, transitive via `@solana/web3.js` and the wallet-adapter tree. This was 97
-  advisories (13 critical or high) until `@solana/wallet-adapter-wallets` — unused, since
-  `WalletProvider wallets={[]}` (see `lib/wallet/provider.tsx`) means wallet-standard wallets
-  self-register and nothing in this repo imports it — was removed; that one package pulled in
-  the WalletConnect and mobile-adapter subtrees responsible for most of the critical and high
-  findings. The remaining moderate advisories (`stream-json`, `uuid`, both transitive via
-  `jayson`) trace back to `@solana/web3.js` itself; `npm audit` reports no fix available for any
-  of them. **This must be resolved before mainnet or any handling of real funds.** The realistic
-  path is migrating to [`@solana/kit`](https://github.com/anza-xyz/kit), the v2 rewrite with a
-  far smaller dependency tree.
-
-### Demo data
-
-Six fictional offers seed on first load, across ecommerce, iGaming, dating and SaaS. No real
-brand names are used. Two are Verified; one (Fenwick Grounds) is nearly exhausted and one
-(Halcyon Tools) has zero escrow, so both degraded states are visible without simulating your
-way there. The landing page's hero states the escrow still locked across these six offers (the
-sum of their `escrowRemainingUsd`, computed from the store) and shows one of them draining in
-`LiveEscrowDemo`, which reuses the app's `EscrowMeter`. It is real seed data, labelled honestly
-as the demo marketplace's, not a claim about Nativness's own traction.
-
-**The landing page's social-proof quotes (`components/landing/SocialProof.tsx`) are
-placeholders.** Nativness has no customers yet, so every name, company and quote there is
-invented — in the same spirit as the fictional seed offers, never a real person or company —
-and the section carries a visible "Illustrative examples" label saying so. Swap each quote for
-a real one the moment there is a real user to quote; the file's header comment repeats this
-note next to the data.
-
-## Icons and assets
-
-- `app/icon.svg` is the app icon, used by the Next.js `icon` convention.
-- `components/ui/CategoryIcon.tsx` holds six hand-authored category glyphs — inline SVG, no
-  network request, tintable via `currentColor` so they inherit the design tokens.
-- `scripts/generate-icons.mjs` is a [fal.ai](https://fal.ai) entry point for future raster
-  assets. It reads `FAL_KEY` from the environment and embeds no credential. `.env*` is
-  gitignored; no key belongs in this repo.
-
-## Architecture
-
-```
-app/                    routes — landing at /, app behind /app, tracking redirect at /r
-components/landing/     landing page sections
-components/app/         marketplace UI
-components/ui/          primitives — Money and Address own all mono/tabular rendering
-lib/store/              the repository seam — the only place that touches localStorage
-lib/wallet/             Solana wallet adapter wiring
-```
-
-**The repository seam is the important part.** Components import from `@/lib/store` and never
-reach deeper. Those function signatures — `listOffers`, `createOffer`, `issueLink`,
-`recordConversion` — are deliberately shaped like the REST API that replaces them, so Phase 2
-swaps *implementations* without touching a single component's imports. `lib/store/users.ts`
-holds the one function on that seam that manages identity (`ensureUser`), alongside
-`offers.ts`, `links.ts`, `conversions.ts`, `storage.ts` and `seed.ts`.
-
-That said, every seam function today is synchronous — `listOffers(): Offer[]`, not
-`Promise<Offer[]>` — because `localStorage` is synchronous. Components call these directly
-from render and from bare `useMemo`. Phase 2's real API is necessarily async, so converting the
-seam to return promises *is* a change that reaches every call site: each one needs a loading
-state and an error state it does not have today. That conversion should be the first thing
-Phase 2 does, before anything else changes.
-
-**The tracking redirect is a client page, not a route handler:**
-`app/r/[offerId]/[wallet]/page.tsx`. In Phase 1, click counts live in `localStorage`, and a
-server route handler cannot read it — only client-side JavaScript can. It still does real work:
-it records the click and forwards the visitor to the offer's target URL. Phase 2 converts it to
-a server route once clicks move to the database, where a server can read them directly.
-
-## Phase 2
-
-Planned, not built:
-
-- Real database for offers, links, conversions, payouts and wallets.
-- A postback endpoint an advertiser's backend can call to confirm a conversion, with
-  duplicate-conversion checks. The simulator stays alongside it as a testing tool.
-- On-chain escrow via [`solana-marketplace-escrow`](https://github.com/topics/solana-escrow)
-  (non-custodial, arbiter-mediated, x402 support) — integrated, not reimplemented. A custom
-  Anchor program is explicitly out of scope.
-- A review path for Verified status.
-- API auth tied to the wallet via a signed message.
-
-## Documents
-
-- Design spec: `docs/superpowers/specs/2026-09-26-nativness-design.md`
-- Implementation plan: `docs/superpowers/plans/2026-09-26-nativness-phase1.md`
+This replaces the earlier Next.js prototype, which had wallet-adapter login, `localStorage`
+persistence and a Vitest suite. That code is in the git history before this change. The original
+specs and plans are kept in `docs/`.
