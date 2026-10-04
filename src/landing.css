@@ -210,7 +210,7 @@
 .lp-md { width: 100%; display: flex; flex-direction: column; gap: 16px; }
 .lp-md h2 { font-size: 26px; letter-spacing: -0.03em; line-height: 1.15; margin-top: 22px; }
 .lp-md p, .lp-md li { font-size: 17px; line-height: 1.65; color: #262626; }
-.lp-md > p:first-child { font-size: 14px; color: #747474; }
+.lp-md > p:first-child { font-size: 21px; line-height: 1.5; color: #000; }
 .lp-md em { color: #747474; }
 .lp-md ul, .lp-md ol { padding-left: 22px; display: flex; flex-direction: column; gap: 8px; }
 .lp-md a { text-decoration: underline; text-decoration-color: #c3ff00; text-decoration-thickness: 2px; text-underline-offset: 3px; }
@@ -224,3 +224,16 @@
 .lp-table td:first-child { font-weight: 600; }
 .lp-md pre { width: 100%; background: #0a0a0a; color: #f0f0f0; border-radius: 12px; padding: 18px 20px; overflow-x: auto; font-size: 13.5px; line-height: 1.6; }
 .lp-md pre code { background: none; border: 0; padding: 0; color: inherit; font-size: inherit; word-break: normal; white-space: pre; }
+
+/* Readable article rhythm */
+.lp-prose { max-width: 720px; }
+.lp-md { gap: 18px; }
+.lp-md p, .lp-md li { font-size: 18px; line-height: 1.7; }
+.lp-md h2 { font-size: 30px; margin-top: 34px; }
+.lp-md strong { font-weight: 700; color: #000; }
+.lp-md blockquote { background: #f6ffd6; border-left: 5px solid #c3ff00; border-radius: 0 12px 12px 0; padding: 16px 20px; }
+.lp-md blockquote p { font-size: 18px; color: #000; }
+.lp-md ol li::marker { font-weight: 700; }
+.lp-table table { min-width: 560px; font-size: 15px; }
+.lp-table td strong { color: #ed5023; }
+.lp-md h2 + p { margin-top: -6px; }

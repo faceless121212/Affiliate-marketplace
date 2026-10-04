@@ -59,7 +59,7 @@ export function BlogPost({ slug }: { slug: string }) {
         <a href="#/blog" className="lp-back">← All posts</a>
         <span className="lp-post-tag">{p.tag}</span>
         <h1>{p.title}</h1>
-        {!p.html && <small>{p.date} · {p.minutes} min read</small>}
+        <small>{p.html ? 'By the Nativness team · ' : ''}{p.date} · {p.minutes} min read</small>
         <img src={`/img/${p.img}.jpg`} alt="" />
         {p.html
           ? <div className="lp-md" dangerouslySetInnerHTML={{ __html: p.html }} />

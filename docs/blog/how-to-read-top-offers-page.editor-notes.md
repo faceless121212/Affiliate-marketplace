@@ -72,3 +72,7 @@ Check claim 19 against this list. "Eight considered, six used" counts the six de
 - One "Where Nativness fits" section, 84 words, with the devnet statement.
 - No em dashes, exclamation marks, banned words, Amazon prices or ratings.
 - Claims verified against a page opened this run: 18. Left unverified: the per-100-clicks convention, flagged above.
+
+## Rewrite, October 4, 2026
+
+The published article in `src/posts/` was rewritten in a conversational style at the owner's request, after reviewing how Ahrefs and Shopify write on similar topics. It is shorter than the original word target, paraphrases most quotations, and moves the publisher note and sources to the end. The facts and sources are unchanged. The claims table above still lists what each statement rests on.

@@ -28,3 +28,7 @@ This article describes our own method, so most claims are about this blog and ca
 - metaTitle 48 characters, description within 155.
 - One "Where Nativness fits" section, 80 words.
 - No em dashes, exclamation marks or banned words.
+
+## Rewrite, October 4, 2026
+
+The published article in `src/posts/` was rewritten in a conversational style at the owner's request, after reviewing how Ahrefs and Shopify write on similar topics. It is shorter than the original word target, paraphrases most quotations, and moves the publisher note and sources to the end. The facts and sources are unchanged. The claims table above still lists what each statement rests on.

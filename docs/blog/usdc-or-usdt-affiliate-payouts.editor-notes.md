@@ -48,3 +48,7 @@ Each page was fetched during this run and read through an automated summarizer a
 - Every table row has source links. One "Where Nativness fits" section, 92 words.
 - No em dashes, exclamation marks or banned words.
 - Claims verified against a page opened this run: 13. Unverified items are listed above.
+
+## Rewrite, October 4, 2026
+
+The published article in `src/posts/` was rewritten in a conversational style at the owner's request, after reviewing how Ahrefs and Shopify write on similar topics. It is shorter than the original word target, paraphrases most quotations, and moves the publisher note and sources to the end. The facts and sources are unchanged. The claims table above still lists what each statement rests on.

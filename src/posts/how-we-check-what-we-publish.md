@@ -1,121 +1,59 @@
 ---
-title: "How we build and check our lists and comparisons"
+title: "How we check what we publish"
 slug: how-we-check-what-we-publish
-metaTitle: "How we build and check our lists and comparisons"
-description: "The rules behind every Nativness article: company pages only, opened on the day, no affiliate links, no rankings, and what we got wrong."
-primaryKeyword: how we check our affiliate program lists
-secondaryKeywords: [editorial policy, affiliate content methodology, source checking, no affiliate links]
+metaTitle: "How we check what we publish"
+description: "Five rules behind every article on this blog, and three things we've already got wrong."
+primaryKeyword: how we check what we publish
 audience: Affiliates and advertisers
 author: "the Nativness team"
 cover: blog-method
 published: 2026-10-03
-updated: 2026-10-03
-readingTime: 5.5 min
+updated: 2026-10-04
+readingTime: 2 min
 ---
 
-# How we build and check our lists and comparisons
+Here's a game. Pick any "best affiliate programs" list and try to find where one commission rate came from.
 
-By the Nativness team · Published October 3, 2026 · Updated October 3, 2026 · 5.5 min read
+Usually you can't. One site printed it, ten more copied it, and two years later nobody knows if it was ever true.
 
-*Nativness publishes this page. Nativness is a devnet prototype with simulated escrow and no live offers or payout data, nothing here is ranked by performance, and we earn nothing from the links on this page.*
+We didn't want to add to that pile. So this blog runs on five rules.
 
-Every number, date and quote on this blog comes from the company's own page, opened on the day we wrote the article. If the page is silent or blocked, we write "not published" and move on. We carry no affiliate links, we rank nothing by performance, and we keep a note of every claim so we can be corrected.
+## The five rules
 
-## Key takeaways
+**1. We go to the source.** A rate, a fee or a policy comes from the company that sets it. Not from another blog's list.
 
-- We use a company's own terms, pricing, help or policy page, never a third-party list.
-- A claim we cannot open on the day does not go in.
-- Lists are ordered by a rule we state, such as alphabetical order, and never by "what converts".
-- We earn nothing from any link, and there are no affiliate links on this blog.
-- We have already found weak spots in our own method, and this page lists them.
+**2. We open it that day.** If we can't load the page while writing, the claim doesn't go in. No filling gaps from memory.
 
-## The rules, and where you can see them
+**3. We'd rather leave a gap than guess.** If a company's page doesn't say, we tell you it doesn't say.
 
-Checked October 3, 2026
+**4. No affiliate links.** A page that compares programs shouldn't be paid by the programs it compares. Every link here is a plain link.
 
-| Rule | What it means in practice | Where you can see it | Source |
-|---|---|---|---|
-| Company pages only | A rate, fee or quote comes from the company that sets it | The "Sources" list at the foot of each article | [Top offers article](#/blog/how-to-read-top-offers-page) |
-| Opened on the day | Each table carries a "Checked" date | The line above every table | [Stablecoin article](#/blog/usdc-or-usdt-affiliate-payouts) |
-| "Not published" beats a guess | An empty cell says so | The USDC and USDT table has four such cells | [Stablecoin article](#/blog/usdc-or-usdt-affiliate-payouts) |
-| No affiliate links | Every link is a plain link | Hover any link on this blog | [FTC FAQ](https://www.ftc.gov/business-guidance/resources/ftcs-endorsement-guides-what-people-are-asking) |
-| No performance rankings | Order follows a stated rule | The "How we chose and checked" section | [Roundup article](#/blog/amazon-top-10-roundup-rules) |
-| Conflict stated up front | One italic sentence under the byline | The top of every article | This page |
+**5. No "best" without proof.** We have no performance data, so we don't rank by performance. Lists follow a rule we tell you, like alphabetical order.
 
-## How we chose and checked
+## What that looks like in practice
 
-This page describes the three research articles on this blog as of October 3, 2026, and the rules they were written under. We reread all three against the rules above before writing this. The one outside page we opened for this article is the FTC's FAQ, for its wording on paid links.
+When we compared [USDC and USDT](#/blog/usdc-or-usdt-affiliate-payouts), we couldn't open Tether's reserve reports. So that row isn't in the table, and the article says why.
 
-## Why only the company's own page?
+When we wrote about [top offers pages](#/blog/how-to-read-top-offers-page), several blogs said some networks quote earnings per 100 clicks. We couldn't confirm it on those networks' own pages. So the article says exactly that.
 
-Because lists copy lists. One site prints a commission rate, ten more repeat it, and two years later nobody can say where it came from.
+It makes for a few awkward sentences. We think that's better than confident nonsense.
 
-We hit this ourselves. While researching how networks quote earnings per click, several third-party pages said some networks quote it per 100 clicks. We could not open those networks' own pages to confirm it. So the article says exactly that, and tells you to check.
+## Three things we've got wrong so far
 
-A company's own terms page can be wrong or out of date too. But it is the page you would be held to, so it is the one worth quoting.
+We'd rather tell you ourselves.
 
-## What happens when a page will not load?
+1. **We read sources through a tool.** An AI model helps us research and draft, and it summarizes pages for us. Until a person rechecks a quote, treat our quotation marks as "reported", not "certified".
+2. **Sources contradict themselves.** ClickBank's help center gives one metric a 90-day window. One of its blog posts says 12 weeks. When that happens, we show you both.
+3. **"We didn't find it" isn't proof.** It only means it wasn't on the pages we opened that day.
 
-The claim comes out. We do not fill the gap from memory.
+## How to check us
 
-In the stablecoin comparison, Tether's reserve reports sit in a tab our reading tool could not open. The table says "not published on the page we opened". That cell is probably unfair to Tether, and our notes flag it for a manual check. An honest gap seemed better than a confident guess.
+Click through. Every article ends with the pages we used and the date we read them.
 
-## Why are there no affiliate links here?
+If a rate has changed since then, the source wins and we're out of date. Terms move. That's why the date is there.
 
-Because a page that compares programs should not be paid by the programs it compares.
+## About this blog
 
-If that ever changes, you will see it. The FTC's FAQ says "'Paid link' right next to an affiliate link should be an adequate disclosure of the nature of the link." That is the label we would use, beside the link, not in a footer.
+Nativness publishes this blog. It's a devnet prototype with simulated escrow and no real money, users or sales. That's exactly why we show our sources: a marketplace with no track record can't ask you to take its word for anything.
 
-## How do we order a list?
-
-By a rule we print. Alphabetical, by commission rate, by date. Pick one, say it, stick to it.
-
-What we will not do is call something "the best" because it sounds good. We have no performance data. Nativness is a prototype with no sales to measure. Anyone who ranks offers "by conversion" without showing the data is asking you to trust them. We would sooner show you how to read the numbers yourself.
-
-## Which topics do we leave out?
-
-Gambling, adult content, dating, supplements and make-money-online programs. We do not use them as examples.
-
-That choice cost us something. One article studied two marketplaces' monthly offer pages, and many of the offers on those pages fall into those groups. So we named no offers at all and used a made-up online course to show the arithmetic.
-
-## What have we got wrong so far?
-
-Three things worth admitting.
-
-1. We read source pages through a summarizing tool that is asked to quote word for word. We do not always see the raw page. Until a person rechecks each quote, treat our quotation marks as "reported", not "certified".
-2. Two source pages on the same site sometimes disagree. ClickBank's help center gives one metric a 90-day window, and one of its blog posts says 12 weeks. We print both and say where each came from.
-3. A missing page proves little. When we say we "did not find" a document, that is a statement about the pages we opened that day.
-
-## How can you check us?
-
-Click through. Every table row has a link to the page it came from.
-
-If a rate has changed since our "Checked" date, the source wins and we are out of date. Terms move. That is why the date sits above every table and not at the bottom of the page.
-
-## What this page does not cover
-
-It does not cover how the Nativness product works, or how offers would be reviewed on the marketplace. It is not a legal policy. It does not promise how often articles are updated, because we have not yet kept a schedule long enough to promise one.
-
-## Where Nativness fits
-
-Nativness is a devnet prototype. Its escrow is simulated, its offers are demo offers, and it has no real money, users, sales or payout data.
-
-That is the reason for these rules. A marketplace with no track record cannot ask to be trusted on its word, so the blog shows its sources. A locked commission budget is the same idea in product form: show the reader the thing itself. It would not make an article accurate. Only checking does that.
-
-## FAQ
-
-**Do you accept payment to include a program?**
-No. Nothing on this blog is paid for, and no link earns us money.
-
-**Why do some table cells say "not published"?**
-Because the company's page did not state the fact, or the page would not open. We would rather show the gap than fill it.
-
-**Who writes the articles?**
-The Nativness team, with research and drafting help from an AI model. A person must recheck the quotes before they count as verified.
-
-**Will you tell me which program is best?**
-No. We have no performance data, and "best" depends on your audience. We show the terms and how to read them.
-
-## Sources
-
-- [FTC: FTC's Endorsement Guides: What People Are Asking](https://www.ftc.gov/business-guidance/resources/ftcs-endorsement-guides-what-people-are-asking)
+Nothing here is paid for, and no link earns us money.

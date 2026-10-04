@@ -47,3 +47,7 @@ Written in a livelier creator voice at the owner's request, using the plain-lang
 - Twelve table rows, each with a source link. Fill-in template included.
 - One "Where Nativness fits" section, 87 words.
 - Claims verified against a page opened this run: 12 groups. Unverified items listed above.
+
+## Rewrite, October 4, 2026
+
+The published article in `src/posts/` was rewritten in a conversational style at the owner's request, after reviewing how Ahrefs and Shopify write on similar topics. It is shorter than the original word target, paraphrases most quotations, and moves the publisher note and sources to the end. The facts and sources are unchanged. The claims table above still lists what each statement rests on.
