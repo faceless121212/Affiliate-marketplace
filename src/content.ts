@@ -68,51 +68,8 @@ function fromMarkdown(raw: string): Post {
 const ARTICLES: Post[] = Object.values(files).map(fromMarkdown).sort((a, b) => Number(b.order ?? 0) - Number(a.order ?? 0) || a.slug.localeCompare(b.slug))
 
 
-const NOTES: Post[] = [
-  {
-    slug: 'why-escrow-first', tag: 'Product', date: '3 October 2026', minutes: 3, img: 'blog-escrow',
-    title: 'Why the budget is locked before the offer goes live',
-    excerpt: 'Affiliate marketing asks affiliates to work first and trust later. Escrow reverses the order.',
-    body: [
-      'In a typical affiliate programme the affiliate spends money and time first. They buy traffic, write content and build creative. Payment comes later, on the network’s schedule, and only if the advertiser is still willing and able to pay.',
-      { h: 'The risk sits with the wrong side' },
-      'The advertiser knows whether the budget exists. The affiliate does not. A commission rate on a page is a promise, and a promise costs nothing to make.',
-      'Nativness changes the order. An advertiser funds the commission budget before the offer is visible to anyone. The offer page then shows the balance that is still locked, not a rate and a hope.',
-      { h: 'What that changes for affiliates' },
-      'You can read how many payouts an offer can still fund before you spend anything. If the balance is nearly gone, you can see that too and decide not to invest in creative.',
-    ],
-  },
-  {
-    slug: 'reading-an-escrow-balance', tag: 'For affiliates', date: '3 October 2026', minutes: 2, img: 'blog-balance',
-    title: 'How to read an escrow balance before you promote',
-    excerpt: 'Three numbers tell you whether an offer can pay: what is left, what one conversion costs, and how many payouts remain.',
-    body: [
-      'Every offer on Nativness shows the same three figures. Together they answer one question: can this offer still pay me?',
-      { h: 'Remaining, not deposited' },
-      'The headline figure is what is still locked. Money already paid to other affiliates is not counted. An offer that deposited a large budget months ago may have very little left.',
-      { h: 'Payouts it can still fund' },
-      'Divide the remaining balance by the commission per conversion. That is the number of conversions the offer can pay for today. A high commission with a small balance funds only a handful.',
-      { h: 'Nearly spent and empty' },
-      'When a balance drops to a tenth of its deposit, the meter turns orange. When it cannot cover one more conversion, the offer stops handing out links. Top-ups are at the advertiser’s discretion, so check before each campaign, not only the first.',
-    ],
-  },
-  {
-    slug: 'writing-conversion-terms', tag: 'For advertisers', date: '3 October 2026', minutes: 2, img: 'blog-terms',
-    title: 'Writing conversion terms affiliates can trust',
-    excerpt: 'A funded budget only helps if both sides agree on what releases it. Say exactly what counts.',
-    body: [
-      'Escrow settles whether the money exists. Your terms settle when it moves. Vague terms put the doubt straight back.',
-      { h: 'Name the event' },
-      'State the single event that counts. “A paid plan still active on day 30” is a term. “A quality signup” is not.',
-      { h: 'Name what is rejected' },
-      'If trials that lapse, duplicate accounts or incentivised traffic do not count, write that down. Rejected conversions do not draw down escrow, and affiliates should know that before they send traffic.',
-      { h: 'Keep the balance honest' },
-      'If you do not plan to top up, say so. Affiliates will see the balance fall either way. Telling them first is what earns the next campaign.',
-    ],
-  },
-]
+export const POSTS: Post[] = ARTICLES
 
-export const POSTS: Post[] = [...ARTICLES, ...NOTES]
 
 export type Doc = { title: string; updated: string; intro: string; sections: { h: string; p: string[] }[] }
 
