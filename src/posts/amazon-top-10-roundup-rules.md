@@ -20,6 +20,8 @@ The good news: the safe version of that post is also the better one. Here's what
 
 > **The short version.** Show your own picks, your own photos and your own opinions. Link plainly to Amazon. Never type a price, a star rating or a customer review by hand. And tell readers you get paid, right above the list.
 
+[[toc]]
+
 ## The cheat sheet
 
 | In your roundup | Okay? | The catch |

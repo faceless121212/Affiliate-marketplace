@@ -1,12 +1,49 @@
 import { marked } from 'marked'
 
-export type Post = { slug: string; title: string; excerpt: string; img: string; date: string; minutes: number; tag: string; body: (string | { h: string })[]; html?: string }
+export type Post = { slug: string; title: string; excerpt: string; img: string; date: string; minutes: number; tag: string; body: (string | { h: string })[]; html?: string; order?: string }
 
 // Long-form articles live as markdown in src/posts, with front matter for the card.
 const files = import.meta.glob('./posts/*.md', { query: '?raw', import: 'default', eager: true }) as Record<string, string>
 
 const longDate = (iso: string) =>
   new Date(`${iso}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
+
+type TocItem = { id: string; text: string; depth: number }
+let toc: TocItem[] = []
+
+const escapeHtml = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+const slugify = (t: string) => t.toLowerCase().replace(/<[^>]+>/g, '').replace(/&[a-z]+;/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+
+// A fenced block tagged "score" becomes a score card:
+//   Setup speed: 4
+//   Cost to start: 5
+function scoreCard(text: string) {
+  const rows = text.trim().split('\n').map(l => l.split(':').map(x => x.trim())).filter(r => r.length === 2 && r[1] !== '')
+  const total = rows.reduce((n, r) => n + Number(r[1]), 0)
+  const bars = rows.map(([label, value]) =>
+    `<div class="lp-score-row"><span>${escapeHtml(label)}</span><i>${[1, 2, 3, 4, 5].map(n => `<b class="${n <= Number(value) ? 'on' : ''}"></b>`).join('')}</i><em>${escapeHtml(value)}/5</em></div>`).join('')
+  return `<div class="lp-score">${bars}<div class="lp-score-total"><span>Score</span><strong>${total}<small>/${rows.length * 5}</small></strong></div></div>`
+}
+
+function tocHtml(items: TocItem[]) {
+  const links = items.map(i => `<li class="d${i.depth}"><a href="#" data-toc="${i.id}">${i.text}</a></li>`).join('')
+  return `<nav class="lp-toc" aria-label="Table of contents"><p>In this article</p><ul>${links}</ul></nav>`
+}
+
+marked.use({
+  renderer: {
+    heading({ tokens, depth }) {
+      const inner = this.parser.parseInline(tokens)
+      const id = slugify(inner)
+      if (depth === 2 || (depth === 3 && /^\d+\./.test(inner))) toc.push({ id, text: inner, depth })
+      return `<h${depth} id="${id}">${inner}</h${depth}>\n`
+    },
+    code({ text, lang }) {
+      if (lang === 'score') return scoreCard(text)
+      return `<pre><code>${escapeHtml(text)}</code></pre>\n`
+    },
+  },
+})
 
 function fromMarkdown(raw: string): Post {
   const [, front = '', text = ''] = raw.split(/^---\s*$/m)
@@ -16,17 +53,19 @@ function fromMarkdown(raw: string): Post {
     if (m) meta[m[1]] = m[2].replace(/^"(.*)"$/, '$1').replace(/\\"/g, '"')
   }
   const article = text.replace(/^\s*# .*$/m, '').trim()
+  toc = []
   const html = (marked.parse(article, { async: false }) as string)
+    .replace(/<p>\[\[toc\]\]<\/p>/, () => tocHtml(toc))
     .replace(/<a href="http/g, '<a target="_blank" rel="noopener noreferrer" href="http')
     .replace(/<table>/g, '<div class="lp-table"><table>')
     .replace(/<\/table>/g, '</table></div>')
   return {
     slug: meta.slug, title: meta.title, excerpt: meta.description, img: meta.cover, tag: `For ${meta.audience.toLowerCase()}`,
-    date: longDate(meta.published), minutes: parseFloat(meta.readingTime), body: [], html,
+    date: longDate(meta.published), minutes: parseFloat(meta.readingTime), body: [], html, order: meta.order,
   }
 }
 
-const ARTICLES: Post[] = Object.values(files).map(fromMarkdown).sort((a, b) => a.slug.localeCompare(b.slug))
+const ARTICLES: Post[] = Object.values(files).map(fromMarkdown).sort((a, b) => Number(b.order ?? 0) - Number(a.order ?? 0) || a.slug.localeCompare(b.slug))
 
 
 const NOTES: Post[] = [

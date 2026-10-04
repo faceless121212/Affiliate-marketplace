@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { MouseEvent, ReactNode } from 'react'
 import { Logo, Footer } from './Landing'
 import { POSTS, type Doc } from './content'
 
@@ -53,18 +53,49 @@ export function BlogIndex() {
 export function BlogPost({ slug }: { slug: string }) {
   const p = POSTS.find(x => x.slug === slug)
   if (!p) return <BlogIndex />
+  if (!p.html) {
+    return (
+      <Shell>
+        <article className="lp-wrap lp-page lp-prose">
+          <a href="#/blog" className="lp-back">← All posts</a>
+          <span className="lp-post-tag">{p.tag}</span>
+          <h1>{p.title}</h1>
+          <small>{p.date} · {p.minutes} min read</small>
+          <img src={`/img/${p.img}.jpg`} alt="" />
+          {p.body.map((b, i) => typeof b === 'string' ? <p key={i}>{b}</p> : <h2 key={i}>{b.h}</h2>)}
+          <a href="#/app" className="lp-btn lp-btn-lime lp-btn-lg">Browse funded offers</a>
+        </article>
+      </Shell>
+    )
+  }
+  // Table of contents links scroll in place, because the hash is used for routing.
+  const onTocClick = (e: MouseEvent<HTMLDivElement>) => {
+    const link = (e.target as HTMLElement).closest<HTMLElement>('[data-toc]')
+    if (!link) return
+    e.preventDefault()
+    const el = document.getElementById(link.dataset.toc!)
+    const header = document.querySelector<HTMLElement>('.lp-header')?.offsetHeight ?? 0
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - header - 16, behavior: 'smooth' })
+  }
   return (
     <Shell>
-      <article className="lp-wrap lp-page lp-prose">
+      <header className="lp-arthero" style={{ backgroundImage: `url(/img/${p.img}.jpg)` }}>
+        <div className="lp-arthero-in">
+          <span className="lp-arthero-tag">{p.tag}</span>
+          <h1>{p.title}</h1>
+          <p>By the Nativness team · {p.date} · {p.minutes} min read</p>
+        </div>
+      </header>
+      <article className="lp-wrap lp-page lp-prose lp-article">
         <a href="#/blog" className="lp-back">← All posts</a>
-        <span className="lp-post-tag">{p.tag}</span>
-        <h1>{p.title}</h1>
-        <small>{p.html ? 'By the Nativness team · ' : ''}{p.date} · {p.minutes} min read</small>
-        <img src={`/img/${p.img}.jpg`} alt="" />
-        {p.html
-          ? <div className="lp-md" dangerouslySetInnerHTML={{ __html: p.html }} />
-          : p.body.map((b, i) => typeof b === 'string' ? <p key={i}>{b}</p> : <h2 key={i}>{b.h}</h2>)}
-        <a href="#/app" className="lp-btn lp-btn-lime lp-btn-lg">Browse funded offers</a>
+        <div className="lp-md" onClick={onTocClick} dangerouslySetInnerHTML={{ __html: p.html }} />
+        <aside className="lp-cta">
+          <div>
+            <h2>See what a funded offer looks like</h2>
+            <p>Every offer on Nativness shows the commission budget that is still locked in escrow.</p>
+          </div>
+          <a href="#/app" className="lp-btn lp-btn-lime lp-btn-lg">Browse offers</a>
+        </aside>
       </article>
     </Shell>
   )

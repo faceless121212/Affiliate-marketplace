@@ -20,6 +20,8 @@ It does, but probably not for the reason you think. The real question isn't whic
 
 > **The short version.** Pick the one your exchange or payment app lets you cash out to your bank. Check the network too, not just the coin. If you live in the EU, check what your provider still supports before you say yes.
 
+[[toc]]
+
 ## First, a surprise: you can't cash out with the issuer
 
 Both coins promise you can swap one token for one dollar. Here's the part people miss. That promise is for the issuer's own customers, and you almost certainly aren't one.

@@ -20,6 +20,8 @@ Stop there. That number isn't a promise. It isn't even about you. Let's unpack w
 
 > **The short version.** EPC, APV, AOV and hop conversion are averages from other people's traffic. The two monthly pages we checked don't say how offers get on the list or which dates the numbers cover. Treat them as a list of questions, not a forecast.
 
+[[toc]]
+
 ## The four numbers, in plain English
 
 | You see | It means | Think of it as |
