@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { SEED_OFFERS, CATEGORIES, money, categoryLabel, payoutsLeft, type Offer, type Category } from './data'
 import { detectWallets, onWalletsChanged, rememberWallet, rememberedWallet, shortAddress, type WalletOption } from './wallet'
+import { rememberRole, rememberedRole, type Role } from './role'
 import './app.css'
 
 type Tab = 'offers' | 'my' | 'links' | 'conversions'
-export type Role = 'affiliate' | 'provider'
 type Link = { id: string; offerId: string; affiliate: string }
 type Payout = { id: string; offerId: string; amountUsd: number; affiliate?: string; seeded?: boolean }
 type ReportStatus = 'pending' | 'approved' | 'partial' | 'declined'
@@ -17,9 +17,6 @@ type Report = {
 }
 const ACTIONS = ['Registered', 'Deposited', 'Purchased', 'Booked a demo', 'Other']
 const STATUS_LABEL: Record<ReportStatus, string> = { pending: 'Waiting for review', approved: 'Approved and paid', partial: 'Partly approved', declined: 'Declined' }
-const ROLE_KEY = 'nativness.role'
-const rememberedRole = (): Role | null => { try { return localStorage.getItem(ROLE_KEY) as Role | null } catch { return null } }
-const rememberRole = (r: Role) => { try { localStorage.setItem(ROLE_KEY, r) } catch { /* storage unavailable */ } }
 const when = (t: number) => new Date(t).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
 
 // One payout per conversion the listed offers have already paid, newest first.
@@ -116,7 +113,7 @@ export default function MarketApp({ refId }: { refId?: string } = {}) {
   const [menu, setMenu] = useState<WalletOption[] | null>(null)
   const [busy, setBusy] = useState(false)
   const [role, setRole] = useState<Role | null>(rememberedRole)
-  const [tab, setTab] = useState<Tab>(() => (rememberedRole() === 'provider' ? 'conversions' : 'offers'))
+  const [tab, setTab] = useState<Tab>(() => (rememberedRole() === 'provider' ? 'my' : 'offers'))
   const [cat, setCat] = useState<Category | 'all' | 'verified' | 'funded'>('all')
   const [query, setQuery] = useState('')
   const [featuredId, setFeaturedId] = useState('meridian')

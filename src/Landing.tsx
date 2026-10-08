@@ -1,4 +1,5 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useState, type MouseEvent, type ReactNode } from 'react'
+import { rememberRole, rememberedRole, type Role } from './role'
 import { SEED_OFFERS, TOTAL_LOCKED, CATEGORIES, money, categoryLabel, type Category } from './data'
 import { Avatar, EscrowChart, Meter } from './MarketApp'
 import { POSTS } from './content'
@@ -128,12 +129,56 @@ function HeroStack() {
   )
 }
 
+// Any link into the marketplace first asks who the visitor is, once.
+function useRoleGate() {
+  const [pending, setPending] = useState<string | null>(null)
+  const onClick = (e: MouseEvent<HTMLDivElement>) => {
+    const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#/app"], a[href^="#/r/"]')
+    if (!a || rememberedRole()) return
+    e.preventDefault()
+    setPending(a.getAttribute('href'))
+  }
+  const choose = (r: Role) => {
+    rememberRole(r)
+    const target = pending ?? '#/app'
+    setPending(null)
+    window.location.hash = r === 'provider' && target.startsWith('#/app') ? '#/app?role=provider' : target
+  }
+  const skip = () => { const t = pending ?? '#/app'; setPending(null); window.location.hash = t }
+  return { pending, onClick, choose, skip, close: () => setPending(null) }
+}
+
+function RoleGate({ gate }: { gate: ReturnType<typeof useRoleGate> }) {
+  if (!gate.pending) return null
+  return (
+    <div className="lp-gate" onClick={gate.close}>
+      <div className="lp-gate-box" role="dialog" aria-modal="true" aria-labelledby="lp-gate-title" onClick={e => e.stopPropagation()}>
+        <h2 id="lp-gate-title">Before you go in, who are you?</h2>
+        <p>Nativness shows different screens to each side. You can switch later.</p>
+        <div className="lp-gate-choices">
+          <button onClick={() => gate.choose('affiliate')}>
+            <b>I'm an affiliate</b>
+            <span>I promote offers with my links and report the conversions I bring.</span>
+          </button>
+          <button onClick={() => gate.choose('provider')}>
+            <b>I'm an affiliate provider</b>
+            <span>I list offers, lock the commission budget and pay affiliates.</span>
+          </button>
+        </div>
+        <button className="lp-gate-skip" onClick={gate.skip}>Just let me look around</button>
+      </div>
+    </div>
+  )
+}
+
 export default function Landing() {
+  const gate = useRoleGate()
   const [fact, setFact] = useState(0)
   const move = (d: number) => setFact(f => (f + d + FACTS.length) % FACTS.length)
 
   return (
-    <div className="lp">
+    <div className="lp" onClick={gate.onClick}>
+      <RoleGate gate={gate} />
       <div className="lp-bar">
         <span className="lp-bar-dot" />
         Connect any Solana or Ethereum wallet and start promoting funded offers.
