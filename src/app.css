@@ -135,3 +135,5 @@
 .mx-dialog-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .mx-btn-danger { background: #000; border-color: #000; color: #fff; }
 .mx-btn-danger:hover:not(:disabled) { background: #ed5023; border-color: #ed5023; }
+
+.mx-list-row .mx-mono { user-select: all; }

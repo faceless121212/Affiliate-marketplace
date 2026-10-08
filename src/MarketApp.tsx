@@ -72,7 +72,25 @@ export function EscrowChart({ offer }: { offer: Offer }) {
   )
 }
 
-export default function MarketApp() {
+const SITE = 'https://www.top100affiliates.com'
+export const linkUrl = (id: string) => `${SITE}/#/r/${id}`
+const linkLabel = (id: string) => `top100affiliates.com/r/${id}`
+
+async function copyText(text: string) {
+  try {
+    await navigator.clipboard.writeText(text)
+    return true
+  } catch {
+    const ta = document.createElement('textarea')
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'
+    document.body.appendChild(ta); ta.select()
+    const ok = document.execCommand('copy')
+    document.body.removeChild(ta)
+    return ok
+  }
+}
+
+export default function MarketApp({ refId }: { refId?: string } = {}) {
   const [offers, setOffers] = useState<Offer[]>(SEED_OFFERS)
   const [links, setLinks] = useState<Link[]>([])
   const [payouts, setPayouts] = useState<Payout[]>(SEED_PAYOUTS)
@@ -133,6 +151,15 @@ export default function MarketApp() {
     say('Wallet disconnected.')
   }
 
+  // Arriving through a tracking link opens the offer it belongs to.
+  useEffect(() => {
+    if (!refId) return
+    const offer = SEED_OFFERS.find(o => refId.startsWith(`${o.id}-`))
+    if (offer) { setFeaturedId(offer.id); say(`You arrived through a tracking link for ${offer.name}.`) }
+    else say('That tracking link was not recognised.')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refId])
+
   // Wallets announce themselves asynchronously, so keep an open menu current,
   // restore the last wallet if it is still authorised, and honour #/app?connect.
   useEffect(() => {
@@ -165,7 +192,7 @@ export default function MarketApp() {
     if (needWallet()) return
     if (links.some(l => l.offerId === o.id)) { say('You already have a link for this offer.'); setTab('links'); return }
     setLinks(ls => [{ id: `${o.id}-${Date.now().toString(36)}`, offerId: o.id, clicks: 0 }, ...ls])
-    say(`Tracking link created for ${o.name}.`)
+    say(`Tracking link created for ${o.name}. Find it under Links.`)
   }
 
   const confirm = (l: Link) => {
@@ -407,8 +434,11 @@ export default function MarketApp() {
                   <Avatar offer={o} size={30} />
                   <span>
                     <b>{o.name}</b>
-                    <small className="mx-mono">nativness.app/r/{l.id}</small>
+                    <small className="mx-mono">{linkLabel(l.id)}</small>
                   </span>
+                  <button className="mx-btn" onClick={async () => say((await copyText(linkUrl(l.id))) ? 'Link copied.' : 'Could not copy. Select the link and copy it by hand.')}>
+                    Copy link
+                  </button>
                   <span className="mx-right"><b>{l.clicks}</b><small>confirmed</small></span>
                   <span className="mx-right"><b>{money(o.escrowRemainingUsd)}</b><small>escrow left</small></span>
                   {tab === 'conversions'

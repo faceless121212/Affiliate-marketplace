@@ -15,6 +15,7 @@ function Root() {
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
   if (hash.startsWith('#/app')) return <MarketApp />
+  if (hash.startsWith('#/r/')) return <MarketApp refId={hash.slice(4)} />
   if (hash.startsWith('#/blog/')) return <BlogPost slug={hash.slice(7)} />
   if (hash === '#/blog') return <BlogIndex />
   if (hash === '#/terms') return <Legal doc={TERMS} />
