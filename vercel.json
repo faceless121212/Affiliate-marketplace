@@ -8,11 +8,11 @@
   "rewrites": [
     {
       "source": "/r/:id",
-      "destination": "/app.html"
+      "destination": "/app"
     },
     {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": "/"
     }
   ],
   "headers": [
