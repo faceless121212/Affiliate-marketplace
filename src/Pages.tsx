@@ -28,7 +28,7 @@ function Shell({ children }: { children: ReactNode }) {
 export function PostCard({ slug }: { slug: string }) {
   const p = POSTS.find(x => x.slug === slug)!
   return (
-    <a href={`#/blog/${p.slug}`} className="lp-post">
+    <a href={`/blog/${p.slug}`} className="lp-post">
       <img src={`/img/${p.img}.jpg`} alt="" />
       <span className="lp-post-tag">{p.tag}</span>
       <h3>{p.title}</h3>
