@@ -4,8 +4,23 @@ import { detectWallets, onWalletsChanged, rememberWallet, rememberedWallet, shor
 import './app.css'
 
 type Tab = 'offers' | 'my' | 'links' | 'conversions'
-type Link = { id: string; offerId: string; clicks: number }
-type Payout = { id: string; offerId: string; amountUsd: number; seeded?: boolean }
+export type Role = 'affiliate' | 'provider'
+type Link = { id: string; offerId: string; affiliate: string }
+type Payout = { id: string; offerId: string; amountUsd: number; affiliate?: string; seeded?: boolean }
+type ReportStatus = 'pending' | 'approved' | 'partial' | 'declined'
+type Message = { from: Role; text: string; at: number }
+type Report = {
+  id: string; linkId: string; offerId: string; affiliate: string
+  action: string; count: number; note: string
+  status: ReportStatus; approvedCount: number; reason?: string
+  messages: Message[]; at: number
+}
+const ACTIONS = ['Registered', 'Deposited', 'Purchased', 'Booked a demo', 'Other']
+const STATUS_LABEL: Record<ReportStatus, string> = { pending: 'Waiting for review', approved: 'Approved and paid', partial: 'Partly approved', declined: 'Declined' }
+const ROLE_KEY = 'nativness.role'
+const rememberedRole = (): Role | null => { try { return localStorage.getItem(ROLE_KEY) as Role | null } catch { return null } }
+const rememberRole = (r: Role) => { try { localStorage.setItem(ROLE_KEY, r) } catch { /* storage unavailable */ } }
+const when = (t: number) => new Date(t).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
 
 // One payout per conversion the listed offers have already paid, newest first.
 const SEED_PAYOUTS: Payout[] = SEED_OFFERS.flatMap(o => {
@@ -93,17 +108,22 @@ async function copyText(text: string) {
 export default function MarketApp({ refId }: { refId?: string } = {}) {
   const [offers, setOffers] = useState<Offer[]>(SEED_OFFERS)
   const [links, setLinks] = useState<Link[]>([])
+  const [reports, setReports] = useState<Report[]>([])
   const [payouts, setPayouts] = useState<Payout[]>(SEED_PAYOUTS)
   const [wallet, setWallet] = useState<string | null>(null)
   const [walletName, setWalletName] = useState('')
   const [active, setActive] = useState<WalletOption | null>(null)
   const [menu, setMenu] = useState<WalletOption[] | null>(null)
   const [busy, setBusy] = useState(false)
-  const [tab, setTab] = useState<Tab>('offers')
+  const [role, setRole] = useState<Role | null>(rememberedRole)
+  const [tab, setTab] = useState<Tab>(() => (rememberedRole() === 'provider' ? 'conversions' : 'offers'))
   const [cat, setCat] = useState<Category | 'all' | 'verified' | 'funded'>('all')
   const [query, setQuery] = useState('')
   const [featuredId, setFeaturedId] = useState('meridian')
   const [toast, setToast] = useState('')
+  const [reportFor, setReportFor] = useState<string | null>(null)
+  const [partialFor, setPartialFor] = useState<string | null>(null)
+  const [threadFor, setThreadFor] = useState<string | null>(null)
 
   const byId = (id: string) => offers.find(o => o.id === id)!
   const featured = offers.find(o => o.id === featuredId) ?? offers[0]
@@ -122,9 +142,14 @@ export default function MarketApp({ refId }: { refId?: string } = {}) {
   const say = (m: string) => {
     setToast(m)
     window.clearTimeout(toastTimer.current)
-    toastTimer.current = window.setTimeout(() => setToast(''), 2600)
+    toastTimer.current = window.setTimeout(() => setToast(''), 3200)
   }
   const needWallet = () => { if (wallet) return false; say('Connect a wallet first.'); return true }
+
+  const chooseRole = (r: Role) => {
+    setRole(r); rememberRole(r)
+    setTab(r === 'provider' ? (offers.some(o => o.advertiser === wallet) ? 'conversions' : 'my') : 'offers')
+  }
 
   const connect = async (option: WalletOption, silent = false) => {
     setMenu(null)
@@ -133,7 +158,7 @@ export default function MarketApp({ refId }: { refId?: string } = {}) {
       const address = await option.connect(silent)
       setWallet(address); setWalletName(option.name); setActive(option)
       rememberWallet(option.id)
-      if (!silent) say(`${option.name} connected. The address is your account.`)
+      if (!silent) say(`${option.name} connected as ${role === 'provider' ? 'an affiliate provider' : 'an affiliate'}.`)
     } catch (err) {
       if (silent) return
       const rejected = (err as { code?: number })?.code === 4001
@@ -155,7 +180,7 @@ export default function MarketApp({ refId }: { refId?: string } = {}) {
   useEffect(() => {
     if (!refId) return
     const offer = SEED_OFFERS.find(o => refId.startsWith(`${o.id}-`))
-    if (offer) { setFeaturedId(offer.id); say(`You arrived through a tracking link for ${offer.name}.`) }
+    if (offer) { setFeaturedId(offer.id); setTab('offers'); say(`You arrived through a tracking link for ${offer.name}.`) }
     else say('That tracking link was not recognised.')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refId])
@@ -186,22 +211,66 @@ export default function MarketApp({ refId }: { refId?: string } = {}) {
   }), [offers, cat, query])
 
   const mostFunded = [...offers].sort((a, b) => b.escrowRemainingUsd - a.escrowRemainingUsd).slice(0, 5)
-  const earned = payouts.filter(p => !p.seeded).reduce((s, p) => s + p.amountUsd, 0)
+  const earned = payouts.filter(p => p.affiliate && p.affiliate === wallet).reduce((s, p) => s + p.amountUsd, 0)
+  const myLinks = links.filter(l => l.affiliate === wallet)
+  const mine = offers.filter(o => o.advertiser === wallet)
+  const pendingForMe = reports.filter(r => r.status === 'pending' && mine.some(o => o.id === r.offerId)).length
+  const approvedOn = (linkId: string) => reports.filter(r => r.linkId === linkId).reduce((n, r) => n + r.approvedCount, 0)
 
   const getLink = (o: Offer) => {
     if (needWallet()) return
-    if (links.some(l => l.offerId === o.id)) { say('You already have a link for this offer.'); setTab('links'); return }
-    setLinks(ls => [{ id: `${o.id}-${Date.now().toString(36)}`, offerId: o.id, clicks: 0 }, ...ls])
+    if (myLinks.some(l => l.offerId === o.id)) { say('You already have a link for this offer.'); setTab('links'); return }
+    setLinks(ls => [{ id: `${o.id}-${Date.now().toString(36)}`, offerId: o.id, affiliate: wallet! }, ...ls])
     say(`Tracking link created for ${o.name}. Find it under Links.`)
   }
 
-  const confirm = (l: Link) => {
+  const submitReport = (l: Link, e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const f = new FormData(e.currentTarget)
+    const count = Number(f.get('count'))
+    if (!(count > 0)) { say('Enter how many conversions you are reporting.'); return }
     const o = byId(l.offerId)
-    if (o.escrowRemainingUsd < o.commissionUsd) { say('Escrow is empty. This conversion cannot be paid.'); return }
-    setOffers(os => os.map(x => x.id === o.id ? { ...x, escrowRemainingUsd: x.escrowRemainingUsd - x.commissionUsd } : x))
-    setPayouts(ps => [{ id: `p-${Date.now()}`, offerId: o.id, amountUsd: o.commissionUsd }, ...ps])
-    setLinks(ls => ls.map(x => x.id === l.id ? { ...x, clicks: x.clicks + 1 } : x))
-    say(`Paid ${money(o.commissionUsd)} from ${o.name} escrow.`)
+    setReports(rs => [{
+      id: `r-${Date.now().toString(36)}`, linkId: l.id, offerId: l.offerId, affiliate: l.affiliate,
+      action: String(f.get('action')), count, note: String(f.get('note')).trim(),
+      status: 'pending', approvedCount: 0, messages: [], at: Date.now(),
+    }, ...rs])
+    setReportFor(null)
+    say(`Report sent to ${o.name}. They will approve it or ask you a question here.`)
+  }
+
+  const pay = (r: Report, n: number, reason?: string) => {
+    const o = byId(r.offerId)
+    const affordable = Math.floor(o.escrowRemainingUsd / o.commissionUsd)
+    if (n > affordable) { say(`Escrow covers only ${affordable} payout${affordable === 1 ? '' : 's'}. Top up the offer or approve fewer.`); return }
+    const amount = n * o.commissionUsd
+    if (n > 0) {
+      setOffers(os => os.map(x => x.id === o.id ? { ...x, escrowRemainingUsd: x.escrowRemainingUsd - amount } : x))
+      setPayouts(ps => [{ id: `p-${Date.now()}`, offerId: o.id, amountUsd: amount, affiliate: r.affiliate }, ...ps])
+    }
+    const status: ReportStatus = n === 0 ? 'declined' : n < r.count ? 'partial' : 'approved'
+    setReports(rs => rs.map(x => x.id === r.id ? { ...x, status, approvedCount: n, reason } : x))
+    setPartialFor(null)
+    say(n === 0 ? `Report declined.` : `Paid ${money(amount)} to ${shortAddress(r.affiliate)} from ${o.name} escrow.`)
+  }
+
+  const partial = (r: Report, e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const f = new FormData(e.currentTarget)
+    const n = Number(f.get('count')); const reason = String(f.get('reason')).trim()
+    if (!(n >= 0) || n > r.count) { say(`Enter a number between 0 and ${r.count}.`); return }
+    if (n < r.count && !reason) { say('Give the affiliate a reason for the difference.'); return }
+    pay(r, n, reason || undefined)
+  }
+
+  const send = (r: Report, e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const form = e.currentTarget
+    const text = String(new FormData(form).get('text')).trim()
+    if (!text || !role) return
+    setReports(rs => rs.map(x => x.id === r.id ? { ...x, messages: [...x.messages, { from: role, text, at: Date.now() }] } : x))
+    form.reset()
+    say(role === 'provider' ? 'Question sent to the affiliate.' : 'Reply sent to the provider.')
   }
 
   const createOffer = (e: FormEvent<HTMLFormElement>) => {
@@ -213,13 +282,13 @@ export default function MarketApp({ refId }: { refId?: string } = {}) {
     if (!name || !(commission > 0) || budget < commission) { say('Escrow budget must cover at least one conversion.'); return }
     const id = `mine-${Date.now().toString(36)}`
     setOffers(os => [{
-      id, advertiser: shortAddress(wallet!), name, category: f.get('category') as Category, commissionUsd: commission,
+      id, advertiser: wallet!, name, category: f.get('category') as Category, commissionUsd: commission,
       description: String(f.get('description')), terms: String(f.get('terms')),
       escrowTotalUsd: budget, escrowRemainingUsd: budget, verified: false, mine: true,
     }, ...os])
     setFeaturedId(id)
     e.currentTarget.reset()
-    say(`${name} is live with ${money(budget)} locked.`)
+    say(`${name} is live with ${money(budget)} locked. Affiliates can take links now.`)
   }
 
   const topUp = (o: Offer, amount: number) => {
@@ -227,21 +296,39 @@ export default function MarketApp({ refId }: { refId?: string } = {}) {
     say(`Added ${money(amount)} to ${o.name} escrow.`)
   }
 
-  const TABS: { id: Tab; label: string }[] = [
-    { id: 'offers', label: 'Offers' }, { id: 'my', label: 'My offers' }, { id: 'links', label: 'Links' }, { id: 'conversions', label: 'Conversions' },
-  ]
+  const TABS: { id: Tab; label: string; badge?: number }[] = role === 'provider'
+    ? [{ id: 'my', label: 'My offers' }, { id: 'conversions', label: 'Conversions', badge: pendingForMe }]
+    : [{ id: 'offers', label: 'Offers' }, { id: 'links', label: 'Links', badge: myLinks.length }]
   const CHIPS: { id: typeof cat; label: string }[] = [
     { id: 'all', label: 'All' }, { id: 'verified', label: 'Verified' }, { id: 'funded', label: 'Funded' },
     ...CATEGORIES.map(c => ({ id: c.value, label: c.label })),
   ]
-  const mine = offers.filter(o => o.mine)
+
+  const Thread = ({ r }: { r: Report }) => (
+    <div className="mx-thread">
+      {r.messages.map((m, i) => (
+        <div key={i} className={`mx-msg ${m.from === role ? 'me' : ''}`}>
+          <small>{m.from === 'provider' ? 'Provider' : 'Affiliate'} · {when(m.at)}</small>
+          <p>{m.text}</p>
+        </div>
+      ))}
+      {(threadFor === r.id || r.messages.length > 0) && role && (
+        <form className="mx-msg-form" onSubmit={e => send(r, e)}>
+          <input name="text" placeholder={role === 'provider' ? 'Ask the affiliate a question' : 'Reply to the provider'} aria-label="Message" />
+          <button className="mx-btn" type="submit">Send</button>
+        </form>
+      )}
+    </div>
+  )
+
+  const StatusChip = ({ r }: { r: Report }) => <span className={`mx-status mx-status-${r.status}`}>{STATUS_LABEL[r.status]}</span>
 
   return (
     <div className="mx">
       <div className="mx-ticker" aria-label="Recent payouts">
         <div className="mx-ticker-run">
           {[...payouts, ...payouts].map((p, i) => (
-            <span key={i}><em>Paid</em> <b>{money(p.amountUsd)}</b> from {byId(p.offerId)?.name ?? 'offer'} escrow</span>
+            <span key={i}><em>Paid</em> <b>{money(p.amountUsd)}</b>{p.affiliate ? ` to ${shortAddress(p.affiliate)}` : ''} from {byId(p.offerId)?.name ?? 'offer'} escrow</span>
           ))}
         </div>
       </div>
@@ -260,17 +347,25 @@ export default function MarketApp({ refId }: { refId?: string } = {}) {
           <nav className="mx-tabs">
             {TABS.map(t => (
               <button key={t.id} className={tab === t.id ? 'on' : ''} onClick={() => setTab(t.id)}>
-                {t.label}{t.id === 'links' && links.length > 0 && <i>{links.length}</i>}
+                {t.label}{!!t.badge && <i>{t.badge}</i>}
               </button>
             ))}
           </nav>
-          <label className="mx-search">
-            <input value={query} onChange={e => { setQuery(e.target.value); setTab('offers') }} placeholder="Search offers" aria-label="Search offers" />
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#747474" strokeWidth="2" strokeLinecap="round" aria-hidden><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-          </label>
+          {role !== 'provider' && (
+            <label className="mx-search">
+              <input value={query} onChange={e => { setQuery(e.target.value); setTab('offers') }} placeholder="Search offers" aria-label="Search offers" />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#747474" strokeWidth="2" strokeLinecap="round" aria-hidden><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+            </label>
+          )}
+          {role && (
+            <div className="mx-role" role="radiogroup" aria-label="Your role">
+              <button role="radio" aria-checked={role === 'affiliate'} className={role === 'affiliate' ? 'on' : ''} onClick={() => chooseRole('affiliate')}>Affiliate</button>
+              <button role="radio" aria-checked={role === 'provider'} className={role === 'provider' ? 'on' : ''} onClick={() => chooseRole('provider')}>Provider</button>
+            </div>
+          )}
           {wallet ? (
             <button className="mx-btn" onClick={() => setConfirmOut(true)} title={`${walletName}: ${wallet}. Click to disconnect.`}>
-              <span className="mx-dot" /> {shortAddress(wallet)} · {money(earned)} earned
+              <span className="mx-dot" /> {shortAddress(wallet)}{role === 'affiliate' ? ` · ${money(earned)} earned` : ''}
             </button>
           ) : (
             <div className="mx-wallet">
@@ -280,12 +375,27 @@ export default function MarketApp({ refId }: { refId?: string } = {}) {
               </button>
               {menu && (
                 <div className="mx-menu" role="menu">
-                  {menu.map(o => (
-                    <button key={o.id} role="menuitem" onClick={() => connect(o)}>
-                      <span>{o.icon && <img src={o.icon} alt="" width={20} height={20} />}{o.name}</span><small>{o.chain}</small>
-                    </button>
-                  ))}
-                  {menu.length === 0 && <p>No wallet found in this browser. Install a wallet extension such as Phantom, MetaMask, Solflare or Backpack, then reload.</p>}
+                  {!role ? (
+                    <div className="mx-rolepick">
+                      <p>First, who are you?</p>
+                      <button onClick={() => chooseRole('affiliate')}>
+                        <b>I'm an affiliate</b><small>I promote offers with links and report the conversions I bring.</small>
+                      </button>
+                      <button onClick={() => chooseRole('provider')}>
+                        <b>I'm an affiliate provider</b><small>I list offers, lock the budget and pay affiliates for conversions.</small>
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <p className="mx-menu-head">Connect as {role === 'provider' ? 'a provider' : 'an affiliate'}</p>
+                      {menu.map(o => (
+                        <button key={o.id} role="menuitem" onClick={() => connect(o)}>
+                          <span>{o.icon && <img src={o.icon} alt="" width={20} height={20} />}{o.name}</span><small>{o.chain}</small>
+                        </button>
+                      ))}
+                      {menu.length === 0 && <p>No wallet found in this browser. Install a wallet extension such as Phantom, MetaMask, Solflare or Backpack, then reload.</p>}
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -310,7 +420,7 @@ export default function MarketApp({ refId }: { refId?: string } = {}) {
                   <Avatar offer={featured} size={44} />
                   <div>
                     <h1>{featured.name}</h1>
-                    <p className="mx-muted">Advertiser {featured.advertiser}</p>
+                    <p className="mx-muted">Advertiser {shortAddress(featured.advertiser)}</p>
                   </div>
                   <div className="mx-score">
                     <b>{money(featured.commissionUsd)}</b>
@@ -321,13 +431,14 @@ export default function MarketApp({ refId }: { refId?: string } = {}) {
                   <div className="mx-feature-side">
                     <div className="mx-actions">
                       <button className="mx-btn mx-btn-lime" disabled={state(featured) === 'empty'} onClick={() => getLink(featured)}>Get link</button>
-                      <button className="mx-btn" onClick={() => setTab('conversions')}>Conversions</button>
+                      <button className="mx-btn" onClick={() => setTab('links')}>My links</button>
                     </div>
                     <h2 className="mx-label">Escrow</h2>
                     <dl className="mx-dl">
                       <div><dt>Remaining</dt><dd>{money(featured.escrowRemainingUsd)}</dd></div>
                       <div><dt>Deposited</dt><dd>{money(featured.escrowTotalUsd)}</dd></div>
                       <div><dt>Payouts it can still fund</dt><dd>{payoutsLeft(featured)}</dd></div>
+                      <div><dt>Affiliates promoting</dt><dd>{links.filter(l => l.offerId === featured.id).length}</dd></div>
                     </dl>
                     <h2 className="mx-label">What counts</h2>
                     <p className="mx-terms">{featured.terms}</p>
@@ -382,6 +493,66 @@ export default function MarketApp({ refId }: { refId?: string } = {}) {
           </>
         )}
 
+        {tab === 'links' && (
+          <section className="mx-card mx-list mx-wide">
+            <h1>Your tracking links</h1>
+            <p className="mx-muted">One link per offer. Report the conversions you bring, and the provider approves and pays them from escrow.</p>
+            {myLinks.length === 0 && (
+              <div className="mx-empty">
+                {wallet ? 'No links yet. Take one from any funded offer.' : 'Connect a wallet, then take a link from any funded offer.'}
+                <button className="mx-btn" onClick={() => setTab('offers')}>Browse offers</button>
+              </div>
+            )}
+            {myLinks.map(l => {
+              const o = byId(l.offerId)
+              const mineReports = reports.filter(r => r.linkId === l.id)
+              return (
+                <div key={l.id} className="mx-linkblock">
+                  <div className="mx-list-row">
+                    <Avatar offer={o} size={30} />
+                    <span>
+                      <b>{o.name}</b>
+                      <small className="mx-mono">{linkLabel(l.id)}</small>
+                    </span>
+                    <button className="mx-btn" onClick={async () => say((await copyText(linkUrl(l.id))) ? 'Link copied.' : 'Could not copy. Select the link and copy it by hand.')}>
+                      Copy link
+                    </button>
+                    <span className="mx-right"><b>{approvedOn(l.id)}</b><small>paid</small></span>
+                    <span className="mx-right"><b>{money(o.escrowRemainingUsd)}</b><small>escrow left</small></span>
+                    <button className="mx-btn mx-btn-lime" disabled={state(o) === 'empty'} onClick={() => setReportFor(reportFor === l.id ? null : l.id)}>
+                      Report conversions
+                    </button>
+                  </div>
+                  {reportFor === l.id && (
+                    <form className="mx-report-form" onSubmit={e => submitReport(l, e)}>
+                      <label>What happened
+                        <select name="action" defaultValue="Registered">{ACTIONS.map(a => <option key={a}>{a}</option>)}</select>
+                      </label>
+                      <label>How many<input name="count" type="number" min="1" step="1" required placeholder="10" /></label>
+                      <label className="mx-grow">Details for the provider<input name="note" placeholder="Dates, order numbers, usernames, anything that helps them check" /></label>
+                      <button className="mx-btn mx-btn-lime" type="submit">Send report</button>
+                    </form>
+                  )}
+                  {mineReports.map(r => (
+                    <div key={r.id} className="mx-report">
+                      <div className="mx-report-head">
+                        <span><b>{r.count} {r.action.toLowerCase()}</b><small>Sent {when(r.at)}{r.note ? ` · ${r.note}` : ''}</small></span>
+                        <StatusChip r={r} />
+                      </div>
+                      {r.status !== 'pending' && (
+                        <p className="mx-report-result">
+                          {r.approvedCount} of {r.count} approved, {money(r.approvedCount * o.commissionUsd)} paid.{r.reason ? ` Reason: ${r.reason}` : ''}
+                        </p>
+                      )}
+                      <Thread r={r} />
+                    </div>
+                  ))}
+                </div>
+              )
+            })}
+          </section>
+        )}
+
         {tab === 'my' && (
           <section className="mx-two">
             <form className="mx-card mx-form" onSubmit={createOffer}>
@@ -405,7 +576,11 @@ export default function MarketApp({ refId }: { refId?: string } = {}) {
               {mine.map(o => (
                 <div key={o.id} className="mx-list-row">
                   <Avatar offer={o} size={30} />
-                  <span><b>{o.name}</b><small>{money(o.escrowRemainingUsd)} of {money(o.escrowTotalUsd)} locked</small><Meter offer={o} /></span>
+                  <span>
+                    <b>{o.name}</b>
+                    <small>{money(o.escrowRemainingUsd)} of {money(o.escrowTotalUsd)} locked · {links.filter(l => l.offerId === o.id).length} affiliates promoting</small>
+                    <Meter offer={o} />
+                  </span>
                   <button className="mx-btn" onClick={() => topUp(o, 100)}>Top up $100</button>
                 </div>
               ))}
@@ -413,37 +588,69 @@ export default function MarketApp({ refId }: { refId?: string } = {}) {
           </section>
         )}
 
-        {(tab === 'links' || tab === 'conversions') && (
+        {tab === 'conversions' && (
           <section className="mx-card mx-list mx-wide">
-            <h1>{tab === 'links' ? 'Your tracking links' : 'Confirm a conversion'}</h1>
-            <p className="mx-muted">
-              {tab === 'links'
-                ? 'One link per offer. Earnings appear the moment a conversion is confirmed.'
-                : 'Confirm a conversion on one of your links to release its payout from escrow.'}
-            </p>
-            {links.length === 0 && (
+            <h1>Conversions</h1>
+            <p className="mx-muted">Every affiliate promoting your offers, with the conversions they report. Approve to pay from escrow, or ask a question first.</p>
+            {mine.length === 0 && (
               <div className="mx-empty">
-                {wallet ? 'No links yet. Take one from any funded offer.' : 'Connect a wallet, then take a link from any funded offer.'}
-                <button className="mx-btn" onClick={() => setTab('offers')}>Browse offers</button>
+                {wallet ? 'You have no offers yet, so there is nothing to review.' : 'Connect a wallet as a provider to review conversions on your offers.'}
+                <button className="mx-btn" onClick={() => setTab('my')}>List an offer</button>
               </div>
             )}
-            {links.map(l => {
-              const o = byId(l.offerId)
+            {mine.map(o => {
+              const offerLinks = links.filter(l => l.offerId === o.id)
+              const offerReports = reports.filter(r => r.offerId === o.id)
               return (
-                <div key={l.id} className="mx-list-row">
-                  <Avatar offer={o} size={30} />
-                  <span>
-                    <b>{o.name}</b>
-                    <small className="mx-mono">{linkLabel(l.id)}</small>
-                  </span>
-                  <button className="mx-btn" onClick={async () => say((await copyText(linkUrl(l.id))) ? 'Link copied.' : 'Could not copy. Select the link and copy it by hand.')}>
-                    Copy link
-                  </button>
-                  <span className="mx-right"><b>{l.clicks}</b><small>confirmed</small></span>
-                  <span className="mx-right"><b>{money(o.escrowRemainingUsd)}</b><small>escrow left</small></span>
-                  {tab === 'conversions'
-                    ? <button className="mx-btn mx-btn-lime" disabled={state(o) === 'empty'} onClick={() => confirm(l)}>Confirm, pay {money(o.commissionUsd)}</button>
-                    : <button className="mx-btn" onClick={() => setTab('conversions')}>Confirm</button>}
+                <div key={o.id} className="mx-linkblock">
+                  <div className="mx-list-row">
+                    <Avatar offer={o} size={30} />
+                    <span><b>{o.name}</b><small>{offerLinks.length} affiliate{offerLinks.length === 1 ? '' : 's'} promoting · {money(o.commissionUsd)} per conversion</small></span>
+                    <span className="mx-right"><b>{offerReports.filter(r => r.status === 'pending').length}</b><small>to review</small></span>
+                    <span className="mx-right"><b>{money(o.escrowRemainingUsd)}</b><small>escrow left</small></span>
+                  </div>
+                  {offerLinks.length === 0 && <p className="mx-muted mx-pad">No affiliate has taken a link for this offer yet.</p>}
+                  {offerLinks.map(l => {
+                    const rs = offerReports.filter(r => r.linkId === l.id)
+                    return (
+                      <div key={l.id} className="mx-affiliate">
+                        <div className="mx-affiliate-head">
+                          <span><b>Affiliate {shortAddress(l.affiliate)}</b><small className="mx-mono">{linkLabel(l.id)}</small></span>
+                          <span className="mx-right"><b>{approvedOn(l.id)}</b><small>paid so far</small></span>
+                        </div>
+                        {rs.length === 0 && <p className="mx-muted">No reports yet from this affiliate.</p>}
+                        {rs.map(r => (
+                          <div key={r.id} className="mx-report">
+                            <div className="mx-report-head">
+                              <span><b>Reports {r.count} {r.action.toLowerCase()}</b><small>Sent {when(r.at)}{r.note ? ` · ${r.note}` : ''}</small></span>
+                              <StatusChip r={r} />
+                            </div>
+                            {r.status === 'pending' && partialFor !== r.id && (
+                              <div className="mx-report-actions">
+                                <button className="mx-btn mx-btn-lime" onClick={() => pay(r, r.count)}>Approve all, pay {money(r.count * o.commissionUsd)}</button>
+                                <button className="mx-btn" onClick={() => setPartialFor(r.id)}>Approve some</button>
+                                <button className="mx-btn" onClick={() => setThreadFor(threadFor === r.id ? null : r.id)}>Ask a question</button>
+                              </div>
+                            )}
+                            {r.status === 'pending' && partialFor === r.id && (
+                              <form className="mx-report-form" onSubmit={e => partial(r, e)}>
+                                <label>Approve how many<input name="count" type="number" min="0" max={r.count} step="1" required defaultValue={r.count} /></label>
+                                <label className="mx-grow">Reason for the difference<input name="reason" placeholder="For example: 3 were duplicate accounts" /></label>
+                                <button className="mx-btn mx-btn-lime" type="submit">Approve and pay</button>
+                                <button className="mx-btn" type="button" onClick={() => setPartialFor(null)}>Cancel</button>
+                              </form>
+                            )}
+                            {r.status !== 'pending' && (
+                              <p className="mx-report-result">
+                                {r.approvedCount} of {r.count} approved, {money(r.approvedCount * o.commissionUsd)} paid.{r.reason ? ` Reason: ${r.reason}` : ''}
+                              </p>
+                            )}
+                            <Thread r={r} />
+                          </div>
+                        ))}
+                      </div>
+                    )
+                  })}
                 </div>
               )
             })}
