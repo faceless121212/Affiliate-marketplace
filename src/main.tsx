@@ -1,28 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { Analytics } from '@vercel/analytics/react'
-import Landing from './Landing'
-import MarketApp from './MarketApp'
-import { BlogIndex, BlogPost, Legal } from './Pages'
-import { TERMS, PRIVACY } from './content'
+import App from './App'
+import { applyMeta, metaFor } from './seo'
 import './base.css'
 
-function Root() {
-  const [hash, setHash] = useState(window.location.hash)
-  useEffect(() => {
-    const onHash = () => { setHash(window.location.hash); if (window.location.hash.startsWith('#/')) window.scrollTo(0, 0) }
-    window.addEventListener('hashchange', onHash)
-    return () => window.removeEventListener('hashchange', onHash)
-  }, [])
-  if (hash.startsWith('#/app')) return <MarketApp />
-  if (hash.startsWith('#/r/')) return <MarketApp refId={hash.slice(4)} />
-  if (hash.startsWith('#/blog/')) return <BlogPost slug={hash.slice(7)} />
-  if (hash === '#/blog') return <BlogIndex />
-  if (hash === '#/terms') return <Legal doc={TERMS} />
-  if (hash === '#/privacy') return <Legal doc={PRIVACY} />
-  return <Landing />
+// Addresses used to live behind a hash. Send old links to the new paths.
+if (window.location.hash.startsWith('#/')) {
+  window.location.replace(window.location.hash.slice(1))
 }
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode><Root /><Analytics /></React.StrictMode>,
-)
+function Root() {
+  const [url, setUrl] = useState(window.location.pathname + window.location.search)
+  useEffect(() => {
+    const onPop = () => setUrl(window.location.pathname + window.location.search)
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
+  useEffect(() => { applyMeta(metaFor(url)) }, [url])
+  return <App url={url} />
+}
+
+const container = document.getElementById('root')!
+const tree = <React.StrictMode><Root /><Analytics /></React.StrictMode>
+if (container.hasChildNodes()) ReactDOM.hydrateRoot(container, tree)
+else ReactDOM.createRoot(container).render(tree)

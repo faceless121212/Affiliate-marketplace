@@ -9,7 +9,7 @@ import './landing.css'
 export function Logo({ light = false }: { light?: boolean }) {
   const ink = light ? '#fff' : '#000'
   return (
-    <a href="#/" className="lp-logo" style={{ color: ink }} aria-label="Nativness home">
+    <a href="/" className="lp-logo" style={{ color: ink }} aria-label="Nativness home">
       <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden>
         <path d="M11 15V12a5 5 0 0 1 10 0v3" fill="none" stroke={ink} strokeWidth="2.6" strokeLinecap="round" />
         <rect x="8" y="15" width="16" height="11" rx="2.4" fill={ink} />
@@ -72,9 +72,9 @@ export function Footer() {
           <Logo light />
           <p className="lp-footer-note">A Solana-native affiliate marketplace where the commission budget is locked in escrow before the offer goes live.</p>
         </div>
-        <div><h4>For affiliates</h4><a href="#/app">Browse offers</a><a href="#/app">Your links</a><a href="#/blog/reading-an-escrow-balance">Reading a balance</a></div>
-        <div><h4>For advertisers</h4><a href="#/app">List an offer</a><a href="#/app">Top up escrow</a><a href="#/blog/writing-conversion-terms">Writing terms</a></div>
-        <div><h4>Company</h4><a href="#/blog">Blog</a><a href="#/terms">Terms of Use</a><a href="#/privacy">Privacy Policy</a></div>
+        <div><h4>For affiliates</h4><a href="/app">Browse offers</a><a href="/app">Your links</a><a href="/blog/reading-an-escrow-balance">Reading a balance</a></div>
+        <div><h4>For advertisers</h4><a href="/app">List an offer</a><a href="/app">Top up escrow</a><a href="/blog/writing-conversion-terms">Writing terms</a></div>
+        <div><h4>Company</h4><a href="/blog">Blog</a><a href="/terms">Terms of Use</a><a href="/privacy">Privacy Policy</a></div>
       </div>
       <div className="lp-wrap lp-footer-base">© 2026 Nativness. All rights reserved.</div>
     </footer>
@@ -132,20 +132,23 @@ function HeroStack() {
 // Any link into the marketplace first asks who the visitor is, once.
 function useRoleGate() {
   const [pending, setPending] = useState<string | null>(null)
+  const [role, setRoleState] = useState<Role | null>(null)
+  useEffect(() => { setRoleState(rememberedRole()) }, [])
   const onClick = (e: MouseEvent<HTMLDivElement>) => {
-    const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#/app"], a[href^="#/r/"]')
+    const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="/app"], a[href^="/r/"]')
     if (!a || rememberedRole()) return
     e.preventDefault()
     setPending(a.getAttribute('href'))
   }
   const choose = (r: Role) => {
-    rememberRole(r)
-    const target = pending ?? '#/app'
+    rememberRole(r); setRoleState(r)
+    const target = pending ?? '/app'
     setPending(null)
-    window.location.hash = r === 'provider' && target.startsWith('#/app') ? '#/app?role=provider' : target
+    window.location.href = r === 'provider' && target.startsWith('/app') ? '/app?role=provider' : target
   }
-  const skip = () => { const t = pending ?? '#/app'; setPending(null); window.location.hash = t }
-  return { pending, onClick, choose, skip, close: () => setPending(null) }
+  const skip = () => { const t = pending ?? '/app'; setPending(null); window.location.href = t }
+  const reopen = () => setPending('/app')
+  return { pending, role, onClick, choose, skip, reopen, close: () => setPending(null) }
 }
 
 function RoleGate({ gate }: { gate: ReturnType<typeof useRoleGate> }) {
@@ -182,22 +185,24 @@ export default function Landing() {
       <div className="lp-bar">
         <span className="lp-bar-dot" />
         Connect any Solana or Ethereum wallet and start promoting funded offers.
-        <a href="#/app?connect">Connect wallet</a>
+        <a href="/app?connect">Connect wallet</a>
       </div>
 
       <header className="lp-header">
         <div className="lp-header-in">
           <Logo />
           <nav className="lp-nav">
-            <a href="#/app">Browse offers</a>
+            <a href="/app">Browse offers</a>
             <a href="#advertisers">For advertisers</a>
             <a href="#how">How it works</a>
             <a href="#both">One login</a>
-            <a href="#/blog">Blog</a>
+            <a href="/blog">Blog</a>
           </nav>
           <div className="lp-header-right">
-            <span className="lp-net">Solana</span>
-            <a href="#/app?connect" className="lp-btn lp-btn-outline lp-btn-sm">Connect wallet</a>
+            {gate.role
+              ? <button className="lp-net lp-rolenote" onClick={gate.reopen}>Browsing as {gate.role === 'provider' ? 'a provider' : 'an affiliate'} · change</button>
+              : <span className="lp-net">Solana</span>}
+            <a href="/app?connect" className="lp-btn lp-btn-outline lp-btn-sm">Connect wallet</a>
           </div>
         </div>
       </header>
@@ -210,7 +215,7 @@ export default function Landing() {
               <p className="lp-hero-sub">
                 Advertisers lock the commission budget before the offer goes live. Affiliates see a guaranteed balance, not a promise.
               </p>
-              <a href="#/app" className="lp-btn lp-btn-dark lp-btn-lg">Browse offers <Arrow /></a>
+              <a href="/app" className="lp-btn lp-btn-dark lp-btn-lg">Browse offers <Arrow /></a>
             </div>
             <HeroStack />
           </div>
@@ -228,7 +233,7 @@ export default function Landing() {
           <p>Offers on the marketplace</p>
           <div className="lp-marks-row">
             {SEED_OFFERS.map(o => (
-              <a key={o.id} href="#/app" className={o.escrowRemainingUsd > 0 ? '' : 'off'}>
+              <a key={o.id} href="/app" className={o.escrowRemainingUsd > 0 ? '' : 'off'}>
                 <Avatar offer={o} size={34} />
                 {o.name}
               </a>
@@ -238,7 +243,7 @@ export default function Landing() {
 
         <section className="lp-wrap lp-tiles">
           {TILES.map(t => (
-            <a key={t.title} href="#/app" className="lp-tile">
+            <a key={t.title} href="/app" className="lp-tile">
               <TileIcon name={t.icon} />
               <span className="lp-tile-text"><b>{t.title}</b><small>{t.sub}</small></span>
               <Chevron />
@@ -319,7 +324,7 @@ export default function Landing() {
                 <li>Pay only for confirmed conversions</li>
                 <li>Top up escrow whenever you like</li>
               </ul>
-              <a href="#/app" className="lp-btn lp-btn-lime lp-btn-lg lp-btn-block">List an offer <Arrow /></a>
+              <a href="/app" className="lp-btn lp-btn-lime lp-btn-lg lp-btn-block">List an offer <Arrow /></a>
               <a href="#how" className="lp-link">How escrow works</a>
             </div>
           </div>
@@ -335,8 +340,8 @@ export default function Landing() {
               <p>Connecting a wallet creates a single identity that can promote other people’s offers and list its own. There is no separate affiliate or advertiser account.</p>
               <p><b>Works with Phantom, MetaMask, Solflare, Backpack and other wallets.</b><br />The wallet is your identity here, not a payment rail.</p>
               <div className="lp-biz-cta">
-                <a href="#/app?connect" className="lp-btn lp-btn-lime lp-btn-lg">Connect wallet</a>
-                <a href="#/app" className="lp-btn lp-btn-outline lp-btn-lg">Browse offers</a>
+                <a href="/app?connect" className="lp-btn lp-btn-lime lp-btn-lg">Connect wallet</a>
+                <a href="/app" className="lp-btn lp-btn-outline lp-btn-lg">Browse offers</a>
               </div>
             </div>
           </div>
@@ -345,7 +350,7 @@ export default function Landing() {
         <section className="lp-wrap lp-blog" id="blog">
           <div className="lp-blog-head">
             <h2>From the blog</h2>
-            <a href="#/blog" className="lp-btn lp-btn-outline">All posts</a>
+            <a href="/blog" className="lp-btn lp-btn-outline">All posts</a>
           </div>
           <div className="lp-posts">{POSTS.slice(0, 3).map(p => <PostCard key={p.slug} slug={p.slug} />)}</div>
         </section>

@@ -1,6 +1,6 @@
 import { marked } from 'marked'
 
-export type Post = { slug: string; title: string; excerpt: string; img: string; date: string; minutes: number; tag: string; body: (string | { h: string })[]; html?: string; order?: string }
+export type Post = { slug: string; title: string; metaTitle: string; excerpt: string; img: string; date: string; published: string; updated: string; minutes: number; tag: string; body: (string | { h: string })[]; html?: string; order?: string }
 
 // Long-form articles live as markdown in src/posts, with front matter for the card.
 const files = import.meta.glob('./posts/*.md', { query: '?raw', import: 'default', eager: true }) as Record<string, string>
@@ -60,8 +60,8 @@ function fromMarkdown(raw: string): Post {
     .replace(/<table>/g, '<div class="lp-table"><table>')
     .replace(/<\/table>/g, '</table></div>')
   return {
-    slug: meta.slug, title: meta.title, excerpt: meta.description, img: meta.cover, tag: `For ${meta.audience.toLowerCase()}`,
-    date: longDate(meta.published), minutes: parseFloat(meta.readingTime), body: [], html, order: meta.order,
+    slug: meta.slug, title: meta.title, metaTitle: meta.metaTitle || meta.title, excerpt: meta.description, img: meta.cover, tag: `For ${meta.audience.toLowerCase()}`,
+    date: longDate(meta.published), published: meta.published, updated: meta.updated || meta.published, minutes: parseFloat(meta.readingTime), body: [], html, order: meta.order,
   }
 }
 

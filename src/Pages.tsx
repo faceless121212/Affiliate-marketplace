@@ -9,13 +9,13 @@ function Shell({ children }: { children: ReactNode }) {
         <div className="lp-header-in">
           <Logo />
           <nav className="lp-nav">
-            <a href="#/app">Browse offers</a>
-            <a href="#/blog">Blog</a>
-            <a href="#/terms">Terms</a>
-            <a href="#/privacy">Privacy</a>
+            <a href="/app">Browse offers</a>
+            <a href="/blog">Blog</a>
+            <a href="/terms">Terms</a>
+            <a href="/privacy">Privacy</a>
           </nav>
           <div className="lp-header-right">
-            <a href="#/app" className="lp-btn lp-btn-lime lp-btn-sm">Open the app</a>
+            <a href="/app" className="lp-btn lp-btn-lime lp-btn-sm">Open the app</a>
           </div>
         </div>
       </header>
@@ -57,18 +57,18 @@ export function BlogPost({ slug }: { slug: string }) {
     return (
       <Shell>
         <article className="lp-wrap lp-page lp-prose">
-          <a href="#/blog" className="lp-back">← All posts</a>
+          <a href="/blog" className="lp-back">← All posts</a>
           <span className="lp-post-tag">{p.tag}</span>
           <h1>{p.title}</h1>
           <small>{p.date} · {p.minutes} min read</small>
           <img src={`/img/${p.img}.jpg`} alt="" />
           {p.body.map((b, i) => typeof b === 'string' ? <p key={i}>{b}</p> : <h2 key={i}>{b.h}</h2>)}
-          <a href="#/app" className="lp-btn lp-btn-lime lp-btn-lg">Browse funded offers</a>
+          <a href="/app" className="lp-btn lp-btn-lime lp-btn-lg">Browse funded offers</a>
         </article>
       </Shell>
     )
   }
-  // Table of contents links scroll in place, because the hash is used for routing.
+  // Table of contents links scroll in place without changing the address.
   const onTocClick = (e: MouseEvent<HTMLDivElement>) => {
     const link = (e.target as HTMLElement).closest<HTMLElement>('[data-toc]')
     if (!link) return
@@ -87,16 +87,20 @@ export function BlogPost({ slug }: { slug: string }) {
         </div>
       </header>
       <article className="lp-wrap lp-page lp-prose lp-article">
-        <a href="#/blog" className="lp-back">← All posts</a>
+        <a href="/blog" className="lp-back">← All posts</a>
         <div className="lp-md" onClick={onTocClick} dangerouslySetInnerHTML={{ __html: p.html }} />
         <aside className="lp-cta">
           <div>
             <h2>See what a funded offer looks like</h2>
             <p>Every offer on Nativness shows the commission budget that is still locked in escrow.</p>
           </div>
-          <a href="#/app" className="lp-btn lp-btn-lime lp-btn-lg">Browse offers</a>
+          <a href="/app" className="lp-btn lp-btn-lime lp-btn-lg">Browse offers</a>
         </aside>
       </article>
+      <section className="lp-wrap lp-related">
+        <h2>Keep reading</h2>
+        <div className="lp-posts">{POSTS.filter(x => x.slug !== p.slug).slice(0, 3).map(x => <PostCard key={x.slug} slug={x.slug} />)}</div>
+      </section>
     </Shell>
   )
 }

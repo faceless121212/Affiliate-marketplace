@@ -288,3 +288,10 @@
 .lp-gate-skip { margin-top: 16px; font-size: 14px; color: #747474; text-decoration: underline; width: 100%; text-align: center; }
 .lp-gate-skip:hover { color: #000; }
 @media (max-width: 640px) { .lp-gate-choices { grid-template-columns: 1fr; } }
+
+.lp-related { padding-bottom: 96px; }
+.lp-related h2 { font-size: 32px; letter-spacing: -0.03em; margin-bottom: 24px; }
+
+.lp-rolenote { text-decoration: underline; text-decoration-color: #c3ff00; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.lp-rolenote:hover { background: #c3ff00; }
+@media (max-width: 960px) { .lp-rolenote { display: inline; font-size: 12px; } }

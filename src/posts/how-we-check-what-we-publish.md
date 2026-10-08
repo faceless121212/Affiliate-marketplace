@@ -57,11 +57,11 @@ We have no performance data, so we don't rank by performance. When we score thin
 
 Rules are easy to write. Here's where they actually cost us something.
 
-When we compared [USDC and USDT](#/blog/usdc-or-usdt-affiliate-payouts), we couldn't open Tether's reserve reports. So that row isn't in the table, and the article says why.
+When we compared [USDC and USDT](/blog/usdc-or-usdt-affiliate-payouts), we couldn't open Tether's reserve reports. So that row isn't in the table, and the article says why.
 
-When we wrote about [top offers pages](#/blog/how-to-read-top-offers-page), several blogs said some networks quote earnings per 100 clicks. We couldn't confirm it on those networks' own pages. So the article says exactly that.
+When we wrote about [top offers pages](/blog/how-to-read-top-offers-page), several blogs said some networks quote earnings per 100 clicks. We couldn't confirm it on those networks' own pages. So the article says exactly that.
 
-And when we scored [12 ways to promote offers](#/blog/ways-to-promote-affiliate-offers), we had no data to rank them by. So the article says the scores are judgment, in bold.
+And when we scored [12 ways to promote offers](/blog/ways-to-promote-affiliate-offers), we had no data to rank them by. So the article says the scores are judgment, in bold.
 
 ## 3 things we've got wrong so far
 

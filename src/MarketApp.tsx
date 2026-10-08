@@ -85,7 +85,7 @@ export function EscrowChart({ offer }: { offer: Offer }) {
 }
 
 const SITE = 'https://www.top100affiliates.com'
-export const linkUrl = (id: string) => `${SITE}/#/r/${id}`
+export const linkUrl = (id: string) => `${SITE}/r/${id}`
 const linkLabel = (id: string) => `top100affiliates.com/r/${id}`
 
 async function copyText(text: string) {
@@ -195,7 +195,7 @@ export default function MarketApp({ refId }: { refId?: string } = {}) {
     }
     const off = onWalletsChanged(sync)
     sync()
-    if (window.location.hash.includes('connect') && !rememberedWallet()) setMenu(detectWallets())
+    if (window.location.search.includes('connect') && !rememberedWallet()) setMenu(detectWallets())
     return off
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -332,7 +332,7 @@ export default function MarketApp({ refId }: { refId?: string } = {}) {
 
       <header className="mx-header">
         <div className="mx-header-in">
-          <a href="#/" className="mx-logo">
+          <a href="/" className="mx-logo">
             <svg width="22" height="22" viewBox="0 0 32 32" aria-hidden>
               <rect width="32" height="32" rx="7" fill="#C3FF00" />
               <path d="M11 15V12a5 5 0 0 1 10 0v3" fill="none" stroke="#000" strokeWidth="2.6" strokeLinecap="round" />
