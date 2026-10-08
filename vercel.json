@@ -25,5 +25,18 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "solanamarketplace.vercel.app"
+        }
+      ],
+      "destination": "https://www.top100affiliates.com/:path*",
+      "permanent": true
+    }
   ]
 }
